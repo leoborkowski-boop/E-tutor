@@ -5,6 +5,7 @@ import type { Task } from '../content/types';
 import { AnswerInput } from '../components/AnswerInput';
 import { MathText } from '../components/MathText';
 import { TaskPrompt, evaluateInput } from '../components/TaskView';
+import { InteractiveAnswer, checkInteractive, hasAnswer, initialIA, isInteractive, type IAState } from '../components/interactive/InteractiveAnswer';
 import { Button, Card, MasteryBar, StatusChip } from '../components/ui';
 import { defaultRng } from '../lib/random';
 import { href } from '../router';
@@ -22,10 +23,15 @@ export function Diagnostic() {
   const [choice, setChoice] = useState<number | null>(null);
   const [results, setResults] = useState<boolean[]>([]);
   const [hint, setHint] = useState<string | null>(null);
+  const [ia, setIa] = useState<IAState | null>(null);
   useStudyTimer(phase === 'running');
 
+  const prepare = (t: Task | undefined) => setIa(t && isInteractive(t) ? initialIA(t) : null);
+
   const start = () => {
-    setTasks(buildDiagnostic(defaultRng));
+    const list = buildDiagnostic(defaultRng);
+    setTasks(list);
+    prepare(list[0]);
     setI(0);
     setResults([]);
     setPhase('running');
@@ -41,7 +47,10 @@ export function Diagnostic() {
       recordAttempts(tasks.map((t, k) => ({ topicId: t.topicId, difficulty: t.difficulty, correct: res[k], score: res[k] ? 1 : 0, hints: 0, source: 'diagnostic' as const })));
       completeDiagnostic();
       setPhase('done');
-    } else setI(i + 1);
+    } else {
+      setI(i + 1);
+      prepare(tasks[i + 1]);
+    }
   };
 
   const submit = () => {
@@ -58,6 +67,13 @@ export function Diagnostic() {
     } else if (t.format === 'choice') {
       if (choice === null) return;
       answer(t.choices[choice].correct);
+    } else if (isInteractive(t) && ia) {
+      const { verdict } = checkInteractive(t, ia);
+      if (!verdict.ok && !verdict.countsAsTry) {
+        setHint(verdict.message);
+        return;
+      }
+      answer(verdict.ok);
     }
   };
 
@@ -158,13 +174,18 @@ export function Diagnostic() {
             ))}
           </div>
         )}
+        {isInteractive(t) && ia && (
+          <div className="interactive-area">
+            <InteractiveAnswer task={t} state={ia} onChange={setIa} />
+          </div>
+        )}
         {hint && (
           <div className="feedback feedback-info">
             <MathText text={hint} />
           </div>
         )}
         <div className="actions">
-          <Button variant="primary" icon="next" onClick={submit} disabled={t.format === 'input' ? !input.trim() : choice === null}>
+          <Button variant="primary" icon="next" onClick={submit} disabled={t.format === 'input' ? !input.trim() : t.format === 'choice' ? choice === null : !(isInteractive(t) && ia && hasAnswer(t, ia))}>
             Dalej
           </Button>
           <Button variant="ghost" onClick={() => answer(false)}>

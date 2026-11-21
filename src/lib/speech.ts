@@ -1,19 +1,49 @@
+import { Capacitor } from '@capacitor/core';
+import { QueueStrategy, TextToSpeech } from '@capacitor-community/text-to-speech';
 import { useEffect, useState } from 'react';
 import type { Settings } from '../state/settings';
 import { toSpoken } from './spoken';
 
-export const speechSupported = typeof window !== 'undefined' && 'speechSynthesis' in window;
+/**
+ * Lektor: w przeglądarce Web Speech API, w aplikacji Android natywny
+ * silnik mowy (WebView na Androidzie nie obsługuje speechSynthesis).
+ */
+const isNative = Capacitor.isNativePlatform();
+const webSpeech = typeof window !== 'undefined' && 'speechSynthesis' in window;
 
-export function getPolishVoices(): SpeechSynthesisVoice[] {
-  if (!speechSupported) return [];
+export const speechSupported = isNative || webSpeech;
+
+export type VoiceOption = { voiceURI: string; name: string; index: number };
+
+let nativeVoices: VoiceOption[] = [];
+
+async function loadNativeVoices(): Promise<VoiceOption[]> {
+  try {
+    const { voices } = await TextToSpeech.getSupportedVoices();
+    nativeVoices = voices
+      .map((v, index) => ({ voiceURI: v.voiceURI, name: v.name, lang: v.lang, index }))
+      .filter((v) => v.lang.toLowerCase().replace('_', '-').startsWith('pl'))
+      .map(({ voiceURI, name, index }) => ({ voiceURI, name, index }));
+  } catch {
+    nativeVoices = [];
+  }
+  return nativeVoices;
+}
+
+function webPolishVoices(): SpeechSynthesisVoice[] {
+  if (!webSpeech) return [];
   return window.speechSynthesis.getVoices().filter((v) => v.lang.toLowerCase().startsWith('pl'));
 }
 
-export function useVoices() {
-  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>(() => getPolishVoices());
+export function useVoices(): VoiceOption[] {
+  const [voices, setVoices] = useState<VoiceOption[]>(() => (isNative ? nativeVoices : webPolishVoices().map((v, index) => ({ voiceURI: v.voiceURI, name: v.name, index }))));
   useEffect(() => {
-    if (!speechSupported) return;
-    const update = () => setVoices(getPolishVoices());
+    if (isNative) {
+      void loadNativeVoices().then(setVoices);
+      return;
+    }
+    if (!webSpeech) return;
+    const update = () => setVoices(webPolishVoices().map((v, index) => ({ voiceURI: v.voiceURI, name: v.name, index })));
     update();
     window.speechSynthesis.addEventListener('voiceschanged', update);
     return () => window.speechSynthesis.removeEventListener('voiceschanged', update);
@@ -23,13 +53,34 @@ export function useVoices() {
 
 type SpeakOpts = Pick<Settings, 'rate' | 'pitch' | 'volume' | 'voiceURI'> & { onEnd?: () => void };
 
+let speakToken = 0;
+
 /** Czyta tekst (z notacją ułamków) polskim głosem. */
 export function speak(text: string | string[], opts: SpeakOpts) {
-  if (!speechSupported) return;
+  const parts = (Array.isArray(text) ? text : [text]).map(toSpoken).filter(Boolean);
+  if (isNative) {
+    const token = ++speakToken;
+    void (async () => {
+      try {
+        await TextToSpeech.stop();
+        if (!nativeVoices.length) await loadNativeVoices();
+        const voice = nativeVoices.find((v) => v.voiceURI === opts.voiceURI)?.index;
+        for (const p of parts) {
+          if (token !== speakToken) return;
+          await TextToSpeech.speak({ text: p, lang: 'pl-PL', rate: opts.rate, pitch: opts.pitch, volume: opts.volume, voice, queueStrategy: QueueStrategy.Flush });
+        }
+      } catch {
+        /* brak silnika mowy – aplikacja działa dalej bez lektora */
+      } finally {
+        if (token === speakToken) opts.onEnd?.();
+      }
+    })();
+    return;
+  }
+  if (!webSpeech) return;
   const synth = window.speechSynthesis;
   synth.cancel();
-  const parts = (Array.isArray(text) ? text : [text]).map(toSpoken).filter(Boolean);
-  const voices = getPolishVoices();
+  const voices = webPolishVoices();
   const voice = voices.find((v) => v.voiceURI === opts.voiceURI) ?? voices[0];
   parts.forEach((p, i) => {
     const u = new SpeechSynthesisUtterance(p);
@@ -47,7 +98,12 @@ export function speak(text: string | string[], opts: SpeakOpts) {
 }
 
 export function stopSpeaking() {
-  if (speechSupported) window.speechSynthesis.cancel();
+  if (isNative) {
+    speakToken++;
+    void TextToSpeech.stop().catch(() => {});
+    return;
+  }
+  if (webSpeech) window.speechSynthesis.cancel();
 }
 
 /* --------- Delikatne dźwięki (WebAudio, bez plików) --------- */

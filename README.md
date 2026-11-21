@@ -13,6 +13,21 @@ npm run build    # wersja produkcyjna w katalogu dist/
 
 Aplikacja działa w całości w przeglądarce (komputer, tablet, telefon). Postępy zapisują się lokalnie w przeglądarce (localStorage), bez logowania.
 
+## Aplikacja na Androida (APK)
+
+Aplikacja jest pakowana przez [Capacitor](https://capacitorjs.com) (katalog `android/`).
+
+```bash
+# wymagane: JDK 21 i Android SDK (platforma 36, build-tools 36); ścieżka SDK w android/local.properties
+npm run android:apk
+# plik: android/app/build/outputs/apk/release/app-release.apk
+```
+
+- W aplikacji lektor korzysta z **natywnego silnika mowy Androida** (`@capacitor-community/text-to-speech`), bo WebView nie obsługuje Web Speech API. Polski głos musi być zainstalowany w telefonie (Ustawienia → Zamiana tekstu na mowę).
+- Wibracje: `@capacitor/haptics`.
+- APK jest podpisany **kluczem testowym** `android/app/etutor-test.keystore` (hasło jawne w `android/app/build.gradle`). Dzięki stałemu kluczowi nowe wersje instalują się jako aktualizacja, bez utraty postępów. Do Google Play trzeba wygenerować prywatny klucz i nie trzymać go w repozytorium.
+- Ikony i ekran startowy: źródła w `assets/`, generowane przez `npx capacitor-assets generate --android`.
+
 ## Co jest w prototypie
 
 | Obszar | Zawartość |
@@ -20,6 +35,9 @@ Aplikacja działa w całości w przeglądarce (komputer, tablet, telefon). Post�
 | **Materiał** | 9 działów: pojęcie ułamka i oś liczbowa · skracanie/rozszerzanie · liczby mieszane · porównywanie · dodawanie/odejmowanie · mnożenie/dzielenie · ułamki dziesiętne (też okresowe) · kolejność działań · zadania tekstowe |
 | **Teoria** | Dla każdego działu: „Co musisz umieć”, reguły, rysunki (paski, oś liczbowa), przykłady z rozwiązaniem, typowe błędy. Każdą sekcję można odsłuchać. |
 | **Zadania** | Generowane automatycznie (nie kończą się), 3 poziomy trudności, formy: wpisanie wyniku, wybór A–D, prawda/fałsz. 12 ręcznie napisanych zadań tekstowych. |
+| **Zadania interaktywne** | Zamalowywanie paska (dotyk lub przeciąganie palcem), zaznaczanie liczby na osi (dotknięcie, przeciąganie, strzałki), układanie kart w kolejności, łączenie w pary (ułamek ↔ ułamek dziesiętny, ułamki równe). |
+| **Laboratoria w teorii** | 7 interaktywnych modeli z przyciskami +/−: budowanie ułamka (pasek + oś + odczyt), ułamki równe, wyłączanie całości, porównywanie, dodawanie na pasku, mnożenie na modelu prostokątnym, rozwinięcie dziesiętne (z siatką 10×10). |
+| **Klawiatura ułamków** | Ekranowa klawiatura z „/”, spacją (liczby mieszane), przecinkiem i minusem – automatycznie na telefonach. Delikatne wibracje po odpowiedzi. |
 | **Pomoc** | Kolejne podpowiedzi, tryb **krok po kroku**, pełne rozwiązanie, komunikaty dla typowych błędów (np. dodanie mianowników). |
 | **Test diagnostyczny** | 18 zadań (po 2 z działu) – ustawia startowy poziom w każdym dziale. |
 | **Próbny arkusz** | 10 zadań zamkniętych + 2 prawda/fałsz + 3 otwarte, limit czasu, punktacja, raport z działami do powtórki i przeglądem rozwiązań. |
@@ -45,7 +63,8 @@ src/
                   spoken.ts (odczyt ułamków po polsku dla lektora), speech.ts (Web Speech API)
   content/        topics.ts (teoria), tasks/ (generatory zadań, arkusz, diagnoza), types.ts
   state/          ustawienia, postępy, odznaki, rekomendacje, zapis lokalny
-  components/     MathText (ułamki piętrowe), TaskView (rozwiązywanie zadania), wizualizacje, UI
+  components/     MathText (ułamki piętrowe), TaskView (rozwiązywanie zadania), wizualizacje, UI,
+                  interactive/ (pasek, oś, kolejność, pary), widgets/ (laboratoria), FractionKeypad
   screens/        Start, Materiał, Teoria, Ćwiczenia, Egzamin, Diagnoza, Postępy, Ustawienia
 ```
 

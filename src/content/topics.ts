@@ -26,6 +26,7 @@ export const TOPICS: Topic[] = [
           },
           { type: 'rule', title: 'Zapamiętaj', text: '{licznik/mianownik} – mianownik (na dole) mówi „na ile części”, licznik (na górze) mówi „ile części”.' },
           { type: 'visual', visual: { kind: 'bar', num: 3, den: 5 }, caption: 'Pasek podzielono na 5 równych części, zamalowano 3. Zamalowana część to {3/5}.' },
+          { type: 'interactive', widget: 'builder', text: 'Zmieniaj licznik i mianownik przyciskami albo dotykaj pasek i oś. Zobacz, jak zmienia się ułamek.' },
           {
             type: 'p',
             text: 'Ułamek, w którym licznik jest mniejszy od mianownika (np. {3/5}), nazywamy **właściwym** – jest mniejszy od 1. Gdy licznik jest równy mianownikowi lub większy (np. {7/5}), mówimy o ułamku **niewłaściwym**.',
@@ -88,6 +89,7 @@ export const TOPICS: Topic[] = [
         blocks: [
           { type: 'rule', title: 'Reguła', text: 'Rozszerzyć ułamek to **pomnożyć** licznik i mianownik przez tę samą liczbę (różną od zera). Wartość ułamka się nie zmienia.' },
           { type: 'visual', visual: { kind: 'bars', items: [{ num: 1, den: 2, label: '{1/2}' }, { num: 2, den: 4, label: '{2/4}' }, { num: 4, den: 8, label: '{4/8}' }] }, caption: 'Te same zamalowane długości – to równe ułamki.' },
+          { type: 'interactive', widget: 'equivalent' },
           {
             type: 'example',
             problem: 'Rozszerz {3/5} do mianownika 20.',
@@ -131,6 +133,7 @@ export const TOPICS: Topic[] = [
         blocks: [
           { type: 'p', text: 'Liczba mieszana składa się z części całkowitej i ułamka właściwego, np. {2 1/3} = 2 + {1/3}. To inny zapis ułamka niewłaściwego.' },
           { type: 'visual', visual: { kind: 'bars', items: [{ num: 3, den: 3, label: '1' }, { num: 3, den: 3, label: '1' }, { num: 1, den: 3, label: '{1/3}' }] }, caption: '{2 1/3} = dwie całości i jedna trzecia, czyli {7/3}.' },
+          { type: 'interactive', widget: 'mixed', text: 'Zwiększaj licznik i obserwuj, kiedy powstaje kolejna pełna całość.' },
         ],
       },
       {
@@ -168,6 +171,7 @@ export const TOPICS: Topic[] = [
           { type: 'rule', title: 'Równe mianowniki', text: 'Większy jest ułamek o **większym liczniku**: {5/9} > {2/9}.' },
           { type: 'rule', title: 'Równe liczniki', text: 'Większy jest ułamek o **mniejszym mianowniku**: {1/3} > {1/5}.' },
           { type: 'visual', visual: { kind: 'bars', items: [{ num: 1, den: 3, label: '{1/3}' }, { num: 1, den: 5, label: '{1/5}' }] }, caption: 'Im na więcej części dzielimy całość, tym mniejsze są te części.' },
+          { type: 'interactive', widget: 'compare' },
         ],
       },
       {
@@ -208,6 +212,7 @@ export const TOPICS: Topic[] = [
         title: 'Różne mianowniki',
         blocks: [
           { type: 'rule', text: 'Najpierw sprowadzamy ułamki do wspólnego mianownika (najlepiej najmniejszego – NWW mianowników), potem dodajemy liczniki.' },
+          { type: 'interactive', widget: 'add' },
           {
             type: 'example',
             problem: 'Oblicz {3/4} + {1/6}.',
@@ -248,6 +253,7 @@ export const TOPICS: Topic[] = [
         title: 'Mnożenie',
         blocks: [
           { type: 'rule', text: 'Licznik mnożymy przez licznik, mianownik przez mianownik: {a/b} · {c/d} = {a·c/b·d}. Wspólny mianownik **nie jest potrzebny**.' },
+          { type: 'interactive', widget: 'multiply', text: 'Mnożenie ułamków to „część z części”. Zmieniaj ułamki i licz kratki zamalowane podwójnie.' },
           { type: 'p', text: 'Przed mnożeniem warto skracać – także „na krzyż” (licznik jednego ułamka z mianownikiem drugiego).' },
           {
             type: 'example',
@@ -307,6 +313,7 @@ export const TOPICS: Topic[] = [
         blocks: [
           { type: 'rule', text: 'Ułamek nieskracalny ma **skończone** rozwinięcie dziesiętne tylko wtedy, gdy jego mianownik rozkłada się wyłącznie na czynniki 2 i 5.' },
           { type: 'p', text: 'W pozostałych przypadkach dzielenie nigdy się nie kończy, a cyfry się powtarzają. Powtarzającą się część (okres) zapisujemy w nawiasie: {1/3} = 0,333… = 0,(3); {1/6} = 0,1666… = 0,1(6).' },
+          { type: 'interactive', widget: 'decimal', text: 'Sprawdź różne mianowniki: które dają rozwinięcie skończone, a które okresowe?' },
         ],
       },
       {

@@ -32,8 +32,24 @@ function validateTask(t: Task) {
     expect(t.choices.filter((c) => c.correct).length, t.prompt).toBe(1);
     expect(new Set(t.choices.map((c) => c.text)).size, t.choices.map((c) => c.text).join(',')).toBe(t.choices.length);
     expect(t.choices.length).toBeGreaterThanOrEqual(3);
-  } else {
+  } else if (t.format === 'truefalse') {
     expect(t.statements.length).toBe(2);
+  } else if (t.format === 'shade') {
+    // odpowiedź musi dać się zamalować całkowitą liczbą części
+    expect(((t.target.num * t.den) / t.target.den) % 1).toBe(0);
+    expect(t.target.valueOf()).toBeGreaterThan(0);
+    expect(t.target.valueOf()).toBeLessThan(1);
+    for (const mc of t.misconceptions ?? []) expect(mc.count).not.toBe((t.target.num * t.den) / t.target.den);
+  } else if (t.format === 'numberline') {
+    const tick = (t.target.valueOf() - t.min) * t.den;
+    expect(Math.abs(tick - Math.round(tick))).toBeLessThan(1e-9);
+    expect(tick).toBeGreaterThan(0);
+    expect(tick).toBeLessThan((t.max - t.min) * t.den);
+  } else if (t.format === 'order') {
+    for (let i = 0; i < t.items.length; i++) for (let j = i + 1; j < t.items.length; j++) expect(t.items[i].value.equals(t.items[j].value)).toBe(false);
+  } else if (t.format === 'match') {
+    expect(new Set(t.pairs.map((p) => p.left)).size).toBe(t.pairs.length);
+    expect(new Set(t.pairs.map((p) => p.right)).size).toBe(t.pairs.length);
   }
 }
 

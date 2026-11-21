@@ -38,7 +38,11 @@ export type TheoryBlock =
   | { type: 'list'; items: string[] }
   | { type: 'visual'; visual: Visual; caption?: string }
   | { type: 'example'; title?: string; problem: string; steps: string[]; answer: string }
-  | { type: 'mistake'; wrong: string; right: string; why: string };
+  | { type: 'mistake'; wrong: string; right: string; why: string }
+  | { type: 'interactive'; widget: WidgetId; title?: string; text?: string };
+
+/** Interaktywne „laboratoria” w teorii */
+export type WidgetId = 'builder' | 'equivalent' | 'mixed' | 'compare' | 'add' | 'multiply' | 'decimal';
 
 export type TheorySection = { title: string; blocks: TheoryBlock[] };
 
@@ -105,7 +109,40 @@ export type ChoiceTask = TaskBase & { format: 'choice'; choices: Choice[] };
 
 export type TrueFalseTask = TaskBase & { format: 'truefalse'; statements: Statement[] };
 
-export type Task = InputTask | ChoiceTask | TrueFalseTask;
+/** Zamaluj odpowiednią część paska (klikanie w kratki). */
+export type ShadeTask = TaskBase & {
+  format: 'shade';
+  den: number;
+  target: Fraction;
+  misconceptions?: { count: number; message: string }[];
+};
+
+/** Zaznacz liczbę na osi liczbowej (dotknięcie / przeciągnięcie). */
+export type LineTask = TaskBase & {
+  format: 'numberline';
+  min: number;
+  max: number;
+  den: number;
+  target: Fraction;
+  misconceptions?: { value: Fraction; message: string }[];
+};
+
+/** Ułóż w kolejności. */
+export type OrderTask = TaskBase & {
+  format: 'order';
+  items: { text: string; value: Fraction }[];
+  direction: 'asc' | 'desc';
+};
+
+/** Połącz w pary (lewa kolumna z prawą). */
+export type MatchTask = TaskBase & {
+  format: 'match';
+  pairs: { left: string; right: string }[];
+};
+
+export type InteractiveTask = ShadeTask | LineTask | OrderTask | MatchTask;
+
+export type Task = InputTask | ChoiceTask | TrueFalseTask | InteractiveTask;
 
 export type Rng = () => number;
 export type Generator = (difficulty: Difficulty, rng: Rng) => Task;

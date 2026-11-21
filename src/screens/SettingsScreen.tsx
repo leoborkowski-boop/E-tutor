@@ -226,6 +226,21 @@ export function SettingsScreen() {
         <Row title="Delikatne dźwięki po odpowiedzi">
           <Toggle label="Dźwięki" checked={s.sounds} onChange={(v) => set({ sounds: v })} />
         </Row>
+        <Row title="Wibracje" hint="Lekka wibracja po odpowiedzi i przy dotykaniu przycisków (na telefonie).">
+          <Toggle label="Wibracje" checked={s.haptics} onChange={(v) => set({ haptics: v })} />
+        </Row>
+        <Row title="Klawiatura ułamków na ekranie" hint="Przyciski z „/”, spacją i przecinkiem. Automatycznie – na telefonach i tabletach.">
+          <Segmented
+            label="Klawiatura ułamków"
+            value={s.keypad}
+            onChange={(v) => set({ keypad: v })}
+            options={[
+              { value: 'auto', label: 'Auto' },
+              { value: 'on', label: 'Zawsze' },
+              { value: 'off', label: 'Nigdy' },
+            ]}
+          />
+        </Row>
       </Card>
 
       <Card>

@@ -1716,3 +1716,464 @@ details summary {
     max-width: none;
   }
 }
+
+/* ==========================================================
+   Interaktywność: zadania dotykowe, laboratoria, klawiatura
+   ========================================================== */
+.interactive-area {
+  margin-top: 1.25rem;
+}
+.link-btn {
+  margin-left: 0.6rem;
+  border: none;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Pasek do zamalowywania */
+.shade-bar {
+  display: grid;
+  gap: 4px;
+  max-width: 560px;
+  touch-action: none;
+  user-select: none;
+}
+.shade-seg {
+  height: 56px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: var(--viz-empty);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.12s, transform 0.08s;
+}
+.shade-seg:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+.shade-seg.is-on {
+  background: var(--viz-fill);
+  border-color: var(--viz-fill);
+}
+.shade-seg:active:not(:disabled) {
+  transform: scale(0.96);
+}
+.shade-seg.is-target {
+  box-shadow: inset 0 -5px 0 var(--ok);
+}
+.shade-bar.is-disabled .shade-seg {
+  cursor: default;
+}
+.shade-info {
+  margin-top: 0.5rem;
+}
+
+/* Oś liczbowa do zaznaczania */
+.nlp-svg {
+  max-width: 600px;
+  touch-action: none;
+  cursor: pointer;
+  user-select: none;
+}
+.nlp-svg.is-disabled {
+  cursor: default;
+}
+.nlp-svg:focus-visible {
+  outline: 3px solid var(--focus);
+}
+.nlp-handle {
+  transition: transform 0.12s ease-out;
+}
+.nlp-point {
+  fill: var(--accent);
+}
+.nlp-stem {
+  stroke: var(--accent);
+  stroke-width: 3;
+}
+.nlp-correct {
+  fill: none;
+  stroke: var(--ok);
+  stroke-width: 3;
+  stroke-dasharray: 4 3;
+}
+.nlp-correct-label {
+  fill: var(--ok);
+  font-weight: 700;
+  font-size: 14px;
+  font-family: var(--font);
+}
+
+/* Układanie kolejności */
+.order-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 72px;
+  padding: 0.6rem;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+.order-slot-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.order-sign {
+  font-weight: 700;
+  color: var(--text-2);
+  font-size: 1.2rem;
+}
+.order-slot {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 56px;
+  border-radius: var(--radius-sm);
+  border: 1.5px dashed var(--border);
+  color: var(--text-2);
+  font-size: 0.8rem;
+}
+.order-pool {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  min-height: 60px;
+  align-items: center;
+}
+.order-card {
+  min-width: 64px;
+  min-height: 56px;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 1.15rem;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.1s, border-color 0.1s;
+}
+.order-card:hover:not(:disabled) {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+.order-card.is-placed {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* Łączenie w pary */
+.match {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  max-width: 520px;
+}
+.match-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.match-item {
+  min-height: 56px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 1.15rem;
+  cursor: pointer;
+  transition: border-color 0.1s, background 0.1s;
+}
+.match-item.is-selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.match-item.is-target {
+  border-style: dashed;
+  border-color: var(--accent);
+}
+.match-item.pair-c0 {
+  background: #e3ecfd;
+  border-color: #6f93e0;
+}
+.match-item.pair-c1 {
+  background: #fdeedd;
+  border-color: #e0a463;
+}
+.match-item.pair-c2 {
+  background: #e7f4ea;
+  border-color: #6bb07f;
+}
+.match-item.pair-c3 {
+  background: #f1e8fb;
+  border-color: #a585d6;
+}
+:root[data-theme='dark'] .match-item.is-paired {
+  background: var(--surface-2);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .match-item.is-paired {
+    background: var(--surface-2);
+  }
+}
+.match-item.is-locked {
+  border-color: var(--ok);
+  border-width: 2.5px;
+}
+.match-item.is-locked::after {
+  content: ' ✓';
+  color: var(--ok);
+  font-weight: 700;
+}
+
+/* Klawiatura ułamków */
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.45rem;
+  margin-top: 0.85rem;
+  max-width: 360px;
+  user-select: none;
+}
+.key {
+  height: 52px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 1.35rem;
+  font-weight: 550;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.key:active:not(:disabled) {
+  background: var(--surface-2);
+  transform: scale(0.97);
+}
+.key-op {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: transparent;
+}
+.key-action {
+  background: var(--surface-2);
+}
+.key-ok {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: transparent;
+}
+.key:disabled {
+  opacity: 0.4;
+}
+
+/* Laboratoria w teorii */
+.widget {
+  margin: 1rem 0;
+  padding: 1rem 1.1rem 1.1rem;
+  border-radius: var(--radius);
+  border: 1.5px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+  background: color-mix(in srgb, var(--accent-soft) 35%, var(--surface));
+}
+.widget-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--accent);
+  margin-bottom: 0.35rem;
+}
+.widget-head strong {
+  color: var(--text);
+}
+.widget-tag {
+  margin-left: auto;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.widget-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.widget-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+}
+.widget-result {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.wbig {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+.widget-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  font-size: 0.92rem;
+  color: var(--text-2);
+  flex: 1;
+  min-width: 200px;
+}
+.stepper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.stepper-label {
+  font-size: 0.78rem;
+  color: var(--text-2);
+  font-weight: 600;
+}
+.stepper-row {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  overflow: hidden;
+}
+.stepper-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font-size: 1.35rem;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.stepper-btn:disabled {
+  color: var(--border);
+  cursor: default;
+}
+.stepper-btn:active:not(:disabled) {
+  background: var(--accent-soft);
+}
+.stepper-value {
+  min-width: 2.2rem;
+  text-align: center;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  font-size: 1.1rem;
+}
+.wbars {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-width: 560px;
+}
+.wbar {
+  display: grid;
+  gap: 3px;
+}
+.wseg {
+  height: 34px;
+  border-radius: 6px;
+  background: var(--viz-empty);
+  border: 1px solid var(--border);
+  padding: 0;
+  transition: background 0.2s;
+}
+button.wseg {
+  cursor: pointer;
+}
+button.wseg:hover {
+  border-color: var(--accent);
+}
+.wseg.on-a {
+  background: var(--viz-fill);
+  border-color: var(--viz-fill);
+}
+.wseg.on-b {
+  background: #e0a463;
+  border-color: #e0a463;
+}
+.area {
+  display: grid;
+  width: min(100%, 300px);
+  aspect-ratio: 1;
+  gap: 2px;
+  padding: 2px;
+  background: var(--border);
+  border-radius: 8px;
+}
+.area-cell {
+  background: var(--surface);
+  border-radius: 2px;
+  transition: background 0.2s;
+}
+.area-cell.only-a {
+  background: color-mix(in srgb, var(--viz-fill) 35%, var(--surface));
+}
+.area-cell.only-b {
+  background: color-mix(in srgb, #e0a463 40%, var(--surface));
+}
+.area-cell.both {
+  background: #6b5bb8;
+}
+.hundred {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 2px;
+  width: min(100%, 240px);
+}
+.hundred span {
+  aspect-ratio: 1;
+  border-radius: 2px;
+  background: var(--viz-empty);
+}
+.hundred span.on {
+  background: var(--viz-fill);
+}
+
+/* Bezpieczne marginesy w aplikacji (wcięcia ekranu, pasek stanu).
+   W aplikacji Android Capacitor ustawia zmienne --safe-area-inset-*. */
+:root {
+  --sat: max(env(safe-area-inset-top, 0px), var(--safe-area-inset-top, 0px));
+  --sab: max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px));
+}
+.topbar {
+  padding-top: calc(0.6rem + var(--sat));
+}
+@media (max-width: 720px) {
+  .topbar {
+    padding-top: calc(0.5rem + var(--sat));
+  }
+  .nav {
+    padding-bottom: calc(0.35rem + var(--sab));
+  }
+  .main {
+    padding-bottom: calc(6rem + var(--sab));
+  }
+  .toast {
+    bottom: calc(5.5rem + var(--sab));
+  }
+  .exam-bar {
+    top: calc(56px + var(--sat));
+  }
+  .shade-seg {
+    height: 52px;
+  }
+  .match {
+    gap: 0.75rem;
+  }
+}

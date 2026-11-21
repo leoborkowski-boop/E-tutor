@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { AnswerSpec, InputTask, Misconception, Task } from '../content/types';
-import { chime, speak } from '../lib/speech';
+import { speak } from '../lib/speech';
+import { signal } from '../lib/feedback';
 import { checkFractionAnswer, parseAnswer, type CheckResult } from '../lib/parse';
 import { attemptScore } from '../state/progress';
 import { useApp } from '../state/AppState';
@@ -8,6 +9,7 @@ import { AnswerInput } from './AnswerInput';
 import { FractionVisual } from './FractionVisual';
 import { MathText } from './MathText';
 import { Button, Icon, SpeakButton } from './ui';
+import { InteractiveAnswer, checkInteractive, hasAnswer, initialIA, isInteractive, type IAState } from './interactive/InteractiveAnswer';
 
 export type TaskOutcome = { correct: boolean; score: number; hints: number; misconception?: string; stepMode: boolean };
 
@@ -215,6 +217,7 @@ export function TaskView({ task, onFinished, onNext, nextLabel = 'Dalej' }: { ta
   const [showSolution, setShowSolution] = useState(false);
   const lastMisconception = useRef<string | undefined>(undefined);
   const reportedRef = useRef(false);
+  const [ia, setIa] = useState<IAState | null>(() => (isInteractive(task) ? initialIA(task) : null));
 
   useEffect(() => {
     if (settings.voiceEnabled && settings.autoRead) speak(task.prompt, settings);
@@ -229,7 +232,7 @@ export function TaskView({ task, onFinished, onNext, nextLabel = 'Dalej' }: { ta
     if (reportedRef.current) return;
     reportedRef.current = true;
     setDone({ correct });
-    if (settings.sounds) chime(correct ? 'correct' : 'wrong');
+    signal(correct ? 'correct' : 'wrong', settings);
     if (!correct || opts.revealed || settings.showSolutionAfterCorrect || opts.stepMode) setShowSolution(true);
     const score = attemptScore({ correct, hints: hintsShown, extraTries: wrongTries, stepMode: !!opts.stepMode, revealed: !!opts.revealed });
     onFinished({ correct: correct && !opts.revealed, score, hints: hintsShown, misconception: lastMisconception.current, stepMode: !!opts.stepMode });
@@ -239,7 +242,7 @@ export function TaskView({ task, onFinished, onNext, nextLabel = 'Dalej' }: { ta
     if (misconception) lastMisconception.current = misconception;
     const tries = wrongTries + 1;
     setWrongTries(tries);
-    if (settings.sounds) chime('wrong');
+    signal('wrong', settings);
     if (tries >= settings.maxAttempts) {
       say({ kind: 'wrong', message: `${message} Zobacz rozwiązanie poniżej.` });
       finish(false);
@@ -270,6 +273,21 @@ export function TaskView({ task, onFinished, onNext, nextLabel = 'Dalej' }: { ta
       registerWrong(c.misconception ?? 'To nie jest poprawna odpowiedź. Spróbuj jeszcze raz.', c.misconception);
     }
   };
+
+  const checkIA = () => {
+    if (!isInteractive(task) || !ia || done) return;
+    const { verdict, next } = checkInteractive(task, ia);
+    setIa(next);
+    if (verdict.ok) {
+      say({ kind: 'correct', message: pickPraise() });
+      finish(true);
+    } else if (!verdict.countsAsTry) say({ kind: 'info', message: verdict.message });
+    else registerWrong(verdict.message, verdict.misconception);
+  };
+
+  const onCheck = task.format === 'input' ? checkInput : task.format === 'choice' ? checkChoice : checkIA;
+  const canCheck =
+    task.format === 'input' ? !!input.trim() : task.format === 'choice' ? selected !== null : isInteractive(task) && !!ia && hasAnswer(task, ia);
 
   const hintsAvailable = settings.hintsMode === 'always' || (settings.hintsMode === 'afterError' && wrongTries > 0);
   const canStepMode = task.format === 'input' && !!task.steps?.length && settings.stepModeAvailable && !done;
@@ -329,6 +347,12 @@ export function TaskView({ task, onFinished, onNext, nextLabel = 'Dalej' }: { ta
         </div>
       )}
 
+      {isInteractive(task) && ia && (
+        <div className="interactive-area">
+          <InteractiveAnswer task={task} state={ia} onChange={setIa} disabled={!!done} reveal={!!done && !done.correct} />
+        </div>
+      )}
+
       {feedback && <FeedbackBox fb={feedback} />}
 
       {hintsAvailable && !done && hintsShown > 0 && (
@@ -349,8 +373,8 @@ export function TaskView({ task, onFinished, onNext, nextLabel = 'Dalej' }: { ta
             <Button
               variant="primary"
               icon="check"
-              onClick={task.format === 'input' ? checkInput : checkChoice}
-              disabled={task.format === 'input' ? !input.trim() : selected === null}
+              onClick={onCheck}
+              disabled={!canCheck}
             >
               Sprawdź
             </Button>

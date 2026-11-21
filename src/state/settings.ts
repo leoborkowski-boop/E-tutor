@@ -30,6 +30,9 @@ export type Settings = {
   wideSpacing: boolean;
   reduceMotion: boolean;
   sounds: boolean;
+  haptics: boolean;
+  /** Ekranowa klawiatura ułamków: auto = na urządzeniach dotykowych */
+  keypad: 'auto' | 'on' | 'off';
   /* Motywacja */
   dailyGoalMinutes: number; // 0 = wyłączony
   showBadges: boolean;
@@ -62,6 +65,8 @@ export const DEFAULT_SETTINGS: Settings = {
   wideSpacing: false,
   reduceMotion: false,
   sounds: false,
+  haptics: true,
+  keypad: 'auto',
   dailyGoalMinutes: 10,
   showBadges: true,
   showCalendar: true,

@@ -4,16 +4,17 @@ import { mieszaneGenerators, pojecieGenerators, skracanieGenerators } from './ba
 import { additionStatement, comparisonStatements, dodawanieGenerators, mnozenieGenerators, porownywanieGenerators } from './operations';
 import { WORD_PROBLEMS, decimalStatement, dziesietneGenerators, kolejnoscGenerators, tekstoweGenerators, wordProblemTask } from './advanced';
 import { fractionChoices, id } from './helpers';
+import { lineTask, matchDecimalTask, matchEquivalentTask, orderTask, shadeTask } from './interactive';
 import type { Fraction } from '../../lib/fraction';
 
 export const GENERATORS: Record<TopicId, Generator[]> = {
-  pojecie: pojecieGenerators,
-  skracanie: skracanieGenerators,
-  mieszane: mieszaneGenerators,
-  porownywanie: porownywanieGenerators,
+  pojecie: [...pojecieGenerators, (d, r) => shadeTask(d, r), (d, r) => lineTask(d, r, 'pojecie')],
+  skracanie: [...skracanieGenerators, (d, r) => (d === 1 ? shadeTask(2, r, 'skracanie') : shadeTask(d, r, 'skracanie')), (d, r) => matchEquivalentTask(d, r)],
+  mieszane: [...mieszaneGenerators, (d, r) => lineTask(d, r, 'mieszane')],
+  porownywanie: [...porownywanieGenerators, (d, r) => orderTask(d, r), (d, r) => orderTask(d, r)],
   dodawanie: dodawanieGenerators,
   mnozenie: mnozenieGenerators,
-  dziesietne: dziesietneGenerators,
+  dziesietne: [...dziesietneGenerators, (d, r) => matchDecimalTask(d, r), (d, r) => lineTask(d, r, 'dziesietne')],
   kolejnosc: kolejnoscGenerators,
   tekstowe: tekstoweGenerators,
 };

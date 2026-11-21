@@ -1,3 +1,4 @@
+import { Capacitor, SystemBars, SystemBarsStyle } from '@capacitor/core';
 import { useEffect } from 'react';
 import { Icon } from './components/ui';
 import { href, useRoute, type Route } from './router';
@@ -30,6 +31,11 @@ function useAppearance() {
     root.toggleAttribute('data-spacing', settings.wideSpacing);
     root.toggleAttribute('data-reduce-motion', settings.reduceMotion);
     root.style.setProperty('--font-scale', String(settings.fontScale));
+    // W aplikacji Android: kolor ikon paska stanu zgodny z motywem aplikacji
+    if (Capacitor.isNativePlatform()) {
+      const dark = settings.theme === 'dark' || (settings.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      void SystemBars.setStyle({ style: dark ? SystemBarsStyle.Dark : SystemBarsStyle.Light }).catch(() => {});
+    }
   }, [settings.theme, settings.highContrast, settings.dyslexiaFont, settings.wideSpacing, settings.reduceMotion, settings.fontScale]);
 }
 

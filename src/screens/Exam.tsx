@@ -18,7 +18,7 @@ function scoreItem(item: ExamItem, a: Answer | undefined): number {
   if (!a) return 0;
   if (t.format === 'choice') return a.choice !== undefined && t.choices[a.choice]?.correct ? item.points : 0;
   if (t.format === 'truefalse') return a.tf && t.statements.every((s, i) => a.tf![i] === s.isTrue) ? item.points : 0;
-  if (!a.text?.trim()) return 0;
+  if (t.format !== 'input' || !a.text?.trim()) return 0;
   return checkFractionAnswer(a.text, t.answer.value).status === 'correct' ? item.points : 0;
 }
 

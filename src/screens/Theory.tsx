@@ -3,6 +3,7 @@ import { TOPIC_BY_ID, TOPICS } from '../content/topics';
 import type { TheoryBlock, TopicId } from '../content/types';
 import { FractionVisual } from '../components/FractionVisual';
 import { MathText } from '../components/MathText';
+import { Widget } from '../components/widgets/Widgets';
 import { Button, Card, MasteryBar, SpeakButton, StatusChip } from '../components/ui';
 import { href } from '../router';
 import { useApp, useStudyTimer } from '../state/AppState';
@@ -22,6 +23,8 @@ function blockSpeech(b: TheoryBlock): string[] {
       return [`${b.title ?? 'Przykład'}. ${b.problem}`, ...b.steps, `Odpowiedź: ${b.answer}`];
     case 'mistake':
       return [`Błędnie: ${b.wrong}`, `Poprawnie: ${b.right}`, b.why];
+    case 'interactive':
+      return [];
   }
 }
 
@@ -79,6 +82,8 @@ function Block({ b }: { b: TheoryBlock }) {
           </details>
         </div>
       );
+    case 'interactive':
+      return <Widget id={b.widget} title={b.title} text={b.text} />;
     case 'mistake':
       return (
         <div className="mistake">

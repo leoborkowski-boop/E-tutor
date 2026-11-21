@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { parseAnswer } from '../lib/parse';
 import type { AnswerSpec } from '../content/types';
 import { MathText } from './MathText';
+import { FractionKeypad, useKeypadVisible } from './FractionKeypad';
 
 /** Pole odpowiedzi z podglądem wpisanego ułamka. */
 export function AnswerInput({
@@ -22,9 +23,11 @@ export function AnswerInput({
   label?: string;
 }) {
   const ref = useRef<HTMLInputElement>(null);
+  const keypad = useKeypadVisible();
   useEffect(() => {
-    if (autoFocus && !disabled) ref.current?.focus({ preventScroll: true });
-  }, [autoFocus, disabled]);
+    // z klawiaturą ekranową nie ustawiamy fokusu, żeby nie wyskakiwała systemowa klawiatura
+    if (autoFocus && !disabled && !keypad) ref.current?.focus({ preventScroll: true });
+  }, [autoFocus, disabled, keypad]);
   const parsed = value.trim() ? parseAnswer(value) : null;
   const preview = parsed && (parsed.form === 'fraction' || parsed.form === 'mixed') ? value.trim().replace(/\s*\/\s*/g, '/') : null;
   return (
@@ -35,7 +38,7 @@ export function AnswerInput({
         <input
           ref={ref}
           className="answer-input"
-          inputMode="text"
+          inputMode={keypad ? 'none' : 'text'}
           autoComplete="off"
           spellCheck={false}
           placeholder={spec.placeholder ?? 'np. 3/4'}
@@ -54,7 +57,10 @@ export function AnswerInput({
           {preview && <MathText text={`= {${preview.replace('-', '-')}}`} />}
         </span>
       </label>
-      <p className="answer-help">Ułamek: 3/4 · liczba mieszana: 1 1/2 · dziesiętny: 0,75</p>
+      <p className="answer-help">
+        {keypad ? 'Liczba mieszana: 1 ␣ 1/2' : 'Ułamek: 3/4 · liczba mieszana: 1 1/2 · dziesiętny: 0,75'}
+      </p>
+      {keypad && !disabled && <FractionKeypad value={value} onChange={onChange} onSubmit={onSubmit} disabled={disabled} />}
     </div>
   );
 }
