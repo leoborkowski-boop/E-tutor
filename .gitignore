@@ -5,3 +5,4 @@ dist
 
 # Zbudowane APK
 *.apk
+dist-artifact

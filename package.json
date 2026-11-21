@@ -11,7 +11,8 @@
     "test": "vitest run",
     "typecheck": "tsc -b",
     "android:sync": "vite build && cap sync android",
-    "android:apk": "npm run android:sync && cd android && ./gradlew assembleRelease --max-workers=1"
+    "android:apk": "npm run android:sync && cd android && ./gradlew assembleRelease --max-workers=1",
+    "build:artifact": "vite build --mode artifact && node scripts/artifact-page.mjs"
   },
   "dependencies": {
     "@capacitor-community/text-to-speech": "^8.0.2",
@@ -31,6 +32,7 @@
     "@vitejs/plugin-react": "^6.3.0",
     "typescript": "~5.9",
     "vite": "^8.3.8",
+    "vite-plugin-singlefile": "^2.3.4",
     "vitest": "^5.1.1"
   }
 }
