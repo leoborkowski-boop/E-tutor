@@ -19,6 +19,9 @@ export type Settings = {
   autoRead: boolean;
   readFeedback: boolean;
   voiceURI: string | null;
+  /** naturalny głos (Piper) albo głos systemowy */
+  voiceEngine: 'neural' | 'system';
+  neuralVoice: 'pl_PL-gosia-medium' | 'pl_PL-darkman-medium' | 'pl_PL-mc_speech-medium';
   rate: number;
   pitch: number;
   volume: number;
@@ -55,6 +58,8 @@ export const DEFAULT_SETTINGS: Settings = {
   autoRead: false,
   readFeedback: false,
   voiceURI: null,
+  voiceEngine: 'neural',
+  neuralVoice: 'pl_PL-gosia-medium',
   rate: 0.9,
   pitch: 1,
   volume: 1,

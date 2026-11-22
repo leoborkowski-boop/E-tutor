@@ -1,0 +1,20 @@
+# Konfiguracja Cloudflare Worker – serwer lekcji z AI
+name = "e-tutor-ai"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+
+[vars]
+# Model Claude. Domyślnie najlepszy jakościowo; tańsze: claude-sonnet-5-5, claude-haiku-5-5
+MODEL = "claude-opus-5-5"
+# Ile lekcji dziennie może przygotować jedno urządzenie
+DAILY_LIMIT = "5"
+# Adresy, z których aplikacja może korzystać z serwera (oddzielone przecinkami).
+# Puste = każdy adres. Aplikacja na Androidzie jest wpuszczana zawsze.
+ALLOWED_ORIGINS = ""
+
+# Dzienny limit wymaga magazynu KV. Utwórz go poleceniem:
+#   npx wrangler kv namespace create LIMITS
+# i wklej otrzymane id poniżej (usuń znaki # z trzech linii):
+# [[kv_namespaces]]
+# binding = "LIMITS"
+# id = "WKLEJ_TUTAJ_ID"

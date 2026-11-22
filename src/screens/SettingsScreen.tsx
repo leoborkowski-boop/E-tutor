@@ -1,6 +1,7 @@
 import { useRef, useState, type ReactNode } from 'react';
 import { Button, Card, Segmented, Slider, Toggle } from '../components/ui';
 import { speak, speechSupported, useVoices } from '../lib/speech';
+import { NEURAL_VOICES, downloadVoice, neuralSupported, removeVoice, useNeuralState } from '../lib/neuralVoice';
 import { useApp } from '../state/AppState';
 import type { Progress } from '../state/progress';
 import { PRESETS } from '../state/settings';
@@ -20,6 +21,7 @@ function Row({ title, hint, children }: { title: string; hint?: string; children
 export function SettingsScreen() {
   const { settings: s, updateSettings: set, resetSettings, progress, resetProgress, importProgress } = useApp();
   const voices = useVoices();
+  const neural = useNeuralState();
   const [confirmReset, setConfirmReset] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -166,22 +168,75 @@ export function SettingsScreen() {
             <Row title="Czytaj komunikaty po sprawdzeniu">
               <Toggle label="Czytanie komunikatów" checked={s.readFeedback} onChange={(v) => set({ readFeedback: v })} />
             </Row>
-            <Row title="Głos" hint={voices.length ? undefined : 'Nie znaleziono polskich głosów w systemie – zostanie użyty domyślny.'}>
-              <select className="select" value={s.voiceURI ?? ''} onChange={(e) => set({ voiceURI: e.target.value || null })} aria-label="Wybór głosu">
-                <option value="">Domyślny polski</option>
-                {voices.map((v) => (
-                  <option key={v.voiceURI} value={v.voiceURI}>
-                    {v.name}
-                  </option>
-                ))}
-              </select>
-            </Row>
+            {neuralSupported && (
+              <Row title="Rodzaj głosu" hint="Naturalny głos brzmi jak prawdziwy lektor. Działa na urządzeniu, także bez internetu.">
+                <Segmented
+                  label="Rodzaj głosu"
+                  value={s.voiceEngine}
+                  onChange={(v) => set({ voiceEngine: v })}
+                  options={[
+                    { value: 'neural', label: 'Naturalny' },
+                    { value: 'system', label: 'Systemowy' },
+                  ]}
+                />
+              </Row>
+            )}
+            {neuralSupported && s.voiceEngine === 'neural' ? (
+              <div className="neural-voices">
+                {NEURAL_VOICES.map((v) => {
+                  const ready = neural.ready.includes(v.id);
+                  const busy = neural.downloading === v.id;
+                  return (
+                    <div key={v.id} className={`neural-voice ${s.neuralVoice === v.id ? 'is-selected' : ''}`}>
+                      <label className="neural-voice-pick">
+                        <input type="radio" name="neural-voice" checked={s.neuralVoice === v.id} onChange={() => set({ neuralVoice: v.id })} />
+                        <span>
+                          <strong>{v.name}</strong> <span className="muted small">{v.about}</span>
+                        </span>
+                      </label>
+                      {ready ? (
+                        <span className="neural-status">
+                          <span className="chip chip-mastered">pobrany</span>
+                          <button type="button" className="link-btn" onClick={() => void removeVoice(v.id)}>
+                            usuń
+                          </button>
+                        </span>
+                      ) : busy ? (
+                        <span className="neural-progress" role="progressbar" aria-valuenow={Math.round(neural.progress * 100)} aria-valuemin={0} aria-valuemax={100}>
+                          <span className="neural-track">
+                            <span className="neural-fill" style={{ width: `${Math.round(neural.progress * 100)}%` }} />
+                          </span>
+                          <span className="muted small">{Math.round(neural.progress * 100)}%</span>
+                        </span>
+                      ) : (
+                        <Button icon="download" variant="ghost" disabled={!!neural.downloading} onClick={() => void downloadVoice(v.id).then(() => set({ neuralVoice: v.id }))}>
+                          Pobierz (ok. 60 MB)
+                        </Button>
+                      )}
+                    </div>
+                  );
+                })}
+                {neural.error && <p className="feedback feedback-wrong">{neural.error}</p>}
+                {!neural.ready.includes(s.neuralVoice) && <p className="muted small">Dopóki głos nie jest pobrany, czyta głos systemowy. Pobieranie najlepiej zrobić przez Wi-Fi.</p>}
+              </div>
+            ) : (
+              <Row title="Głos" hint={voices.length ? undefined : 'Nie znaleziono polskich głosów w systemie – zostanie użyty domyślny.'}>
+                <select className="select" value={s.voiceURI ?? ''} onChange={(e) => set({ voiceURI: e.target.value || null })} aria-label="Wybór głosu">
+                  <option value="">Domyślny polski</option>
+                  {voices.map((v) => (
+                    <option key={v.voiceURI} value={v.voiceURI}>
+                      {v.name}
+                    </option>
+                  ))}
+                </select>
+              </Row>
+            )}
             <Row title="Tempo mowy">
               <Slider label="Tempo mowy" value={s.rate} min={0.5} max={1.5} step={0.05} onChange={(v) => set({ rate: v })} format={(v) => `${v.toFixed(2)}×`} />
             </Row>
-            <Row title="Wysokość głosu">
+            {s.voiceEngine === 'system' && <Row title="Wysokość głosu">
               <Slider label="Wysokość głosu" value={s.pitch} min={0.5} max={1.5} step={0.05} onChange={(v) => set({ pitch: v })} format={(v) => v.toFixed(2)} />
-            </Row>
+            </Row>}
             <Row title="Głośność">
               <Slider label="Głośność" value={s.volume} min={0.1} max={1} step={0.1} onChange={(v) => set({ volume: v })} format={(v) => `${Math.round(v * 100)}%`} />
             </Row>

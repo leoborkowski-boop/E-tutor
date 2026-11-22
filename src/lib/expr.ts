@@ -19,7 +19,8 @@ function tokenize(src: string): Tok[] | null {
     if (/[0-9]/.test(c)) {
       let j = i;
       while (j < s.length && /[0-9.,]/.test(s[j])) j++;
-      const f = Fraction.fromDecimalString(s.slice(i, j).replace('.', ','));
+      const raw = s.slice(i, j).replace('.', ',');
+      const f = /^\d+$/.test(raw) ? new Fraction(Number(raw)) : Fraction.fromDecimalString(raw);
       if (!f) return null;
       out.push({ t: 'num', v: f });
       i = j;

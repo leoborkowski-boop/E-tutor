@@ -2283,3 +2283,26 @@ button.wseg:hover {
 .ai-item-link:hover strong { color: var(--accent); }
 .icon-btn { border: 0; background: transparent; color: var(--text-2); cursor: pointer; padding: 6px; border-radius: 8px; }
 .icon-btn:hover { background: var(--surface-2); color: var(--bad); }
+
+/* Naturalny głos lektora */
+.neural-voices { display: grid; gap: 8px; margin: 4px 0 12px; }
+.neural-voice {
+  display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: space-between;
+  padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface);
+}
+.neural-voice.is-selected { border-color: var(--accent); background: var(--accent-soft); }
+.neural-voice-pick { display: flex; gap: 10px; align-items: center; cursor: pointer; min-width: 0; }
+.neural-voice-pick input { width: 18px; height: 18px; accent-color: var(--accent); }
+.neural-status { display: inline-flex; gap: 10px; align-items: center; }
+.neural-progress { display: inline-flex; gap: 8px; align-items: center; min-width: 160px; }
+.neural-track { flex: 1; height: 8px; border-radius: 999px; background: var(--viz-empty); overflow: hidden; min-width: 100px; }
+.neural-fill { display: block; height: 100%; background: var(--accent); transition: width .2s; }
+
+.voice-banner {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center;
+  padding: 12px 16px; margin-bottom: 18px; border-radius: var(--radius); border: 1px dashed var(--border);
+  color: var(--text); text-decoration: none; background: var(--surface);
+}
+.voice-banner:hover { border-color: var(--accent); }
+.theory-card-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.theory-card-head h2 { margin: 0; }

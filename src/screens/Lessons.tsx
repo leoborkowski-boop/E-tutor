@@ -4,11 +4,12 @@ import { LESSON_KINDS, starsFor, type Lesson } from '../content/curriculum/model
 import { toChoice } from '../content/tasks';
 import type { Task, TheoryBlock } from '../content/types';
 import { TaskView, type TaskOutcome } from '../components/TaskView';
-import { Button, Card, Icon } from '../components/ui';
+import { Button, Card, Icon, SpeakButton } from '../components/ui';
 import { defaultRng } from '../lib/random';
 import { href } from '../router';
 import { useApp, useStudyTimer } from '../state/AppState';
-import { Block } from './Theory';
+import { Block, blockSpeech } from './Theory';
+import { neuralSupported, useNeuralState } from '../lib/neuralVoice';
 import { FractionVisual } from '../components/FractionVisual';
 
 /* ---------------- Gwiazdki ---------------- */
@@ -35,8 +36,10 @@ function zoneDone(zoneId: string, done: Record<string, { stars: number }>) {
 /* ---------------- Lista działów ---------------- */
 
 export function ZonesScreen() {
-  const { progress } = useApp();
+  const { progress, settings } = useApp();
+  const neural = useNeuralState();
   const done = progress.lessons ?? {};
+  const voiceMissing = neuralSupported && settings.voiceEnabled && settings.voiceEngine === 'neural' && !neural.ready.includes(settings.neuralVoice);
   return (
     <div className="page">
       <header className="page-head">
@@ -56,6 +59,16 @@ export function ZonesScreen() {
         </span>
         <Icon name="next" />
       </a>
+
+      {voiceMissing && (
+        <a className="voice-banner" href={href.settings}>
+          <Icon name="speaker" size={20} />
+          <span>
+            <strong>Naturalny głos lektora.</strong> <span className="muted">Pobierz raz (ok. 60 MB), a teoria i zadania będą czytane głosem, który brzmi jak prawdziwy nauczyciel.</span>
+          </span>
+          <Icon name="next" />
+        </a>
+      )}
 
       <div className="zone-grid">
         {ZONES.map((z) => {
@@ -247,6 +260,10 @@ export function LessonRunner({
         </header>
         {!!theory?.length && (
           <Card className="theory-card">
+            <div className="theory-card-head">
+              <h2>Teoria</h2>
+              <SpeakButton text={theory.flatMap(blockSpeech)} label="Przeczytaj teorię" />
+            </div>
             {theory.map((b, i) => (
               <Block key={i} b={b} />
             ))}

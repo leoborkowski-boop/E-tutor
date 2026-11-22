@@ -3,6 +3,7 @@ import { QueueStrategy, TextToSpeech } from '@capacitor-community/text-to-speech
 import { useEffect, useState } from 'react';
 import type { Settings } from '../state/settings';
 import { toSpoken } from './spoken';
+import { isNeuralReady, neuralSupported, speakNeural, stopNeural } from './neuralVoice';
 
 /**
  * Lektor: w przeglądarce Web Speech API, w aplikacji Android natywny
@@ -11,7 +12,7 @@ import { toSpoken } from './spoken';
 const isNative = Capacitor.isNativePlatform();
 const webSpeech = typeof window !== 'undefined' && 'speechSynthesis' in window;
 
-export const speechSupported = isNative || webSpeech;
+export const speechSupported = isNative || webSpeech || neuralSupported;
 
 export type VoiceOption = { voiceURI: string; name: string; index: number };
 
@@ -51,13 +52,25 @@ export function useVoices(): VoiceOption[] {
   return voices;
 }
 
-type SpeakOpts = Pick<Settings, 'rate' | 'pitch' | 'volume' | 'voiceURI'> & { onEnd?: () => void };
+type SpeakOpts = Pick<Settings, 'rate' | 'pitch' | 'volume' | 'voiceURI'> & Partial<Pick<Settings, 'voiceEngine' | 'neuralVoice'>> & { onEnd?: () => void };
 
 let speakToken = 0;
 
 /** Czyta tekst (z notacją ułamków) polskim głosem. */
 export function speak(text: string | string[], opts: SpeakOpts) {
   const parts = (Array.isArray(text) ? text : [text]).map(toSpoken).filter(Boolean);
+  // Naturalny głos (Piper), jeśli jest pobrany; przy błędzie – głos systemowy
+  if (opts.voiceEngine !== 'system' && opts.neuralVoice && neuralSupported && isNeuralReady(opts.neuralVoice)) {
+    stopSystem();
+    void speakNeural(parts, { voice: opts.neuralVoice, rate: opts.rate, volume: opts.volume, onEnd: opts.onEnd }).then((ok) => {
+      if (!ok) speakSystem(parts, opts);
+    });
+    return;
+  }
+  speakSystem(parts, opts);
+}
+
+function speakSystem(parts: string[], opts: SpeakOpts) {
   if (isNative) {
     const token = ++speakToken;
     void (async () => {
@@ -98,6 +111,11 @@ export function speak(text: string | string[], opts: SpeakOpts) {
 }
 
 export function stopSpeaking() {
+  stopNeural();
+  stopSystem();
+}
+
+function stopSystem() {
   if (isNative) {
     speakToken++;
     void TextToSpeech.stop().catch(() => {});
