@@ -1,6 +1,7 @@
 import { Capacitor, SystemBars, SystemBarsStyle } from '@capacitor/core';
 import { useEffect } from 'react';
 import { Icon } from './components/ui';
+import { LogoMark } from './components/Logo';
 import { href, useRoute, type Route } from './router';
 import { Diagnostic } from './screens/Diagnostic';
 import { Exam } from './screens/Exam';
@@ -103,8 +104,11 @@ export default function App() {
     <div className="app">
       <header className="topbar">
         <a className="brand" href={href.home}>
-          <span className="brand-mark">½</span>
-          <span className="brand-name">E-tutor</span>
+          <LogoMark size={34} />
+          <span className="brand-text">
+            <span className="brand-name">E-tutor</span>
+            <span className="brand-tagline">Nauka do kwadratu</span>
+          </span>
         </a>
         <nav className="nav" aria-label="Główna nawigacja">
           {NAV.map((n) => (

@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>E-tutor · Matematyka do egzaminu</title>
+<title>E-tutor · Nauka do kwadratu</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Matematyka do egzaminu ósmoklasisty po 10 minut dziennie. Zadania bez końca, podpowiedzi krok po kroku i postępy, które pokazują, co powtórzyć. Dział z ułamkami działa za darmo.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233462c9'/><text x='16' y='22' font-size='16' text-anchor='middle' fill='white' font-family='sans-serif'>½</text></svg>">
+<meta name="description" content="E-tutor – nauka do kwadratu. Matematyka do egzaminu ósmoklasisty po 10 minut dziennie. Zadania bez końca, podpowiedzi krok po kroku i postępy, które pokazują, co powtórzyć. Dział z ułamkami działa za darmo.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23000'/%3E%3Cpath fill='%23fff' d='M44.55 68.55L44.55 68.55Q39.94 68.55 36.59 66.72Q33.24 64.89 31.46 61.49Q29.68 58.09 29.68 53.37L29.68 53.37Q29.68 48.83 31.46 45.40Q33.24 41.98 36.51 40.06Q39.78 38.15 44.21 38.15L44.21 38.15Q47.32 38.15 49.92 39.13Q52.52 40.10 54.43 42.02Q56.34 43.93 57.38 46.72Q58.42 49.52 58.42 53.18L58.42 53.18L58.42 55.50L38.73 55.50Q38.81 57.48 39.49 58.85L39.49 58.85Q40.23 60.38 41.57 61.13Q42.92 61.88 44.71 61.88L44.71 61.88Q45.95 61.88 46.97 61.54Q47.98 61.20 48.71 60.51Q49.43 59.83 49.80 58.85L49.80 58.85L58.00 60.20Q57.26 62.73 55.46 64.61Q53.65 66.50 50.90 67.53Q48.14 68.55 44.55 68.55ZM38.78 50.15L38.78 50.15L49.70 50.15Q49.54 48.88 49.14 47.88L49.14 47.88Q48.51 46.41 47.30 45.61Q46.08 44.82 44.29 44.82Q42.50 44.82 41.26 45.63Q40.02 46.43 39.39 47.86L39.39 47.86Q38.91 48.88 38.78 50.15Z'/%3E%3Cpath fill='%23fff' d='M75.52 45L62.65 45L62.65 42.04L69 36.42Q69.73 35.77 70.24 35.21Q70.75 34.65 71.02 34.10Q71.29 33.55 71.29 32.88L71.29 32.88Q71.29 32.16 70.96 31.63Q70.64 31.11 70.08 30.83Q69.53 30.55 68.80 30.55L68.80 30.55Q68.06 30.55 67.51 30.84Q66.96 31.14 66.66 31.70Q66.35 32.26 66.35 33.06L66.35 33.06L62.41 33.06Q62.41 31.29 63.22 30Q64.02 28.71 65.46 28.01Q66.90 27.30 68.81 27.30L68.81 27.30Q70.78 27.30 72.24 27.97Q73.70 28.63 74.50 29.82Q75.29 31.01 75.29 32.57L75.29 32.57Q75.29 33.56 74.90 34.53Q74.51 35.50 73.48 36.69Q72.46 37.89 70.56 39.53L70.56 39.53L68.39 41.54L68.39 41.66L75.52 41.66L75.52 45Z'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Caveat:wght@500;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -96,10 +96,12 @@ p { margin: 0; }
 .top { padding-block: 18px; }
 .top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font: 700 1.2rem/1 var(--f-display); }
-.brand-mark {
-  width: 34px; height: 34px; border-radius: 9px; background: var(--accent); color: var(--accent-ink);
-  display: grid; place-items: center; font: 700 1.05rem/1 var(--f-body);
-}
+.brand-mark { width: 40px; height: 40px; flex: none; }
+.brand-mark circle { fill: var(--ink); }
+.brand-mark .g { fill: var(--paper); }
+.brand-text { display: grid; gap: 2px; }
+.brand-name { font: 800 1.25rem/1 var(--f-display); letter-spacing: -0.01em; }
+.brand-tag { font: 500 0.75rem/1.1 var(--f-mono); letter-spacing: 0.04em; color: var(--ink-2); }
 .top-link { font-weight: 600; text-decoration: none; }
 .top-link:hover { text-decoration: underline; }
 
@@ -336,7 +338,7 @@ table.compare { width: 100%; min-width: 560px; border-collapse: collapse; font-v
 
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="#start" aria-label="E-tutor, początek strony"><span class="brand-mark" aria-hidden="true">½</span>E-tutor</a>
+    <a class="brand" href="#start" aria-label="E-tutor – nauka do kwadratu, początek strony"><svg class="brand-mark" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46"/><path class="g" d="M44.55 68.55L44.55 68.55Q39.94 68.55 36.59 66.72Q33.24 64.89 31.46 61.49Q29.68 58.09 29.68 53.37L29.68 53.37Q29.68 48.83 31.46 45.40Q33.24 41.98 36.51 40.06Q39.78 38.15 44.21 38.15L44.21 38.15Q47.32 38.15 49.92 39.13Q52.52 40.10 54.43 42.02Q56.34 43.93 57.38 46.72Q58.42 49.52 58.42 53.18L58.42 53.18L58.42 55.50L38.73 55.50Q38.81 57.48 39.49 58.85L39.49 58.85Q40.23 60.38 41.57 61.13Q42.92 61.88 44.71 61.88L44.71 61.88Q45.95 61.88 46.97 61.54Q47.98 61.20 48.71 60.51Q49.43 59.83 49.80 58.85L49.80 58.85L58.00 60.20Q57.26 62.73 55.46 64.61Q53.65 66.50 50.90 67.53Q48.14 68.55 44.55 68.55ZM38.78 50.15L38.78 50.15L49.70 50.15Q49.54 48.88 49.14 47.88L49.14 47.88Q48.51 46.41 47.30 45.61Q46.08 44.82 44.29 44.82Q42.50 44.82 41.26 45.63Q40.02 46.43 39.39 47.86L39.39 47.86Q38.91 48.88 38.78 50.15Z"/><path class="g" d="M75.52 45L62.65 45L62.65 42.04L69 36.42Q69.73 35.77 70.24 35.21Q70.75 34.65 71.02 34.10Q71.29 33.55 71.29 32.88L71.29 32.88Q71.29 32.16 70.96 31.63Q70.64 31.11 70.08 30.83Q69.53 30.55 68.80 30.55L68.80 30.55Q68.06 30.55 67.51 30.84Q66.96 31.14 66.66 31.70Q66.35 32.26 66.35 33.06L66.35 33.06L62.41 33.06Q62.41 31.29 63.22 30Q64.02 28.71 65.46 28.01Q66.90 27.30 68.81 27.30L68.81 27.30Q70.78 27.30 72.24 27.97Q73.70 28.63 74.50 29.82Q75.29 31.01 75.29 32.57L75.29 32.57Q75.29 33.56 74.90 34.53Q74.51 35.50 73.48 36.69Q72.46 37.89 70.56 39.53L70.56 39.53L68.39 41.54L68.39 41.66L75.52 41.66L75.52 45Z"/></svg><span class="brand-text"><span class="brand-name">E-tutor</span><span class="brand-tag">Nauka do kwadratu</span></span></a>
     <a class="top-link js-app-link" href="https://claude.ai/artifact/6TaVSnCLe2uWKBRQu5u7PT" target="_blank" rel="noopener">Wypróbuj ułamki</a>
   </div>
 </header>
@@ -366,7 +368,7 @@ table.compare { width: 100%; min-width: 560px; border-collapse: collapse; font-v
 
       <figure class="shot" style="margin:0">
         <div class="phone">
-          <img src="img/ekran-zadanie.png" width="780" height="1560" alt="Zadanie w aplikacji E-tutor: zamaluj pięć szóstych paska. Pod paskiem podpowiedź: mianownik 6 – pasek ma 6 części, licznik 5 – tyle zamaluj.">
+          <img src="img/ekran-zadanie.png" width="780" height="1560" alt="Zadanie w aplikacji E-tutor: zamaluj pięć ósmych paska. Pod paskiem podpowiedź: mianownik 8 – pasek ma 8 części, licznik 5 – tyle zamaluj.">
         </div>
         <figcaption class="note note-hero" aria-hidden="true">
           <span>podpowiedź, a&nbsp;nie gotowy wynik</span>
@@ -606,7 +608,7 @@ table.compare { width: 100%; min-width: 560px; border-collapse: collapse; font-v
 
 <footer class="foot">
   <div class="wrap">
-    <span>E-tutor · matematyka do egzaminu ósmoklasisty</span>
+    <span>E-tutor · Nauka do kwadratu · matematyka do egzaminu ósmoklasisty</span>
     <a class="js-app-link" href="https://claude.ai/artifact/6TaVSnCLe2uWKBRQu5u7PT" target="_blank" rel="noopener">Otwórz aplikację</a>
   </div>
 </footer>

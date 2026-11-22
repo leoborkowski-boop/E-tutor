@@ -25,7 +25,7 @@ export function Home() {
     <div className="page">
       <header className="page-head">
         <h1>{greeting()}!</h1>
-        <p className="lead">Ułamki · klasa 8. Ucz się we własnym tempie.</p>
+        <p className="lead">Nauka do kwadratu: matematyka do egzaminu ósmoklasisty, we własnym tempie.</p>
       </header>
 
       <div className="grid-2">

@@ -258,6 +258,13 @@ a:hover {
   color: var(--accent-ink);
   font-size: 1.05rem;
 }
+/* Logo e²: czarne koło na jasnym motywie, jasne na ciemnym */
+.logo-mark { flex: none; display: block; }
+.logo-circle { fill: var(--text); }
+.logo-glyph { fill: var(--bg); }
+.brand-text { display: grid; line-height: 1.1; }
+.brand-name { font-weight: 800; letter-spacing: -0.01em; }
+.brand-tagline { font-size: 0.72rem; font-weight: 500; color: var(--text-2); letter-spacing: 0.01em; }
 .nav {
   display: flex;
   gap: 0.25rem;

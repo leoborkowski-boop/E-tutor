@@ -6,6 +6,10 @@ Ten plik opisuje wygląd strony `landing/index.html`. Przy każdej zmianie stron
 
 Kartka z zeszytu w kratkę. Nagłówek strony leży na kratce 5 mm z czerwonym marginesem. Dopiski czerwonym długopisem przy zrzutach ekranu są jak uwagi nauczyciela na marginesie. Dalej strona jest spokojna: biała kartka, granatowy atrament, jeden niebieski kolor przycisków (ten sam co w aplikacji).
 
+## Logo
+
+Znak **e²** („nauka do kwadratu”): czarne koło z białym „e” i potęgą 2, obok nazwa **E-tutor** i hasło **Nauka do kwadratu**. Pliki w `logo/`: `e2-znak.svg`, `e2-logo.svg` (z nazwą i hasłem), wersje `-odwrocony` na ciemne tło. Litery są zamienione na kształty (czcionka Inter ExtraBold), więc logo wygląda wszędzie tak samo. Na stronie koło ma kolor `--ink`, a litery `--paper` – w ciemnym motywie znak sam się odwraca. Logo zawsze czarno-białe, bez koloru akcentu.
+
 ## Kolory (tokeny w `:root`)
 
 | Token | Jasny | Ciemny | Do czego |
