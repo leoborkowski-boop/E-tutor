@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>E-tutor – propozycje logo</title>
+<style>
+@font-face { font-family: 'Inter'; font-weight: 800; src: url('../node_modules/@fontsource/inter/files/inter-latin-800-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: 'Inter'; font-weight: 800; src: url('../node_modules/@fontsource/inter/files/inter-latin-ext-800-normal.woff2') format('woff2'); unicode-range: U+0100-024F; }
+@font-face { font-family: 'Inter'; font-weight: 700; src: url('../node_modules/@fontsource/inter/files/inter-latin-700-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: 'Inter'; font-weight: 700; src: url('../node_modules/@fontsource/inter/files/inter-latin-ext-700-normal.woff2') format('woff2'); }
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; color: #000; font-family: 'Inter', system-ui, sans-serif; padding: 40px; width: 1200px; }
+h1 { font-size: 28px; margin: 0 0 6px; }
+.sub { margin: 0 0 30px; color: #555; font-size: 15px; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.card { border: 1px solid #ddd; border-radius: 14px; padding: 22px; display: grid; gap: 16px; }
+.num { font-size: 13px; font-weight: 700; letter-spacing: .08em; color: #777; }
+.name { font-size: 18px; font-weight: 700; margin: 0; }
+.idea { font-size: 13.5px; line-height: 1.45; color: #444; margin: 0; min-height: 58px; }
+.lockup { display: flex; align-items: center; gap: 14px; height: 120px; }
+.lockup svg.mark { width: 96px; height: 96px; flex: none; }
+.word { font-size: 40px; font-weight: 800; letter-spacing: -0.03em; }
+.sizes { display: flex; align-items: center; gap: 18px; border-top: 1px solid #eee; padding-top: 14px; }
+.sizes svg { flex: none; }
+.app { width: 56px; height: 56px; border: 1.5px solid #000; border-radius: 13px; display: grid; place-items: center; }
+.tab { display: flex; align-items: center; gap: 6px; font-size: 12px; background: #f3f3f3; border-radius: 8px 8px 0 0; padding: 6px 10px; }
+.cap { font-size: 11px; color: #888; }
+</style>
+</head>
+<body>
+<h1>E-tutor – propozycje logo</h1>
+<p class="sub">Czarne na białym. Każda propozycja: znak z nazwą, ikona aplikacji (56 px) i ikona karty przeglądarki (16 px).</p>
+
+<!-- Znaki jako symbole, żeby użyć ich kilka razy w różnych rozmiarach -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <!-- 1. e/t – nazwa jako ułamek -->
+    <symbol id="m1" viewBox="0 0 100 100">
+      <text x="50" y="42" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="44">e</text>
+      <rect x="20" y="50" width="60" height="8" rx="4"/>
+      <text x="50" y="94" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="44">t</text>
+    </symbol>
+    <!-- 2. E z kropkami dzielenia -->
+    <symbol id="m2" viewBox="0 0 100 100">
+      <rect x="18" y="16" width="14" height="68"/>
+      <rect x="18" y="16" width="64" height="13"/>
+      <rect x="18" y="43.5" width="64" height="13"/>
+      <rect x="18" y="71" width="64" height="13"/>
+      <circle cx="61" cy="36.3" r="4.6"/>
+      <circle cx="61" cy="63.7" r="4.6"/>
+    </symbol>
+    <!-- 3. Dymek z ułamkiem -->
+    <symbol id="m3" viewBox="0 0 100 100">
+      <path d="M22 12h56a12 12 0 0 1 12 12v44a12 12 0 0 1-12 12H40l-18 14v-14a12 12 0 0 1-12-12V24a12 12 0 0 1 12-12z" fill="none" stroke="#000" stroke-width="7" stroke-linejoin="round"/>
+      <text x="50" y="40" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="26">1</text>
+      <rect x="34" y="45" width="32" height="5.5" rx="2.75"/>
+      <text x="50" y="72" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="26">2</text>
+    </symbol>
+    <!-- 4. Trójkąt Pitagorasa -->
+    <symbol id="m4" viewBox="0 0 100 100">
+      <path d="M16 14v72h68z"/>
+      <path d="M24 64h14v14" fill="none" stroke="#fff" stroke-width="5"/>
+    </symbol>
+    <!-- 5. e do kwadratu -->
+    <symbol id="m5" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46"/>
+      <text x="44" y="68" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="54" fill="#fff">e</text>
+      <text x="69" y="45" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="24" fill="#fff">2</text>
+    </symbol>
+    <!-- 6. Kratka z zeszytu – jedna czwarta -->
+    <symbol id="m6" viewBox="0 0 100 100">
+      <rect x="12" y="12" width="76" height="76" rx="8" fill="none" stroke="#000" stroke-width="7"/>
+      <path d="M50 12v76M12 50h76" stroke="#000" stroke-width="7"/>
+      <path d="M50 50h38v30a8 8 0 0 1-8 8H50z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="grid">
+  <!-- karta -->
+  <div class="card">
+    <span class="num">PROPOZYCJA 1</span>
+    <p class="name">e/t – nazwa jako ułamek</p>
+    <p class="idea">Litery „e” i „t” zapisane jak ułamek. Od razu mówi „matematyka”, a skrót nazwy jest w samym znaku.</p>
+    <div class="lockup"><svg class="mark"><use href="#m1"/></svg><span class="word">E-tutor</span></div>
+    <div class="sizes"><div class="app"><svg width="38" height="38"><use href="#m1"/></svg></div><div class="tab"><svg width="16" height="16"><use href="#m1"/></svg>E-tutor</div><span class="cap">ikona · karta</span></div>
+  </div>
+
+  <div class="card">
+    <span class="num">PROPOZYCJA 2</span>
+    <p class="name">E jak dzielenie</p>
+    <p class="idea">Geometryczna litera E z dwiema kropkami między ramionami. Środkowa kreska z kropkami tworzy znak dzielenia ÷.</p>
+    <div class="lockup"><svg class="mark"><use href="#m2"/></svg><span class="word">E-tutor</span></div>
+    <div class="sizes"><div class="app"><svg width="38" height="38"><use href="#m2"/></svg></div><div class="tab"><svg width="16" height="16"><use href="#m2"/></svg>E-tutor</div><span class="cap">ikona · karta</span></div>
+  </div>
+
+  <div class="card">
+    <span class="num">PROPOZYCJA 3</span>
+    <p class="name">Dymek z ułamkiem</p>
+    <p class="idea">Dymek rozmowy, a w nim ½. Łączy „tutora”, który tłumaczy, z matematyką. Nawiązuje do obecnego znaku ½.</p>
+    <div class="lockup"><svg class="mark"><use href="#m3"/></svg><span class="word">E-tutor</span></div>
+    <div class="sizes"><div class="app"><svg width="40" height="40"><use href="#m3"/></svg></div><div class="tab"><svg width="16" height="16"><use href="#m3"/></svg>E-tutor</div><span class="cap">ikona · karta</span></div>
+  </div>
+
+  <div class="card">
+    <span class="num">PROPOZYCJA 4</span>
+    <p class="name">Trójkąt Pitagorasa</p>
+    <p class="idea">Pełny trójkąt prostokątny z białym znakiem kąta prostego. Najprostszy kształt, czytelny nawet w 16 px.</p>
+    <div class="lockup"><svg class="mark"><use href="#m4"/></svg><span class="word">E-tutor</span></div>
+    <div class="sizes"><div class="app"><svg width="38" height="38"><use href="#m4"/></svg></div><div class="tab"><svg width="16" height="16"><use href="#m4"/></svg>E-tutor</div><span class="cap">ikona · karta</span></div>
+  </div>
+
+  <div class="card">
+    <span class="num">PROPOZYCJA 5</span>
+    <p class="name">e² – nauka do kwadratu</p>
+    <p class="idea">Czarne koło z białym „e” i potęgą. Mocny, okrągły znak, dobrze wygląda jako ikona aplikacji i awatar.</p>
+    <div class="lockup"><svg class="mark"><use href="#m5"/></svg><span class="word">E-tutor</span></div>
+    <div class="sizes"><div class="app"><svg width="42" height="42"><use href="#m5"/></svg></div><div class="tab"><svg width="16" height="16"><use href="#m5"/></svg>E-tutor</div><span class="cap">ikona · karta</span></div>
+  </div>
+
+  <div class="card">
+    <span class="num">PROPOZYCJA 6</span>
+    <p class="name">Kratka z zeszytu</p>
+    <p class="idea">Kwadrat podzielony na cztery, jedna ćwiartka zamalowana: kratka z zeszytu i ułamek ¼. Pasuje do strony sprzedażowej w kratkę.</p>
+    <div class="lockup"><svg class="mark"><use href="#m6"/></svg><span class="word">E-tutor</span></div>
+    <div class="sizes"><div class="app"><svg width="38" height="38"><use href="#m6"/></svg></div><div class="tab"><svg width="16" height="16"><use href="#m6"/></svg>E-tutor</div><span class="cap">ikona · karta</span></div>
+  </div>
+</div>
+<script>
+// Wstawia znaki bezpośrednio (zamiast <use>), żeby tekst w SVG używał czcionki Inter
+document.querySelectorAll('svg > use').forEach((u) => {
+  const sym = document.querySelector(u.getAttribute('href'));
+  const svg = u.parentNode;
+  svg.setAttribute('viewBox', sym.getAttribute('viewBox'));
+  svg.innerHTML = sym.innerHTML;
+});
+</script>
+</body>
+</html>
