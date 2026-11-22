@@ -1,10 +1,11 @@
 import type { Difficulty, TopicId } from '../content/types';
 
-export type AttemptSource = 'practice' | 'diagnostic' | 'exam';
+export type AttemptSource = 'practice' | 'diagnostic' | 'exam' | 'lesson';
 
 export type Attempt = {
   ts: number;
-  topicId: TopicId;
+  /** Dział ułamków albo identyfikator umiejętności z lekcji */
+  topicId: string;
   difficulty: Difficulty;
   correct: boolean;
   /** Wartość 0–1 po uwzględnieniu podpowiedzi, prób i trybu krok po kroku */
@@ -25,13 +26,15 @@ export type TopicMeta = {
 
 export type Progress = {
   attempts: Attempt[];
-  topicMeta: Partial<Record<TopicId, TopicMeta>>;
+  topicMeta: Partial<Record<string, TopicMeta>>;
   diagnosticDone: boolean;
   exams: ExamResult[];
   /** sekundy nauki na dzień, klucz YYYY-MM-DD */
   studySeconds: Record<string, number>;
   badges: Record<string, number>; // id → timestamp zdobycia
   theoryRead: Partial<Record<TopicId, number>>;
+  /** Ukończone lekcje: najlepszy wynik w gwiazdkach (1–3) i data */
+  lessons: Record<string, { stars: number; ts: number }>;
 };
 
 export const EMPTY_PROGRESS: Progress = {
@@ -42,6 +45,7 @@ export const EMPTY_PROGRESS: Progress = {
   studySeconds: {},
   badges: {},
   theoryRead: {},
+  lessons: {},
 };
 
 /* ---------------- Ocena opanowania ---------------- */
@@ -69,7 +73,7 @@ export type TopicStats = {
 const REVIEW_INTERVAL_DAYS = [2, 4, 7, 14, 30, 60];
 const DAY = 24 * 3600 * 1000;
 
-export function topicStats(progress: Progress, topicId: TopicId, now = Date.now()): TopicStats {
+export function topicStats(progress: Progress, topicId: string, now = Date.now()): TopicStats {
   const all = progress.attempts.filter((a) => a.topicId === topicId);
   const recent = all.slice(-MASTERY_WINDOW);
   if (!recent.length) {

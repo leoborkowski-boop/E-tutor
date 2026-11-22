@@ -11,7 +11,7 @@ const FINITE = [
   [1, 20], [3, 20], [7, 20], [9, 25], [12, 25], [7, 50], [1, 16], [3, 40], [11, 20],
 ] as const;
 
-function toDecimal(d: Difficulty, rng: Rng): Task {
+export function toDecimal(d: Difficulty, rng: Rng): Task {
   const pool = d === 1 ? FINITE.slice(0, 8) : FINITE;
   const [n, den] = pick(rng, pool);
   let f = F(n, den);
@@ -43,7 +43,7 @@ function toDecimal(d: Difficulty, rng: Rng): Task {
   };
 }
 
-function fromDecimal(d: Difficulty, rng: Rng): Task {
+export function fromDecimal(d: Difficulty, rng: Rng): Task {
   const [n, den] = pick(rng, d === 1 ? FINITE.slice(0, 8) : FINITE);
   let f = F(n, den);
   if (d === 3 && rng() < 0.5) f = f.add(F(int(rng, 1, 4)));
@@ -68,7 +68,7 @@ function fromDecimal(d: Difficulty, rng: Rng): Task {
   };
 }
 
-function periodicChoice(d: Difficulty, rng: Rng): Task {
+export function periodicChoice(d: Difficulty, rng: Rng): Task {
   const items = [
     { f: F(1, 3), dec: '0,(3)' },
     { f: F(2, 3), dec: '0,(6)' },
@@ -101,7 +101,7 @@ function periodicChoice(d: Difficulty, rng: Rng): Task {
   };
 }
 
-function finiteChoice(d: Difficulty, rng: Rng): Task {
+export function finiteChoice(d: Difficulty, rng: Rng): Task {
   const finite = pick(rng, FINITE.slice(0, 12));
   const nonFinite = [F(1, 3), F(2, 7), F(5, 6), F(4, 9), F(7, 12), F(3, 11), F(1, 15), F(5, 18)];
   const others = [...nonFinite].sort(() => rng() - 0.5).slice(0, 3);
@@ -156,7 +156,7 @@ export function decimalStatement(rng: Rng) {
 
 /* ================= 8. Kolejność działań ================= */
 
-function orderTask(d: Difficulty, rng: Rng): Task {
+export function orderTask(d: Difficulty, rng: Rng): Task {
   if (d === 1) {
     // a + b · c  (pułapka: liczenie od lewej)
     const a = properFraction(rng, 2, 6);
@@ -272,7 +272,7 @@ function orderTask(d: Difficulty, rng: Rng): Task {
   };
 }
 
-function orderChoice(d: Difficulty, rng: Rng): Task {
+export function orderChoice(d: Difficulty, rng: Rng): Task {
   const a = properFraction(rng, 2, 6);
   const n = int(rng, 2, 5);
   const b = properFraction(rng, 2, 6);
@@ -302,7 +302,7 @@ export const kolejnoscGenerators: Generator[] = [
 
 /* ================= 9. Ułamek liczby, zadania tekstowe ================= */
 
-function fractionOfNumber(d: Difficulty, rng: Rng): Task {
+export function fractionOfNumber(d: Difficulty, rng: Rng): Task {
   const f = properFraction(rng, 2, d === 1 ? 6 : 10);
   const n = f.den * int(rng, 2, d === 1 ? 8 : 15);
   const res = F(n).mul(f);
@@ -323,7 +323,7 @@ function fractionOfNumber(d: Difficulty, rng: Rng): Task {
   };
 }
 
-function wholeFromPart(d: Difficulty, rng: Rng): Task {
+export function wholeFromPart(d: Difficulty, rng: Rng): Task {
   const f = properFraction(rng, 2, d === 1 ? 6 : 9);
   const unit = int(rng, 2, 12);
   const part = unit * f.num;
@@ -520,7 +520,7 @@ export function wordProblemTask(wp: WordProblem): Task {
   };
 }
 
-function wordProblem(d: Difficulty, rng: Rng): Task {
+export function wordProblem(d: Difficulty, rng: Rng): Task {
   const pool = WORD_PROBLEMS.filter((w) => w.difficulty === d);
   return wordProblemTask(pick(rng, pool.length ? pool : WORD_PROBLEMS));
 }

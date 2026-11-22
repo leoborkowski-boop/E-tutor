@@ -16,6 +16,7 @@ type AppState = {
   completeDiagnostic: () => void;
   addExam: (r: ExamResult) => void;
   markTheoryRead: (t: TopicId) => void;
+  completeLesson: (id: string, stars: number) => void;
   resetProgress: () => void;
   importProgress: (p: Progress) => void;
   toasts: Badge[];
@@ -88,6 +89,11 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       completeDiagnostic: () => commit((p) => ({ ...p, diagnosticDone: true })),
       addExam: (r) => commit((p) => ({ ...p, exams: [...p.exams, r] })),
       markTheoryRead: (t) => commit((p) => (p.theoryRead[t] ? p : { ...p, theoryRead: { ...p.theoryRead, [t]: Date.now() } })),
+      completeLesson: (id, stars) =>
+        commit((p) => {
+          const prev = p.lessons?.[id]?.stars ?? 0;
+          return { ...p, lessons: { ...(p.lessons ?? {}), [id]: { stars: Math.max(prev, stars), ts: Date.now() } } };
+        }),
       resetProgress: () => setProgress(EMPTY_PROGRESS),
       importProgress: (p) => setProgress({ ...EMPTY_PROGRESS, ...p }),
       toasts,

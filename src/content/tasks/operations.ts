@@ -6,7 +6,7 @@ import { SIMPLEST, cmpSign, fractionChoices, id, m, mixedNumber, mm, properFract
 
 /* ================= 4. Porównywanie ================= */
 
-function compareTask(d: Difficulty, rng: Rng): Task {
+export function compareTask(d: Difficulty, rng: Rng): Task {
   let a: Fraction;
   let b: Fraction;
   let kind: 'sameDen' | 'sameNum' | 'general' | 'mixed';
@@ -85,7 +85,7 @@ function compareTask(d: Difficulty, rng: Rng): Task {
   };
 }
 
-function largestChoice(d: Difficulty, rng: Rng): Task {
+export function largestChoice(d: Difficulty, rng: Rng): Task {
   const pool: Fraction[] = [];
   let guard = 0;
   while (pool.length < 4 && guard++ < 100) {
@@ -126,7 +126,7 @@ function largestChoice(d: Difficulty, rng: Rng): Task {
   };
 }
 
-function betweenTask(d: Difficulty, rng: Rng): Task {
+export function betweenTask(d: Difficulty, rng: Rng): Task {
   const a = properFraction(rng, 3, 9);
   let b = properFraction(rng, 3, 9);
   let guard = 0;
@@ -167,7 +167,7 @@ export const porownywanieGenerators: Generator[] = [
 
 /* ================= 5. Dodawanie i odejmowanie ================= */
 
-function addSubTask(d: Difficulty, rng: Rng): Task {
+export function addSubTask(d: Difficulty, rng: Rng): Task {
   const op = rng() < 0.5 ? '+' : '−';
   let a: Fraction;
   let b: Fraction;
@@ -279,7 +279,7 @@ function addSubTask(d: Difficulty, rng: Rng): Task {
   };
 }
 
-function missingAddend(d: Difficulty, rng: Rng): Task {
+export function missingAddend(d: Difficulty, rng: Rng): Task {
   const a = properFraction(rng, 2, 8);
   let total = properFraction(rng, 2, 10);
   let guard = 0;
@@ -308,7 +308,7 @@ export const dodawanieGenerators: Generator[] = [
 
 /* ================= 6. Mnożenie i dzielenie ================= */
 
-function mulDivTask(d: Difficulty, rng: Rng): Task {
+export function mulDivTask(d: Difficulty, rng: Rng): Task {
   const op: '·' | ':' = rng() < 0.5 ? '·' : ':';
   let a: Fraction;
   let b: Fraction;
@@ -432,7 +432,7 @@ function mulDivTask(d: Difficulty, rng: Rng): Task {
   };
 }
 
-function reciprocalChoice(d: Difficulty, rng: Rng): Task {
+export function reciprocalChoice(d: Difficulty, rng: Rng): Task {
   const v = d === 1 ? properFraction(rng, 2, 9) : mixedNumber(rng, 3, 2, 7);
   const inv = v.inverse();
   return {

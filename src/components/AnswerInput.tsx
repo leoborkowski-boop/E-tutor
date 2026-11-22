@@ -57,9 +57,10 @@ export function AnswerInput({
           {preview && <MathText text={`= {${preview.replace('-', '-')}}`} />}
         </span>
       </label>
-      <p className="answer-help">
-        {keypad ? 'Liczba mieszana: 1 ␣ 1/2' : 'Ułamek: 3/4 · liczba mieszana: 1 1/2 · dziesiętny: 0,75'}
-      </p>
+      {/* podpowiedź o zapisie tylko wtedy, gdy wynik nie jest liczbą całkowitą */}
+      {!spec.value.isInteger() && (
+        <p className="answer-help">{keypad ? 'Liczba mieszana: 1 ␣ 1/2' : 'Ułamek: 3/4 · liczba mieszana: 1 1/2 · dziesiętny: 0,75'}</p>
+      )}
       {keypad && !disabled && <FractionKeypad value={value} onChange={onChange} onSubmit={onSubmit} disabled={disabled} />}
     </div>
   );

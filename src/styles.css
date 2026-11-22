@@ -2177,3 +2177,109 @@ button.wseg:hover {
     gap: 0.75rem;
   }
 }
+
+/* ==========================================================
+   Rysunki geometryczne, wykresy, tabele
+   ========================================================== */
+.fig { margin: 0; display: grid; justify-items: center; gap: 6px; }
+.fig svg { overflow: visible; }
+.fig-shape { fill: none; stroke: var(--text); stroke-width: 2; stroke-linejoin: round; }
+.fig-fill { fill: var(--accent-soft); }
+.fig-line { stroke: var(--text); stroke-width: 2; }
+.fig-thin { stroke-width: 1.2; }
+.fig-dashed { stroke-dasharray: 5 4; stroke: var(--text-2); }
+.fig-arc { fill: none; stroke: var(--accent); stroke-width: 1.8; }
+.fig-text { fill: var(--text); font: 500 14px/1 var(--font); }
+.fig-small { font-size: 11.5px; fill: var(--text-2); }
+.fig-bold { font-weight: 700; }
+.fig-angle { fill: var(--accent); font-weight: 700; }
+.fig-dot { fill: var(--accent); }
+.fig-grid { stroke: var(--border); stroke-width: 1; }
+.fig-axis { stroke: var(--text-2); stroke-width: 1.6; }
+.fig-bar { fill: var(--viz-fill); }
+.fig-title { font-weight: 600; }
+.data-table-wrap { overflow-x: auto; max-width: 100%; }
+.data-table { border-collapse: collapse; font-variant-numeric: tabular-nums; margin-inline: auto; }
+.data-table th, .data-table td { border: 1px solid var(--border); padding: 6px 12px; text-align: center; }
+.data-table th { background: var(--surface-2); font-weight: 600; }
+
+/* ==========================================================
+   Lekcje: działy, lista lekcji, gwiazdki, lekcje z AI
+   ========================================================== */
+.stars { display: inline-flex; gap: 2px; vertical-align: middle; }
+.star path { fill: var(--viz-empty); stroke: var(--border); stroke-width: 1; }
+.star.on path { fill: #e8b23a; stroke: #c7921c; }
+
+.zone-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.zone-card { display: grid; gap: 12px; align-content: start; }
+.zone-card-link { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: start; color: inherit; text-decoration: none; }
+.zone-card-link:hover strong { color: var(--accent); }
+.zone-card-text { display: grid; gap: 4px; min-width: 0; }
+.zone-card-text strong { font-size: 1.08rem; }
+.zone-mark {
+  width: 44px; height: 44px; border-radius: 12px; flex: none;
+  display: grid; place-items: center;
+  background: var(--accent-soft); color: var(--accent);
+  font-weight: 700; font-size: 1.15rem;
+}
+.zone-mark-lg { width: 60px; height: 60px; font-size: 1.6rem; border-radius: 16px; }
+.zone-progress { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; }
+.zone-track { height: 8px; border-radius: 999px; background: var(--viz-empty); overflow: hidden; }
+.zone-fill { height: 100%; background: var(--ok); border-radius: 999px; transition: width .4s ease; }
+.zone-next { justify-self: start; }
+.zone-head { display: flex; gap: 16px; align-items: flex-start; }
+.zone-summary { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+.zone-summary .actions { margin: 0; }
+
+.skill-list { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 10px; }
+.skill-row { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; display: grid; gap: 10px; }
+.skill-title { display: flex; align-items: center; gap: 10px; }
+.skill-title h3 { margin: 0; font-size: 1.02rem; }
+.skill-num { width: 28px; height: 28px; border-radius: 50%; background: var(--surface-2); display: grid; place-items: center; font-size: .85rem; font-weight: 600; color: var(--text-2); flex: none; }
+.lesson-chips { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.lesson-chip {
+  display: grid; gap: 2px; padding: 8px 10px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--surface-2); color: inherit; text-decoration: none;
+  min-width: 0; transition: border-color .15s, background-color .15s, transform .15s;
+}
+.lesson-chip:hover { border-color: var(--accent); transform: translateY(-1px); }
+.lesson-chip-n { font-size: .72rem; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.lesson-chip-label { font-weight: 600; font-size: .92rem; }
+.lesson-chip-about { font-size: .72rem; color: var(--text-2); line-height: 1.25; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.lesson-chip.is-done { background: var(--ok-soft); border-color: color-mix(in srgb, var(--ok) 40%, transparent); }
+.lesson-chip.is-next { border: 2px solid var(--accent); background: var(--accent-soft); }
+@media (max-width: 560px) {
+  .lesson-chips { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.lesson-result { display: grid; gap: 10px; justify-items: start; }
+.theory-card { display: grid; gap: 14px; }
+
+.ai-entry {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: center;
+  padding: 16px 18px; margin-bottom: 18px; border-radius: var(--radius);
+  background: var(--accent-soft); color: var(--text); text-decoration: none;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  transition: transform .15s, border-color .15s;
+}
+.ai-entry:hover { transform: translateY(-1px); border-color: var(--accent); }
+.ai-entry > span:nth-child(2) { display: grid; gap: 2px; }
+.ai-entry-mark { width: 42px; height: 42px; border-radius: 12px; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; }
+.ai-form { display: grid; gap: 16px; }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field > label, .field-label { font-weight: 600; }
+.field textarea, .field input, .field select {
+  font: inherit; color: var(--text); background: var(--surface);
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; width: 100%;
+}
+.field textarea:focus, .field input:focus, .field select:focus { outline: 2px solid var(--focus); outline-offset: 1px; border-color: var(--accent); }
+.idea-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.idea-chip { font: inherit; font-size: .82rem; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-2); cursor: pointer; text-align: left; }
+.idea-chip:hover { border-color: var(--accent); color: var(--accent); }
+.notice { border-left: 4px solid var(--warn); }
+.ai-list { display: grid; gap: 10px; margin-top: 22px; }
+.ai-list h2 { margin: 0 0 4px; }
+.ai-item { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 10px; align-items: center; }
+.ai-item-link { display: grid; gap: 2px; color: inherit; text-decoration: none; min-width: 0; }
+.ai-item-link:hover strong { color: var(--accent); }
+.icon-btn { border: 0; background: transparent; color: var(--text-2); cursor: pointer; padding: 6px; border-radius: 8px; }
+.icon-btn:hover { background: var(--surface-2); color: var(--bad); }

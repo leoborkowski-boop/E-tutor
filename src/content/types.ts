@@ -16,8 +16,24 @@ export type Difficulty = 1 | 2 | 3;
 
 /* ---------- Wizualizacje ---------- */
 
+export type Pt = [number, number];
+
+/** Elementy rysunku geometrycznego (współrzędne w jednostkach rysunku, oś y w dół). */
+export type FigItem =
+  | { t: 'poly'; pts: Pt[]; fill?: boolean; dashed?: boolean; open?: boolean }
+  | { t: 'line'; a: Pt; b: Pt; dashed?: boolean; thin?: boolean }
+  | { t: 'circle'; c: Pt; r: number; fill?: boolean; dashed?: boolean }
+  | { t: 'text'; at: Pt; text: string; anchor?: 'start' | 'middle' | 'end'; bold?: boolean }
+  | { t: 'right'; at: Pt; a: Pt; b: Pt }
+  | { t: 'arc'; at: Pt; a: Pt; b: Pt; label?: string }
+  | { t: 'dot'; at: Pt; label?: string; dx?: number; dy?: number };
+
 export type Visual =
   | { kind: 'bar'; num: number; den: number; label?: string }
+  | { kind: 'figure'; w: number; h: number; items: FigItem[]; caption?: string }
+  | { kind: 'chart'; bars: { label: string; value: number }[]; unit?: string; title?: string }
+  | { kind: 'plane'; min: number; max: number; points: { x: number; y: number; label: string }[]; poly?: boolean; segments?: [number, number][] }
+  | { kind: 'table'; head: string[]; rows: string[][] }
   | { kind: 'bars'; items: { num: number; den: number; label?: string }[] }
   | {
       kind: 'numberline';
@@ -86,7 +102,8 @@ export type Step = {
 
 type TaskBase = {
   id: string;
-  topicId: TopicId;
+  /** Dział ułamków (TopicId) albo identyfikator umiejętności z lekcji */
+  topicId: string;
   difficulty: Difficulty;
   prompt: string;
   visual?: Visual;

@@ -141,10 +141,10 @@ export function Exam() {
     const pct = Math.round((pts / maxPoints) * 100);
     const byTopic = new Map<TopicId, { got: number; max: number }>();
     items.forEach((it, i) => {
-      const e = byTopic.get(it.task.topicId) ?? { got: 0, max: 0 };
+      const e = byTopic.get(it.task.topicId as TopicId) ?? { got: 0, max: 0 };
       e.got += scoreItem(it, answers[i]);
       e.max += it.points;
-      byTopic.set(it.task.topicId, e);
+      byTopic.set(it.task.topicId as TopicId, e);
     });
     const weak = [...byTopic.entries()].filter(([, v]) => v.got / v.max < 0.6);
     return (

@@ -9,7 +9,7 @@ import { href } from '../router';
 import { useApp, useStudyTimer } from '../state/AppState';
 import { topicStats } from '../state/progress';
 
-function blockSpeech(b: TheoryBlock): string[] {
+export function blockSpeech(b: TheoryBlock): string[] {
   switch (b.type) {
     case 'p':
       return [b.text];
@@ -28,7 +28,7 @@ function blockSpeech(b: TheoryBlock): string[] {
   }
 }
 
-function Block({ b }: { b: TheoryBlock }) {
+export function Block({ b }: { b: TheoryBlock }) {
   const { settings } = useApp();
   switch (b.type) {
     case 'p':

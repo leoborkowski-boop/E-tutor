@@ -68,7 +68,7 @@ export function Practice({ id }: { id: string }) {
       source: 'practice',
       misconception: o.misconception,
     });
-    setResults((r) => [...r, { topicId: task.topicId, correct: o.correct, misconception: o.misconception }]);
+    setResults((r) => [...r, { topicId: task.topicId as TopicId, correct: o.correct, misconception: o.misconception }]);
   };
 
   const onNext = () => {
@@ -164,7 +164,7 @@ export function Practice({ id }: { id: string }) {
         </a>
         <div className="practice-title">
           <h1>{title}</h1>
-          {mode.kind !== 'topic' && <span className="muted">Dział: {TOPIC_BY_ID[task.topicId].title}</span>}
+          {mode.kind !== 'topic' && <span className="muted">Dział: {TOPIC_BY_ID[task.topicId as TopicId].title}</span>}
         </div>
         <div className="session-progress" aria-label={`Zadanie ${index + 1} z ${total}`}>
           <div className="session-track">

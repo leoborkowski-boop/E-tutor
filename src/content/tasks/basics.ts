@@ -6,7 +6,7 @@ import { SIMPLEST, fractionChoices, id, m, mixedNumber, properFraction, textChoi
 
 /* ================= 1. Pojęcie ułamka, oś liczbowa ================= */
 
-function shadedBar(d: Difficulty, rng: Rng): Task {
+export function shadedBar(d: Difficulty, rng: Rng): Task {
   const den = d === 1 ? int(rng, 3, 8) : int(rng, 5, 12);
   const num = int(rng, 1, den - 1);
   const ans = F(num, den);
@@ -41,7 +41,7 @@ function shadedBar(d: Difficulty, rng: Rng): Task {
   };
 }
 
-function numberLinePoint(d: Difficulty, rng: Rng): Task {
+export function numberLinePoint(d: Difficulty, rng: Rng): Task {
   const den = d === 1 ? pick(rng, [2, 3, 4, 5]) : pick(rng, [3, 4, 5, 6, 8]);
   const max = d === 1 ? 1 : 2;
   let at = int(rng, 1, den * max - 1);
@@ -97,7 +97,7 @@ const UNITS_OF_TIME = [
   { part: 4, whole: 12, partName: 'miesiące', wholeName: 'roku', eq: '1 rok = 12 miesięcy' },
 ];
 
-function unitPart(d: Difficulty, rng: Rng): Task {
+export function unitPart(d: Difficulty, rng: Rng): Task {
   const u = pick(rng, UNITS_OF_TIME);
   const raw = F(u.part, u.whole);
   const ans = raw.simplify();
@@ -130,7 +130,7 @@ export const pojecieGenerators: Generator[] = [
 
 /* ================= 2. Skracanie i rozszerzanie ================= */
 
-function simplifyTask(d: Difficulty, rng: Rng): Task {
+export function simplifyTask(d: Difficulty, rng: Rng): Task {
   const base = properFraction(rng, 2, d === 1 ? 7 : 10);
   const k = d === 1 ? int(rng, 2, 4) : d === 2 ? int(rng, 3, 8) : pick(rng, [6, 8, 9, 12, 14, 15]);
   const given = F(base.num * k, base.den * k);
@@ -158,7 +158,7 @@ function simplifyTask(d: Difficulty, rng: Rng): Task {
   };
 }
 
-function extendTask(d: Difficulty, rng: Rng): Task {
+export function extendTask(d: Difficulty, rng: Rng): Task {
   const base = properFraction(rng, 2, d === 1 ? 6 : 9);
   const k = int(rng, 2, d === 1 ? 5 : 9);
   const target = base.den * k;
@@ -186,7 +186,7 @@ function extendTask(d: Difficulty, rng: Rng): Task {
   };
 }
 
-function equivalentChoice(d: Difficulty, rng: Rng): Task {
+export function equivalentChoice(d: Difficulty, rng: Rng): Task {
   const base = properFraction(rng, 3, d === 1 ? 7 : 11);
   const k = int(rng, 2, 5);
   const correct = F(base.num * k, base.den * k);
@@ -231,7 +231,7 @@ export const skracanieGenerators: Generator[] = [
 
 /* ================= 3. Liczby mieszane, ułamki niewłaściwe ================= */
 
-function mixedToImproper(d: Difficulty, rng: Rng): Task {
+export function mixedToImproper(d: Difficulty, rng: Rng): Task {
   const v = mixedNumber(rng, d === 1 ? 3 : 6, 2, d === 1 ? 6 : 10);
   const mx = v.toMixed();
   return {
@@ -259,7 +259,7 @@ function mixedToImproper(d: Difficulty, rng: Rng): Task {
   };
 }
 
-function improperToMixed(d: Difficulty, rng: Rng): Task {
+export function improperToMixed(d: Difficulty, rng: Rng): Task {
   const v = mixedNumber(rng, d === 1 ? 3 : 7, 2, d === 1 ? 6 : 11);
   const mx = v.toMixed();
   const swapped = mx.num < mx.den && mx.whole < mx.den && mx.whole !== mx.num ? Fraction.fromMixed(mx.num, mx.whole, mx.den) : null;
@@ -283,7 +283,7 @@ function improperToMixed(d: Difficulty, rng: Rng): Task {
   };
 }
 
-function mixedOnLineChoice(d: Difficulty, rng: Rng): Task {
+export function mixedOnLineChoice(d: Difficulty, rng: Rng): Task {
   const v = mixedNumber(rng, d === 1 ? 2 : 4, 2, 9);
   const mx = v.toMixed();
   const correct = `${mx.whole} i ${mx.whole + 1}`;

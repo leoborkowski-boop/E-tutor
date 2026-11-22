@@ -24,6 +24,10 @@ const ICONS: Record<string, string> = {
   play: 'M6 4l14 8-14 8z',
   refresh: 'M3 12a9 9 0 0 1 15.5-6.3L21 8M21 3v5h-5M21 12a9 9 0 0 1-15.5 6.3L3 16M3 21v-5h5',
   x: 'M18 6 6 18M6 6l12 12',
+  spark: 'M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z',
+  layers: 'M12 3 2 8l10 5 10-5zM2 13l10 5 10-5M2 18l10 5 10-5',
+  download: 'M12 3v12M7 10l5 5 5-5M4 21h16',
+  trash: 'M4 7h16M9 7V4h6v3M6 7l1 14h10l1-14',
 };
 
 export function Icon({ name, size = 20 }: { name: keyof typeof ICONS | string; size?: number }) {
