@@ -10,10 +10,9 @@ Kartka z zeszytu w kratkę. Nagłówek strony leży na kratce 5 mm z czerwonym m
 
 | Token | Jasny | Ciemny | Do czego |
 | --- | --- | --- | --- |
-| `--paper` | `#fbfcfd` | `#11151c` | tło strony |
-| `--paper-2` | `#f0f3f7` | `#171c25` | tło sekcji „Spis treści” |
+| `--paper` | `#fbfcfd` | `#11151c` | tło całej strony, wszystkich sekcji |
 | `--grid` | `#dfe6ef` | `#1f2632` | kratka w nagłówku |
-| `--ink` | `#17223a` | `#e8ecf3` | tekst, tło sekcji z ceną |
+| `--ink` | `#17223a` | `#e8ecf3` | tekst, obramowania ramek |
 | `--ink-2` | `#4f5b70` | `#a7b0c0` | tekst pomocniczy |
 | `--rule` | `#d5dce6` | `#2a3240` | linie podziału |
 | `--accent` | `#3462c9` | `#86a8f2` | przyciski, linki (kolor aplikacji) |
@@ -22,6 +21,8 @@ Kartka z zeszytu w kratkę. Nagłówek strony leży na kratce 5 mm z czerwonym m
 | `--ok` | `#2f7d4f` | `#6cc58f` | ptaszki, „gotowe” |
 
 Strona ma jasny i ciemny motyw. Każdy kolor bierz z tokenu, nigdy wpisany na sztywno.
+
+**Jedno tło dla całej strony.** Żadna sekcja nie dostaje innego koloru tła (zwłaszcza ciemnego pasa na jasnej stronie ani jasnego na ciemnej). Sekcje oddzielamy cienką linią `--rule`, a ważne bloki (telefon, formularz) ramką 2 px w kolorze `--ink` z przesuniętym cieniem.
 
 ## Czcionki (Google Fonts)
 
@@ -39,7 +40,12 @@ Strona ma jasny i ciemny motyw. Każdy kolor bierz z tokenu, nigdy wpisany na sz
 5. Ikony jako SVG rysowane linią (styl Lucide), nigdy emoji.
 6. Tylko prawdziwe zrzuty ekranu aplikacji (`landing/img/`). Bez zdjęć ze stocku i rysunków „laptop z wykresem”.
 7. Konkretny nagłówek: liczby i fakty („10 minut dziennie”, „11 maja 2027”), nie „Odkryj potencjał nauki”.
-8. Bez animacji pojawiania się przy przewijaniu. Wszystko jest widoczne od razu. Ruch tylko na hover przycisków.
+8. Bez animacji pojawiania się treści przy przewijaniu: tekst i zrzuty są widoczne od razu. Dozwolony ruch:
+   - wejście nagłówka przy wczytaniu strony (tekst i telefon lekko podjeżdżają, zakreślacz przeciąga się pod „10 minut”),
+   - dopiski długopisem „piszą się”, gdy pojawią się na ekranie (to ozdoba, nie treść),
+   - hover: telefon i formularz unoszą się o 3 px, przyciski o 1 px, strzałki w przyciskach drgną,
+   - płynne przewijanie do sekcji, rozwijanie pytań, pojawienie się komunikatu formularza.
+   Czasy 0,15–0,8 s, bez sprężynek i odbić. Przy „ogranicz animacje” w systemie cały ruch jest wyłączony.
 9. Bez wymyślonych opinii. Gdy będą prawdziwe, dodaj je z imieniem, klasą dziecka i zgodą autora.
 10. Bez resztek po kreatorach: lorem ipsum, linki `href="#"`, „Made with…”, nieużywane klasy.
 11. (pominięte: nie mamy jeszcze strony-wzoru.)
