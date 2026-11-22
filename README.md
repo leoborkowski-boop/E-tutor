@@ -1,4 +1,6 @@
-# E-tutor – matematyka dla klasy 8 (prototyp)
+# EduKwadrat – nauka do kwadratu
+
+Aplikacja do nauki przed egzaminem ósmoklasisty (dawniej: E-tutor).
 
 Aplikacja do samodzielnej nauki matematyki przed egzaminem ósmoklasisty. Interfejs po polsku.
 

@@ -1,5 +1,5 @@
 # Konfiguracja Cloudflare Worker – serwer lekcji z AI
-name = "e-tutor-ai"
+name = "edukwadrat-ai"
 main = "src/index.ts"
 compatibility_date = "2026-10-01"
 

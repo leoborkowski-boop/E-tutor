@@ -1,5 +1,5 @@
 /**
- * Serwer lekcji z AI dla E-tutora (Cloudflare Worker).
+ * Serwer lekcji z AI dla EduKwadratu (Cloudflare Worker).
  *
  * POST /lekcja  { topic, level, zone?, interests? }  →  { lekcja } albo { blad }
  *
@@ -62,7 +62,7 @@ export default {
     const h = cors(req.headers.get('Origin'), env);
     const url = new URL(req.url);
     if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: h });
-    if (url.pathname === '/' && req.method === 'GET') return json({ ok: true, usluga: 'E-tutor – lekcje z AI' }, 200, h);
+    if (url.pathname === '/' && req.method === 'GET') return json({ ok: true, usluga: 'EduKwadrat – lekcje z AI' }, 200, h);
     if (url.pathname !== '/lekcja' || req.method !== 'POST') return json({ blad: 'Nie ma takiego adresu.' }, 404, h);
     if (h['Access-Control-Allow-Origin'] === 'null') return json({ blad: 'Ta aplikacja nie ma dostępu do serwera.' }, 403, h);
     if (!env.ANTHROPIC_API_KEY) return json({ blad: 'Serwer nie jest jeszcze skonfigurowany.' }, 503, h);

@@ -1,4 +1,4 @@
-# E-tutor – strona sprzedażowa: zasady wyglądu
+# EduKwadrat – strona sprzedażowa: zasady wyglądu
 
 Ten plik opisuje wygląd strony `landing/index.html`. Przy każdej zmianie strony (także przez Claude) trzymaj się tych zasad, żeby strona nie wyglądała jak z szablonu.
 
@@ -8,7 +8,7 @@ Kartka z zeszytu w kratkę. Nagłówek strony leży na kratce 5 mm z czerwonym m
 
 ## Logo
 
-Znak **e²** („nauka do kwadratu”): czarne koło z białym „e” i potęgą 2, obok nazwa **E-tutor** i hasło **Nauka do kwadratu**. Pliki w `logo/`: `e2-znak.svg`, `e2-logo.svg` (z nazwą i hasłem), wersje `-odwrocony` na ciemne tło. Litery są zamienione na kształty (czcionka Inter ExtraBold), więc logo wygląda wszędzie tak samo. Na stronie koło ma kolor `--ink`, a litery `--paper` – w ciemnym motywie znak sam się odwraca. Logo zawsze czarno-białe, bez koloru akcentu.
+Znak **e²** („nauka do kwadratu”): czarne koło z białym „e” i potęgą 2, obok nazwa **EduKwadrat** (pisana razem, z wielkim K) i hasło **Nauka do kwadratu**. Pliki w `logo/`: `e2-znak.svg`, `e2-logo.svg` (z nazwą i hasłem), wersje `-odwrocony` na ciemne tło. Litery są zamienione na kształty (czcionka Inter ExtraBold), więc logo wygląda wszędzie tak samo. Na stronie koło ma kolor `--ink`, a litery `--paper` – w ciemnym motywie znak sam się odwraca. Logo zawsze czarno-białe, bez koloru akcentu.
 
 ## Kolory (tokeny w `:root`)
 

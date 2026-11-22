@@ -1,8 +1,8 @@
 {
-  "name": "e-tutor-ai-server",
+  "name": "edukwadrat-ai-server",
   "private": true,
   "version": "0.1.0",
-  "description": "Serwer lekcji z AI dla E-tutora (Cloudflare Worker + Claude API)",
+  "description": "Serwer lekcji z AI dla EduKwadratu (Cloudflare Worker + Claude API)",
   "type": "module",
   "scripts": {
     "dev": "wrangler dev",

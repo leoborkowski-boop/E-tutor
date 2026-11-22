@@ -11,5 +11,5 @@ const cleanedHead = head
   .replace(/<meta name="theme-color"[^>]*>/, '')
   .replace(/<title>[^<]*<\/title>/, '')
   .replace(/<link rel="icon" href="[^"]*"\s*\/?>/, '');
-writeFileSync('dist-artifact/e-tutor.html', `<title>E-tutor</title>\n${cleanedHead.trim()}\n${body.trim()}\n`);
-console.log('dist-artifact/e-tutor.html');
+writeFileSync('dist-artifact/edukwadrat.html', `<title>EduKwadrat</title>\n${cleanedHead.trim()}\n${body.trim()}\n`);
+console.log('dist-artifact/edukwadrat.html');

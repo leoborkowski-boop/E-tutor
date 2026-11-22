@@ -27,10 +27,10 @@ export function SettingsScreen() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const exportProgress = () => {
-    const blob = new Blob([JSON.stringify({ app: 'e-tutor', version: 1, progress, settings: s }, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify({ app: 'edukwadrat', version: 1, progress, settings: s }, null, 2)], { type: 'application/json' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `e-tutor-postepy-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `edukwadrat-postepy-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(a.href);
   };
@@ -42,7 +42,7 @@ export function SettingsScreen() {
       importProgress(data.progress);
       setMsg('Postępy zostały wczytane.');
     } catch {
-      setMsg('Nie udało się wczytać pliku – sprawdź, czy to plik eksportu z E-tutora.');
+      setMsg('Nie udało się wczytać pliku – sprawdź, czy to plik eksportu z EduKwadratu.');
     }
   };
 

@@ -106,7 +106,7 @@ export default function App() {
         <a className="brand" href={href.home}>
           <LogoMark size={34} />
           <span className="brand-text">
-            <span className="brand-name">E-tutor</span>
+            <span className="brand-name">EduKwadrat</span>
             <span className="brand-tagline">Nauka do kwadratu</span>
           </span>
         </a>

@@ -1,6 +1,6 @@
 # Serwer lekcji z AI (Claude)
 
-Mały serwer (Cloudflare Worker), który przygotowuje „lekcje na zamówienie” w aplikacji E-tutor. Uczeń pisze, czego nie rozumie, a serwer prosi Claude o lekcję: krótką teorię, dwa przykłady i 6 zadań.
+Mały serwer (Cloudflare Worker), który przygotowuje „lekcje na zamówienie” w aplikacji EduKwadrat. Uczeń pisze, czego nie rozumie, a serwer prosi Claude o lekcję: krótką teorię, dwa przykłady i 6 zadań.
 
 Klucz API trzymamy **tylko na serwerze**. Aplikacja nigdy go nie widzi.
 
@@ -22,16 +22,16 @@ npx wrangler login                              # logowanie do Cloudflare w prze
 npx wrangler kv namespace create LIMITS         # magazyn na dzienne limity
 # wklej otrzymane id do wrangler.toml (sekcja [[kv_namespaces]], usuń znaki #)
 npx wrangler secret put ANTHROPIC_API_KEY       # wklej klucz API, gdy wrangler o niego poprosi
-npx wrangler deploy                             # wypisze adres, np. https://e-tutor-ai.twoje-konto.workers.dev
+npx wrangler deploy                             # wypisze adres, np. https://edukwadrat-ai.twoje-konto.workers.dev
 ```
 
 Potem zbuduj aplikację z adresem serwera:
 
 ```bash
 cd ..
-VITE_AI_URL=https://e-tutor-ai.twoje-konto.workers.dev npm run build
+VITE_AI_URL=https://edukwadrat-ai.twoje-konto.workers.dev npm run build
 # albo dla Androida:
-VITE_AI_URL=https://e-tutor-ai.twoje-konto.workers.dev npm run android:apk
+VITE_AI_URL=https://edukwadrat-ai.twoje-konto.workers.dev npm run android:apk
 ```
 
 Bez `VITE_AI_URL` ekran „Moja lekcja” pokazuje informację, że funkcja nie jest jeszcze włączona.
@@ -52,7 +52,7 @@ VITE_AI_URL=http://localhost:8787 npm run dev
 | --- | --- | --- |
 | `MODEL` | `claude-opus-5-5` | Model Claude. Najlepsza jakość lekcji. Tańsze: `claude-sonnet-5-5`, `claude-haiku-5-5`. |
 | `DAILY_LIMIT` | `5` | Lekcje dziennie na jedno urządzenie (na adres IP: 6 razy więcej). |
-| `ALLOWED_ORIGINS` | puste | Adresy stron, które mogą korzystać z serwera, np. `https://e-tutor.pl`. Puste = każdy. Aplikacja na Androida jest wpuszczana zawsze. |
+| `ALLOWED_ORIGINS` | puste | Adresy stron, które mogą korzystać z serwera, np. `https://edukwadrat.pl`. Puste = każdy. Aplikacja na Androida jest wpuszczana zawsze. |
 
 ## Koszt
 

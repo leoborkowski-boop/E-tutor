@@ -2,6 +2,7 @@
  * Zapis lokalny (localStorage). Klucze zawierają identyfikator profilu,
  * aby później łatwo dodać wiele profili uczniów i synchronizację z serwerem.
  */
+// Prefiks z pierwotnej nazwy (E-tutor) – zostaje, żeby zapisane postępy nie zniknęły po zmianie nazwy
 const PREFIX = 'etutor:v1';
 export const PROFILE_ID = 'default';
 

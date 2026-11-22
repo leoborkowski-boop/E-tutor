@@ -1,4 +1,4 @@
-package pl.etutor.matematyka;
+package pl.edukwadrat.app;
 
 import com.getcapacitor.BridgeActivity;
 
