@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>E-tutor · Matematyka do egzaminu</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Matematyka do egzaminu ósmoklasisty po 10 minut dziennie. Zadania bez końca, podpowiedzi krok po kroku i postępy, które pokazują, co powtórzyć. Dział z ułamkami działa za darmo.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233462c9'/><text x='16' y='22' font-size='16' text-anchor='middle' fill='white' font-family='sans-serif'>½</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Caveat:wght@500;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: kartka z zeszytu w kratkę (kratka + czerwony margines w nagłówku), dalej spokojne sekcje
+   na przemian zrzut ekranu / tekst. Czerwony długopis tylko do dopisków przy zrzutach. Pełne zasady: landing/DESIGN.md */
+:root {
+  --paper: #fbfcfd;        /* tło strony – biała kartka */
+  --paper-2: #f0f3f7;      /* tło sekcji wyróżnionych */
+  --grid: #dfe6ef;         /* linie kratki */
+  --ink: #17223a;          /* tekst główny – granatowy atrament */
+  --ink-2: #4f5b70;        /* tekst pomocniczy */
+  --rule: #d5dce6;         /* linie podziału */
+  --accent: #3462c9;       /* niebieski z aplikacji – przyciski i linki */
+  --accent-ink: #ffffff;
+  --pen: #c8372d;          /* czerwony długopis – tylko dopiski i margines */
+  --marker: #ffe270;       /* zakreślacz – jedno wyróżnienie w nagłówku */
+  --ok: #2f7d4f;
+
+  --f-display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+  --f-body: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --f-hand: 'Caveat', 'Comic Sans MS', cursive;
+  --f-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --cell: 20px;            /* kratka 5 mm w skali ekranu */
+  --wrap: 1120px;
+  --radius: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #11151c; --paper-2: #171c25; --grid: #1f2632; --ink: #e8ecf3; --ink-2: #a7b0c0;
+    --rule: #2a3240; --accent: #86a8f2; --accent-ink: #0d1424; --pen: #ff8a7a; --marker: #6b5a12; --ok: #6cc58f;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #11151c; --paper-2: #171c25; --grid: #1f2632; --ink: #e8ecf3; --ink-2: #a7b0c0;
+  --rule: #2a3240; --accent: #86a8f2; --accent-ink: #0d1424; --pen: #ff8a7a; --marker: #6b5a12; --ok: #6cc58f;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1.0625rem/1.6 var(--f-body);
+}
+img { max-width: 100%; display: block; }
+a { color: var(--accent); text-underline-offset: 3px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+
+.wrap {
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h2 { font-size: clamp(1.75rem, 1.2rem + 2vw, 2.5rem); line-height: 1.12; font-weight: 700; }
+h3 { font-size: 1.25rem; line-height: 1.3; font-weight: 700; }
+p { margin: 0; }
+.lead { font-size: 1.1875rem; color: var(--ink-2); max-width: 36em; }
+.label {
+  font: 500 0.8125rem/1.3 var(--f-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------- Przyciski ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5em;
+  min-height: 48px; padding: 0.7em 1.3em;
+  border-radius: 999px; border: 2px solid var(--accent);
+  font: 600 1rem/1.2 var(--f-body); text-decoration: none; cursor: pointer;
+  transition: background-color .15s, color .15s;
+}
+.btn svg { width: 20px; height: 20px; flex: none; }
+.btn-primary { background: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover { background: color-mix(in srgb, var(--accent) 86%, var(--ink)); }
+.btn-ghost { background: transparent; color: var(--accent); }
+.btn-ghost:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+
+/* ---------- Nagłówek strony ---------- */
+.top { padding-block: 18px; }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font: 700 1.2rem/1 var(--f-display); }
+.brand-mark {
+  width: 34px; height: 34px; border-radius: 9px; background: var(--accent); color: var(--accent-ink);
+  display: grid; place-items: center; font: 700 1.05rem/1 var(--f-body);
+}
+.top-link { font-weight: 600; text-decoration: none; }
+.top-link:hover { text-decoration: underline; }
+
+/* ---------- Hero na kratce ---------- */
+.hero {
+  position: relative;
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: var(--cell) var(--cell);
+  border-block: 1px solid var(--rule);
+  overflow: hidden;
+}
+.hero .wrap {
+  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(24px, 5vw, 72px); align-items: center;
+  padding-block: clamp(40px, 7vw, 88px);
+  position: relative;
+}
+/* czerwony margines jak w zeszycie */
+.hero .wrap::before {
+  content: ""; position: absolute; top: 0; bottom: 0;
+  left: max(4px, calc(env(safe-area-inset-left, 0px) + 4px));
+  border-left: 2px solid color-mix(in srgb, var(--pen) 55%, transparent);
+}
+.hero-text { display: grid; gap: 22px; min-width: 0; padding-left: 12px; }
+.hero h1 {
+  font-size: clamp(2.3rem, 1.4rem + 3.6vw, 4rem);
+  line-height: 1.04; font-weight: 800; letter-spacing: -0.025em;
+}
+.hl {
+  background: linear-gradient(transparent 58%, var(--marker) 58%, var(--marker) 92%, transparent 92%);
+  padding-inline: 0.06em;
+}
+.hero .lead { color: var(--ink-2); }
+.cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
+.exam-date {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px;
+  font: 400 0.9375rem/1.4 var(--f-mono); color: var(--ink-2);
+  padding-top: 6px;
+}
+.exam-date strong { color: var(--ink); font-weight: 500; }
+
+/* ---------- Telefon ze zrzutem ---------- */
+.shot { position: relative; justify-self: center; width: min(100%, 320px); }
+.phone {
+  border: 2px solid var(--ink); border-radius: 26px; overflow: hidden;
+  background: var(--paper); box-shadow: 8px 8px 0 color-mix(in srgb, var(--ink) 12%, transparent);
+}
+.phone img { width: 100%; height: auto; }
+.note {
+  position: absolute; font: 700 1.45rem/1.05 var(--f-hand); color: var(--pen);
+  width: 7.5em; pointer-events: none;
+}
+.note svg { display: block; width: 64px; height: 40px; fill: none; stroke: var(--pen); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.note span { display: block; }
+.note-hero { right: calc(100% - 18px); top: 45%; text-align: right; }
+.note-hero span, .note-left span { margin-right: 30px; }
+.note-right span { margin-left: 24px; }
+.note-hero svg { margin-left: auto; }
+.note-right { left: calc(100% - 10px); top: 30%; }
+.note-right svg { transform: scaleX(-1); }
+.note-left { right: calc(100% - 10px); top: 22%; text-align: right; }
+.note-left svg { margin-left: auto; }
+
+/* ---------- Sekcje ---------- */
+section { padding-block: clamp(56px, 8vw, 104px); }
+.section-head { display: grid; gap: 14px; max-width: 44rem; margin-bottom: clamp(28px, 4vw, 48px); }
+
+/* Jak to działa: kroki + zrzut */
+.how { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(32px, 6vw, 88px); align-items: center; }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; counter-reset: step; }
+.steps li {
+  counter-increment: step;
+  display: grid; grid-template-columns: 3.25rem minmax(0, 1fr); gap: 4px 16px;
+  padding-block: 22px; border-top: 1px solid var(--rule);
+}
+.steps li:last-child { border-bottom: 1px solid var(--rule); }
+.steps li::before {
+  content: counter(step);
+  grid-row: span 2;
+  font: 800 2.4rem/1 var(--f-display); color: var(--accent);
+}
+.steps h3 { align-self: end; }
+.steps p { color: var(--ink-2); }
+
+/* Wiersz zrzut + tekst */
+.feature { display: grid; grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
+.feature.flip { grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); }
+.feature.flip .shot { order: 2; }
+.feature-text { display: grid; gap: 18px; min-width: 0; }
+.feature-text .lead { font-size: 1.0625rem; }
+.feature + .feature { margin-top: clamp(64px, 9vw, 120px); }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0; border-top: 2px solid var(--ink); }
+.fact { padding: 14px 16px 14px 0; border-bottom: 1px solid var(--rule); }
+.fact b { display: block; font: 700 1.6rem/1.1 var(--f-display); }
+.fact span { color: var(--ink-2); font-size: 0.9375rem; }
+.ticks { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.ticks li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; }
+.ticks svg { width: 22px; height: 22px; margin-top: 2px; fill: none; stroke: var(--ok); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Spis treści */
+.toc-band { background: var(--paper-2); border-block: 1px solid var(--rule); }
+.toc-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 80px); align-items: start; }
+.toc h3 { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 10px; border-bottom: 2px solid var(--ink); }
+.toc ol { list-style: none; margin: 0; padding: 0; }
+.toc li { display: flex; align-items: baseline; gap: 10px; padding-block: 10px; border-bottom: 1px solid var(--rule); }
+.toc .n { font: 500 0.875rem/1 var(--f-mono); color: var(--ink-2); width: 1.8em; flex: none; }
+.toc .t { min-width: 0; }
+.toc .dots { flex: 1; min-width: 12px; border-bottom: 2px dotted var(--rule); transform: translateY(-4px); }
+.toc .s { font: 500 0.8125rem/1 var(--f-mono); white-space: nowrap; }
+.s-ready { color: var(--ok); }
+.s-soon { color: var(--ink-2); }
+.toc-note { margin-top: 16px; color: var(--ink-2); font-size: 0.9375rem; }
+
+/* Porównanie */
+.compare-wrap { overflow-x: auto; }
+table.compare { width: 100%; min-width: 560px; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.compare th, .compare td { text-align: left; padding: 14px 16px 14px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.compare thead th { font: 500 0.8125rem/1.3 var(--f-mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); border-bottom: 2px solid var(--ink); }
+.compare tbody th { font-weight: 600; width: 28%; }
+.compare td.us { font-weight: 600; }
+
+/* Cena + zapis */
+.price-band { background: var(--ink); color: var(--paper); }
+.price-band a { color: var(--marker); }
+.price-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 88px); align-items: start; }
+.price-band .label { color: color-mix(in srgb, var(--paper) 70%, transparent); }
+.price { display: grid; gap: 18px; }
+.price-tag { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 16px; }
+.price-tag .now { font: 800 clamp(3.2rem, 2rem + 5vw, 5rem)/1 var(--f-display); letter-spacing: -0.03em; }
+.price-tag .was { font: 500 1.4rem/1 var(--f-display); text-decoration: line-through; text-decoration-color: var(--pen); text-decoration-thickness: 3px; opacity: 0.75; }
+.price p { color: color-mix(in srgb, var(--paper) 82%, transparent); max-width: 32em; }
+.price .ticks svg { stroke: var(--marker); }
+
+.signup {
+  background: var(--paper); color: var(--ink); border-radius: var(--radius);
+  padding: clamp(20px, 3vw, 32px); display: grid; gap: 16px;
+}
+.signup h3 { font-size: 1.4rem; }
+.field { display: grid; gap: 6px; }
+.field label { font-weight: 600; }
+.field input, .field select {
+  font: inherit; color: var(--ink); background: var(--paper);
+  min-height: 48px; padding: 10px 14px; border: 2px solid var(--rule); border-radius: 10px; width: 100%;
+}
+.field input:focus, .field select:focus { outline: none; border-color: var(--accent); }
+.check { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; font-size: 0.9375rem; color: var(--ink-2); align-items: start; }
+.check input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--accent); }
+.signup .btn { justify-content: center; width: 100%; }
+.form-msg { font-size: 0.9375rem; min-height: 1.6em; }
+.form-msg.ok { color: var(--ok); font-weight: 600; }
+.form-msg.err { color: var(--pen); }
+.small { font-size: 0.875rem; color: var(--ink-2); }
+
+/* Pytania */
+.faq { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(32px, 6vw, 88px); align-items: start; }
+.faq-list { border-top: 2px solid var(--ink); }
+.faq details { border-bottom: 1px solid var(--rule); }
+.faq summary {
+  cursor: pointer; list-style: none; padding: 18px 40px 18px 0; position: relative;
+  font: 700 1.125rem/1.35 var(--f-display);
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: "+"; position: absolute; right: 4px; top: 14px;
+  font: 400 1.6rem/1 var(--f-body); color: var(--accent);
+}
+.faq details[open] summary::after { content: "−"; }
+.faq details p { padding: 0 0 20px; color: var(--ink-2); max-width: 40em; }
+
+.foot { padding-block: 28px; border-top: 1px solid var(--rule); color: var(--ink-2); font-size: 0.9375rem; }
+.foot .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+
+/* ---------- Telefon i wąskie ekrany ---------- */
+@media (max-width: 1040px) {
+  .note-right, .note-left { display: none; }
+}
+@media (max-width: 860px) {
+  .hero .wrap, .how, .feature, .feature.flip, .toc-grid, .price-grid, .faq { grid-template-columns: minmax(0, 1fr); }
+  .feature.flip .shot { order: 0; }
+  .note-hero { display: none; }
+  .shot { width: min(100%, 300px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#start" aria-label="E-tutor, początek strony"><span class="brand-mark" aria-hidden="true">½</span>E-tutor</a>
+    <a class="top-link js-app-link" href="https://claude.ai/artifact/6TaVSnCLe2uWKBRQu5u7PT" target="_blank" rel="noopener">Wypróbuj ułamki</a>
+  </div>
+</header>
+
+<main id="start">
+  <div class="hero">
+    <div class="wrap">
+      <div class="hero-text">
+        <p class="label">Egzamin ósmoklasisty · matematyka</p>
+        <h1>Matematyka do egzaminu po <span class="hl">10&nbsp;minut</span> dziennie.</h1>
+        <p class="lead">E-tutor daje dziecku zadania na jego poziomie, podpowiada krok po kroku zamiast podawać wynik i pokazuje, który dział trzeba powtórzyć. Pierwszy dział, ułamki, działa już teraz i jest za darmo.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#cena">
+            Zarezerwuj cenę 99 zł
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          </a>
+          <a class="btn btn-ghost js-app-link" href="https://claude.ai/artifact/6TaVSnCLe2uWKBRQu5u7PT" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg>
+            Wypróbuj ułamki za darmo
+          </a>
+        </div>
+        <p class="exam-date">
+          <span>Matematyka: <strong>wtorek, 11 maja 2027, godz. 9:00</strong></span>
+          <span>do egzaminu: <strong class="num" id="weeks-left">24 tygodnie</strong></span>
+        </p>
+      </div>
+
+      <figure class="shot" style="margin:0">
+        <div class="phone">
+          <img src="img/ekran-zadanie.png" width="780" height="1560" alt="Zadanie w aplikacji E-tutor: zamaluj pięć szóstych paska. Pod paskiem podpowiedź: mianownik 6 – pasek ma 6 części, licznik 5 – tyle zamaluj.">
+        </div>
+        <figcaption class="note note-hero" aria-hidden="true">
+          <span>podpowiedź, a&nbsp;nie gotowy wynik</span>
+          <svg viewBox="0 0 64 40"><path d="M4 8c18 0 34 6 50 22"/><path d="M44 30l10 0 0-10"/></svg>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- Jak wygląda nauka -->
+  <section id="jak">
+    <div class="wrap how">
+      <div>
+        <div class="section-head">
+          <p class="label">Jak wygląda nauka</p>
+          <h2>Dziecko wie, co robić dziś. Ty wiesz, jak mu idzie.</h2>
+        </div>
+        <ol class="steps">
+          <li>
+            <h3>Krótki test na start</h3>
+            <p>18 zadań, około 10 minut. Test ustawia poziom trudności osobno w każdym dziale.</p>
+          </li>
+          <li>
+            <h3>Zadania na właściwym poziomie</h3>
+            <p>Zadania generują się same, więc nigdy się nie kończą. Przy błędzie aplikacja mówi, co poszło źle, np. „dodano mianowniki”.</p>
+          </li>
+          <li>
+            <h3>Powtórki, zanim coś się zapomni</h3>
+            <p>Opanowany dział wraca do odświeżenia po 2, 4, 7, 14, 30 i 60 dniach.</p>
+          </li>
+        </ol>
+      </div>
+      <figure class="shot" style="margin:0">
+        <div class="phone">
+          <img src="img/ekran-start.png" width="780" height="1560" alt="Ekran startowy E-tutora: cel na dziś 10 minut nauki, licznik opanowanych działów 0 z 9 i zaproszenie do testu diagnostycznego.">
+        </div>
+        <figcaption class="note note-right" aria-hidden="true">
+          <svg viewBox="0 0 64 40"><path d="M4 8c18 0 34 6 50 22"/><path d="M44 30l10 0 0-10"/></svg>
+          <span>tak wygląda pierwszy dzień</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Postępy i teoria -->
+  <section id="postepy" style="padding-top:0">
+    <div class="wrap">
+      <div class="feature flip">
+        <div class="feature-text">
+          <p class="label">Postępy</p>
+          <h2>Procent opanowania przy każdym dziale, a&nbsp;nie ogólne „dobrze ci idzie”.</h2>
+          <p class="lead">Wynik liczymy z ostatnich 12 zadań w dziale. Podpowiedzi i kolejne próby go obniżają, a same łatwe zadania nie wystarczą do zaliczenia działu.</p>
+          <div class="facts">
+            <div class="fact"><b class="num">&lt; 50%</b><span>dział do powtórki</span></div>
+            <div class="fact"><b class="num">≥ 85%</b><span>dział opanowany</span></div>
+            <div class="fact"><b class="num">15 zadań</b><span>w próbnym arkuszu z limitem czasu</span></div>
+          </div>
+        </div>
+        <figure class="shot" style="margin:0">
+          <div class="phone">
+            <img src="img/ekran-postepy.png" width="780" height="1560" alt="Ekran postępów: lista działów z paskami opanowania, np. Skracanie i rozszerzanie 92 procent, Liczby mieszane 67 procent, z etykietami W trakcie i Warto odświeżyć.">
+          </div>
+          <figcaption class="note note-left" aria-hidden="true">
+            <span>przykładowy uczeń po 3&nbsp;tygodniach</span>
+            <svg viewBox="0 0 64 40"><path d="M4 8c18 0 34 6 50 22"/><path d="M44 30l10 0 0-10"/></svg>
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="feature">
+        <figure class="shot" style="margin:0">
+          <div class="phone">
+            <img src="img/ekran-teoria.png" width="780" height="1560" alt="Ekran teorii działu Dodawanie i odejmowanie: lista Co musisz umieć, przycisk odsłuchania i reguła dodawania ułamków o tym samym mianowniku.">
+          </div>
+        </figure>
+        <div class="feature-text">
+          <p class="label">Teoria</p>
+          <h2>Wyjaśnienia, które można przeczytać, odsłuchać i&nbsp;„pomacać”.</h2>
+          <p class="lead">Każdy dział zaczyna się od listy „Co musisz umieć”, reguł z rysunkami, przykładów z rozwiązaniem i typowych błędów.</p>
+          <ul class="ticks">
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>7 interaktywnych modeli: pasek, oś liczbowa, siatka 10×10</span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Lektor czyta teorię i zadania, także ułamki („trzy czwarte”)</span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Czcionka OpenDyslexic, wysoki kontrast i większy tekst w ustawieniach</span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Działa w przeglądarce na telefonie i komputerze, jest też aplikacja na Androida</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Spis treści -->
+  <section class="toc-band" id="material">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="label">Spis treści</p>
+        <h2>Co jest gotowe, a co powstaje</h2>
+        <p class="lead">Zaczęliśmy od ułamków, bo bez nich nie da się policzyć procentów, równań ani zadań tekstowych. Kolejne działy dochodzą w tej kolejności.</p>
+      </div>
+      <div class="toc-grid">
+        <div class="toc">
+          <h3><span>Ułamki</span><span class="s s-ready">gotowe</span></h3>
+          <ol>
+            <li><span class="n">1.</span><span class="t">Czym jest ułamek, oś liczbowa</span><span class="dots"></span></li>
+            <li><span class="n">2.</span><span class="t">Skracanie i rozszerzanie</span><span class="dots"></span></li>
+            <li><span class="n">3.</span><span class="t">Liczby mieszane</span><span class="dots"></span></li>
+            <li><span class="n">4.</span><span class="t">Porównywanie ułamków</span><span class="dots"></span></li>
+            <li><span class="n">5.</span><span class="t">Dodawanie i odejmowanie</span><span class="dots"></span></li>
+            <li><span class="n">6.</span><span class="t">Mnożenie i dzielenie</span><span class="dots"></span></li>
+            <li><span class="n">7.</span><span class="t">Ułamki dziesiętne, też okresowe</span><span class="dots"></span></li>
+            <li><span class="n">8.</span><span class="t">Kolejność działań</span><span class="dots"></span></li>
+            <li><span class="n">9.</span><span class="t">Zadania tekstowe</span><span class="dots"></span></li>
+          </ol>
+          <p class="toc-note">Do tego test diagnostyczny i próbny arkusz w stylu egzaminu.</p>
+        </div>
+        <div class="toc">
+          <h3><span>Pełna wersja</span><span class="s s-soon">w przygotowaniu</span></h3>
+          <ol>
+            <li><span class="n">10.</span><span class="t">Procenty</span><span class="dots"></span><span class="s s-soon">następne</span></li>
+            <li><span class="n">11.</span><span class="t">Potęgi i pierwiastki</span><span class="dots"></span></li>
+            <li><span class="n">12.</span><span class="t">Wyrażenia algebraiczne i równania</span><span class="dots"></span></li>
+            <li><span class="n">13.</span><span class="t">Proporcjonalność i prędkość</span><span class="dots"></span></li>
+            <li><span class="n">14.</span><span class="t">Figury płaskie, twierdzenie Pitagorasa</span><span class="dots"></span></li>
+            <li><span class="n">15.</span><span class="t">Graniastosłupy i ostrosłupy</span><span class="dots"></span></li>
+            <li><span class="n">16.</span><span class="t">Statystyka i prawdopodobieństwo</span><span class="dots"></span></li>
+            <li><span class="n">+</span><span class="t">Konto i postępy na każdym urządzeniu</span><span class="dots"></span></li>
+            <li><span class="n">+</span><span class="t">Cotygodniowy raport dla rodzica e-mailem</span><span class="dots"></span></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Porównanie -->
+  <section id="porownanie">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="label">Porównanie</p>
+        <h2>Na co dzień zamiast dodatkowej godziny korepetycji</h2>
+        <p class="lead">E-tutor nie zastąpi dobrego nauczyciela. Daje za to codzienną praktykę między lekcjami, kiedy nauczyciela nie ma obok.</p>
+      </div>
+      <div class="compare-wrap">
+        <table class="compare">
+          <thead>
+            <tr><th scope="col"></th><th scope="col">Korepetycje</th><th scope="col">E-tutor, pełna wersja</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Koszt</th><td>zwykle 80–150 zł za godzinę</td><td class="us">99 zł za cały sezon do egzaminu</td></tr>
+            <tr><th scope="row">Kiedy</th><td>w umówionym terminie</td><td class="us">kiedy dziecko ma 10 minut</td></tr>
+            <tr><th scope="row">Liczba zadań</th><td>tyle, ile zmieści się w lekcji</td><td class="us">bez limitu, generowane na bieżąco</td></tr>
+            <tr><th scope="row">Co widzi rodzic</th><td>to, co powie nauczyciel</td><td class="us">procent opanowania każdego działu</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cena i zapis -->
+  <section class="price-band" id="cena">
+    <div class="wrap price-grid">
+      <div class="price">
+        <p class="label">Przedsprzedaż sezonu 2026/27</p>
+        <div class="price-tag">
+          <span class="now num">99 zł</span>
+          <span class="was num">149 zł</span>
+        </div>
+        <p>Jedna opłata za dostęp do wszystkich działów do dnia egzaminu, 11 maja 2027. Teraz nic nie płacisz. Zostaw e-mail, a gdy ruszy pełna wersja, dostaniesz link do zakupu w cenie 99 zł.</p>
+        <ul class="ticks">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Wszystkie działy z egzaminu, gdy tylko będą gotowe</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Próbne arkusze i raport dla rodzica</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Ułamki zostają za darmo, także bez zapisu</span></li>
+        </ul>
+      </div>
+
+      <form class="signup" id="signup" novalidate>
+        <h3>Zarezerwuj cenę 99 zł</h3>
+        <div class="field">
+          <label for="email">Twój e-mail</label>
+          <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required placeholder="imie@przyklad.pl">
+        </div>
+        <div class="field">
+          <label for="topic">Z czym dziecko ma największy kłopot?</label>
+          <select id="topic" name="topic">
+            <option value="">Wybierz (nieobowiązkowe)</option>
+            <option>Ułamki</option>
+            <option>Procenty</option>
+            <option>Równania i wyrażenia</option>
+            <option>Geometria</option>
+            <option>Zadania tekstowe</option>
+            <option>Wszystko po trochu</option>
+          </select>
+        </div>
+        <label class="check" for="consent">
+          <input id="consent" name="consent" type="checkbox" required>
+          <span>Zgadzam się, aby E-tutor wysłał mi e-mail w sprawie startu pełnej wersji. Adresu nie przekazujemy nikomu.</span>
+        </label>
+        <button class="btn btn-primary" type="submit" id="signup-btn">Zapisz mnie</button>
+        <p class="form-msg" id="form-msg" role="status" aria-live="polite"></p>
+        <p class="small">Jeden e-mail na start, bez newslettera. Wypisać się można jednym kliknięciem.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- Pytania -->
+  <section id="pytania">
+    <div class="wrap faq">
+      <div class="section-head">
+        <p class="label">Pytania</p>
+        <h2>Zanim się zapiszesz</h2>
+      </div>
+      <div class="faq-list">
+        <details>
+          <summary>Gdzie są opinie innych rodziców?</summary>
+          <p>Jeszcze ich nie mamy. Strona i aplikacja są nowe, a gotowy jest jeden dział. Zamiast wymyślonych opinii dajemy ułamki za darmo: niech dziecko spróbuje przez tydzień, a Ty zobacz postępy.</p>
+        </details>
+        <details>
+          <summary>Dla kogo jest E-tutor?</summary>
+          <p>Dla uczniów 7. i 8. klasy, którzy przygotowują się do egzaminu ósmoklasisty z matematyki. Starsi uczniowie mogą nim powtórzyć ułamki przed liceum.</p>
+        </details>
+        <details>
+          <summary>Czy trzeba zakładać konto?</summary>
+          <p>Teraz nie. Postępy zapisują się w przeglądarce na urządzeniu dziecka. W pełnej wersji dojdzie konto, żeby postępy były na każdym urządzeniu, a rodzic dostawał raport.</p>
+        </details>
+        <details>
+          <summary>Kiedy i ile zapłacę?</summary>
+          <p>Teraz nic. Gdy pełna wersja będzie gotowa, wyślemy e-mail z linkiem do zakupu w cenie 99 zł. Jeśli nie kupisz, nic się nie dzieje.</p>
+        </details>
+        <details>
+          <summary>Czy to działa na telefonie?</summary>
+          <p>Tak. Aplikacja działa w przeglądarce na telefonie, tablecie i komputerze. Na telefonach pojawia się klawiatura do wpisywania ułamków. Jest też wersja na Androida.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>E-tutor · matematyka do egzaminu ósmoklasisty</span>
+    <a class="js-app-link" href="https://claude.ai/artifact/6TaVSnCLe2uWKBRQu5u7PT" target="_blank" rel="noopener">Otwórz aplikację</a>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // ===== Ustawienia strony (zmień tutaj) =====
+  // Adres, pod który formularz wysyła zapis, np. https://formspree.io/f/xxxxxxx (żądanie POST z JSON).
+  var FORM_ENDPOINT = '';
+  // Termin egzaminu z matematyki wg harmonogramu CKE: 11 maja 2027, 9:00 czasu polskiego.
+  var EXAM = new Date('2027-05-11T09:00:00+02:00');
+
+  // Odliczanie tygodni
+  function tygodnie(n) {
+    var l = n % 10, ll = n % 100;
+    if (n === 1) return '1 tydzień';
+    if (l >= 2 && l <= 4 && !(ll >= 12 && ll <= 14)) return n + ' tygodnie';
+    return n + ' tygodni';
+  }
+  var el = document.getElementById('weeks-left');
+  var days = Math.ceil((EXAM - new Date()) / 864e5);
+  if (el) {
+    if (days > 13) el.textContent = tygodnie(Math.floor(days / 7));
+    else if (days > 0) el.textContent = days === 1 ? '1 dzień' : days + ' dni';
+    else el.parentNode.hidden = true;
+  }
+
+  // Formularz zapisu
+  var form = document.getElementById('signup');
+  var msg = document.getElementById('form-msg');
+  var btn = document.getElementById('signup-btn');
+  function say(text, kind) { msg.textContent = text; msg.className = 'form-msg ' + (kind || ''); }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var email = form.email.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { say('Wpisz poprawny adres e-mail, np. imie@przyklad.pl.', 'err'); form.email.focus(); return; }
+    if (!form.consent.checked) { say('Zaznacz zgodę, żebyśmy mogli wysłać Ci e-mail na start.', 'err'); return; }
+    if (!FORM_ENDPOINT) { say('Zapisy jeszcze nie działają na tej stronie. Wróć za kilka dni.', 'err'); return; }
+    btn.disabled = true; say('Zapisuję…');
+    fetch(FORM_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ email: email, topic: form.topic.value, source: 'landing-przedsprzedaz' })
+    }).then(function (r) {
+      if (!r.ok) throw new Error(r.status);
+      form.reset();
+      say('Zapisane. Gdy ruszy pełna wersja, wyślemy e-mail z linkiem do zakupu za 99 zł.', 'ok');
+    }).catch(function () {
+      say('Nie udało się zapisać. Sprawdź połączenie z internetem i spróbuj jeszcze raz.', 'err');
+    }).then(function () { btn.disabled = false; });
+  });
+})();
+</script>
+</body>
+</html>

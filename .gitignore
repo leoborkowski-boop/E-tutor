@@ -6,3 +6,4 @@ dist
 # Zbudowane APK
 *.apk
 dist-artifact
+landing-shots
