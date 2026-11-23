@@ -7,7 +7,7 @@ Klucz API trzymamy **tylko na serwerze**. Aplikacja nigdy go nie widzi.
 ## Jak to działa
 
 1. Aplikacja wysyła `POST /lekcja` z tematem, poziomem, (opcjonalnie) działem i zainteresowaniami ucznia.
-2. Serwer sprawdza dzienny limit (domyślnie 5 lekcji na urządzenie, 30 na adres IP).
+2. Serwer sprawdza dzienny limit (domyślnie 5 lekcji na urządzenie, 30 na adres IP i 300 łącznie). Bez magazynu KV `LIMITS` serwer odmawia pracy, żeby rachunek za API nie mógł urosnąć bez kontroli.
 3. Claude dostaje stałe instrukcje (`src/prompt.ts`): tylko matematyka z klas 4–8, tylko po polsku, język dla dzieci, odmowa przy tematach spoza matematyki lub niestosownych. Odpowiedź musi pasować do schematu JSON (`src/schema.ts`).
 4. Każde zadanie ma wynik **i** wyrażenie do sprawdzenia (np. `15/100*240`). Aplikacja sama liczy to wyrażenie i **odrzuca zadania, w których wynik się nie zgadza** (`src/lib/expr.ts`, `src/lib/ai.ts`). Dzięki temu uczeń nie dostanie zadania z błędną odpowiedzią.
 
@@ -52,6 +52,8 @@ VITE_AI_URL=http://localhost:8787 npm run dev
 | --- | --- | --- |
 | `MODEL` | `claude-opus-5-5` | Model Claude. Najlepsza jakość lekcji. Tańsze: `claude-sonnet-5-5`, `claude-haiku-5-5`. |
 | `DAILY_LIMIT` | `5` | Lekcje dziennie na jedno urządzenie (na adres IP: 6 razy więcej). |
+| `GLOBAL_DAILY_LIMIT` | `300` | Lekcje dziennie łącznie dla wszystkich – górna granica kosztów. |
+| `ALLOW_NO_LIMITS` | – | `1` pozwala działać bez KV. Tylko do testów lokalnych, nigdy na produkcji. |
 | `ALLOWED_ORIGINS` | puste | Adresy stron, które mogą korzystać z serwera, np. `https://edukwadrat.pl`. Puste = każdy. Aplikacja na Androida jest wpuszczana zawsze. |
 
 ## Koszt

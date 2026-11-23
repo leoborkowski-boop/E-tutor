@@ -52,7 +52,7 @@ Jeśli w katalogu domeny są stare pliki (np. strona startowa home.pl `index.htm
 - przycisk „Wypróbuj ułamki” – otwiera `https://twojadomena.pl/aplikacja/`,
 - `https://twojadomena.pl/polityka-prywatnosci.html` i `/regulamin.html`,
 - zapis: wpisz swój adres w formularzu, kliknij link z e-maila (sprawdź też spam) – powinna się pokazać strona „Zapis potwierdzony”,
-- `https://twojadomena.pl/dane/zapisy.json` – musi pokazać błąd 404 albo 403, a **nie** listę adresów,
+- `https://twojadomena.pl/dane/zapisy.php` – musi pokazać błąd 404 albo pustą stronę, a **nie** listę adresów,
 - `https://twojadomena.pl/zapis.php?eksport` – po wpisaniu hasła pobiera się plik CSV z Twoim adresem.
 
 Jeśli zamiast strony widać błąd 500, usuń z serwera plik `.htaccess` i napisz, co się stało – to znaczy, że serwer nie obsługuje którejś z jego reguł.
@@ -69,11 +69,12 @@ i wgraj pliki ponownie (wystarczą te, które się zmieniły; przy zmianach apli
 
 ## Jak działa zapis
 
-- Ktoś wpisuje adres → dostaje e-mail z linkiem potwierdzającym. Dopiero kliknięcie dopisuje adres do listy. Dzięki temu nikt nie zapisze cudzego adresu, a Ty masz dowód zgody (data i IP potwierdzenia).
+- Ktoś wpisuje adres → dostaje e-mail z linkiem potwierdzającym. Link otwiera stronę z przyciskiem „Potwierdzam zapis”; dopiero kliknięcie przycisku dopisuje adres do listy (skanery poczty, które same otwierają linki, nie potwierdzą zapisu za kogoś). Dzięki temu nikt nie zapisze cudzego adresu, a Ty masz dowód zgody (data i IP potwierdzenia).
 - Niepotwierdzone adresy znikają po 7 dniach, wszystkie – po dacie `usun_po` (31 maja 2027, tak jak w polityce prywatności).
 - Każdy e-mail ma link do wypisania; kliknięcie od razu usuwa adres.
 - Lista: `zapis.php?eksport` → hasło → plik CSV (otwiera się w Excelu). W ostatniej kolumnie jest osobisty link do wypisania – wklej go do e-maila startowego dla każdej osoby.
-- Ochrona przed spamem: ukryte pole-pułapka na boty i limit 5 prób na godzinę z jednego adresu IP.
+- Ochrona przed spamem: ukryte pole-pułapka na boty, limit 5 prób na godzinę z jednego adresu IP, najwyżej 3 linki na dobę na ten sam adres e-mail i najwyżej 50 e-maili na godzinę w sumie (`limit_maili_na_godzine`).
+- Eksport: 10 prób hasła na godzinę z jednego adresu IP.
 
 ## Przed uruchomieniem
 

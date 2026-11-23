@@ -8,7 +8,7 @@ npm run build
 OUT=wydanie/strona-na-serwer
 rm -rf "$OUT"
 mkdir -p "$OUT/aplikacja"
-cp landing/index.html landing/polityka-prywatnosci.html landing/regulamin.html landing/legal.css "$OUT/"
+cp landing/index.html landing/strona.js landing/polityka-prywatnosci.html landing/regulamin.html landing/legal.css "$OUT/"
 cp -r landing/fonts landing/img "$OUT/"
 cp -r dist/. "$OUT/aplikacja/"
 cp deploy/.htaccess deploy/robots.txt deploy/zapis.php "$OUT/"

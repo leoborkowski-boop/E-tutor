@@ -8,11 +8,14 @@ compatibility_date = "2026-10-01"
 MODEL = "claude-opus-5-5"
 # Ile lekcji dziennie może przygotować jedno urządzenie
 DAILY_LIMIT = "5"
+# Ile lekcji dziennie łącznie dla wszystkich użytkowników – górna granica rachunku za API
+GLOBAL_DAILY_LIMIT = "300"
 # Adresy, z których aplikacja może korzystać z serwera (oddzielone przecinkami).
 # Puste = każdy adres. Aplikacja na Androidzie jest wpuszczana zawsze.
 ALLOWED_ORIGINS = ""
 
-# Dzienny limit wymaga magazynu KV. Utwórz go poleceniem:
+# Limity wymagają magazynu KV – BEZ NIEGO SERWER ODMAWIA PRACY (chroni przed nieograniczonym rachunkiem).
+# Utwórz go poleceniem:
 #   npx wrangler kv namespace create LIMITS
 # i wklej otrzymane id poniżej (usuń znaki # z trzech linii):
 # [[kv_namespaces]]

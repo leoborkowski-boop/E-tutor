@@ -2,6 +2,7 @@
 <html lang="pl">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Polityka prywatności · EduKwadrat</title>
 <meta name="robots" content="index, follow">
@@ -33,9 +34,9 @@
         </tr>
         <tr>
           <td>Potwierdzenie zgody i ochrona formularza</td>
-          <td>data i godzina oraz adres IP zapisu i kliknięcia w link potwierdzający; skrót (hash) adresu IP przy każdej próbie zapisu</td>
-          <td>wykazanie, że zgoda została wyrażona (art. 7 ust. 1 RODO), oraz ograniczenie liczby prób zapisu z jednego adresu, żeby nikt nie zapisywał cudzych adresów masowo; prawnie uzasadniony interes (art. 6 ust. 1 lit. f RODO)</td>
-          <td>dane potwierdzenia: tak długo jak adres e-mail na liście; skrót adresu IP: 1 godzina</td>
+          <td>data i godzina oraz adres IP zapisu i potwierdzenia; skrót (hash) adresu IP przy każdej próbie zapisu; skrót adresu e-mail przy każdym wysłanym linku potwierdzającym</td>
+          <td>wykazanie, że zgoda została wyrażona (art. 7 ust. 1 RODO), oraz ograniczenie liczby prób zapisu i e-maili na jeden adres, żeby nikt nie zapisywał ani nie zasypywał wiadomościami cudzych adresów; prawnie uzasadniony interes (art. 6 ust. 1 lit. f RODO)</td>
+          <td>dane potwierdzenia: tak długo jak adres e-mail na liście; skrót adresu IP: 1 godzina; skrót adresu e-mail: 24 godziny</td>
         </tr>
         <tr>
           <td>Wizyta na stronie</td>

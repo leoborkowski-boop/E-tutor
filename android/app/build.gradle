@@ -18,7 +18,14 @@ android {
     }
     // Klucz TESTOWY (hasło jawne) – tylko do instalacji prototypu poza sklepem.
     // Dzięki stałemu kluczowi nowe wersje instalują się jako aktualizacja (bez utraty postępów).
-    // Do publikacji w Google Play trzeba wygenerować prywatny klucz i NIE trzymać go w repozytorium.
+    // Wersja do Google Play: utwórz prywatny klucz i plik android/keystore.properties
+    // (oba są w .gitignore, instrukcja w android/keystore.properties.przyklad).
+    // Gdy ten plik istnieje, wersja release jest podpisywana prywatnym kluczem.
+    def keystorePropsFile = rootProject.file('keystore.properties')
+    def keystoreProps = new Properties()
+    if (keystorePropsFile.exists()) {
+        keystorePropsFile.withInputStream { keystoreProps.load(it) }
+    }
     signingConfigs {
         testKey {
             storeFile file('etutor-test.keystore')
@@ -26,13 +33,21 @@ android {
             keyAlias 'etutor'
             keyPassword 'etutor-test'
         }
+        if (keystorePropsFile.exists()) {
+            privateKey {
+                storeFile rootProject.file(keystoreProps['storeFile'])
+                storePassword keystoreProps['storePassword']
+                keyAlias keystoreProps['keyAlias']
+                keyPassword keystoreProps['keyPassword']
+            }
+        }
     }
     buildTypes {
         debug {
             signingConfig signingConfigs.testKey
         }
         release {
-            signingConfig signingConfigs.testKey
+            signingConfig keystorePropsFile.exists() ? signingConfigs.privateKey : signingConfigs.testKey
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

@@ -20,6 +20,10 @@ AddType application/manifest+json .webmanifest
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+  # Strona nie może być osadzona w cudzej ramce, a podmiana adresu bazowego i wtyczki są zablokowane
+  Header always set Content-Security-Policy "frame-ancestors 'self'; base-uri 'self'; object-src 'none'"
+  # Przeglądarka przez rok łączy się tylko przez https (przez http przeglądarki ten nagłówek pomijają)
+  Header always set Strict-Transport-Security "max-age=31536000"
 </IfModule>
 
 # Pamięć podręczna: pliki aplikacji mają w nazwie skrót treści, więc mogą być zapamiętane na długo;
@@ -46,6 +50,8 @@ AddType application/manifest+json .webmanifest
 </Files>
 <IfModule mod_alias.c>
   RedirectMatch 404 ^/dane(/|$)
+  # Ukryte pliki (np. .htaccess, .git) – niedostępne
+  RedirectMatch 404 /\.(?!well-known/)
 </IfModule>
 
 # Bez listowania zawartości katalogów

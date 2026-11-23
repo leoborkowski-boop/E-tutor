@@ -4,8 +4,10 @@
  * POST /lekcja  { topic, level, zone?, interests? }  →  { lekcja } albo { blad }
  *
  * Klucz API Claude jest tylko tutaj (sekret ANTHROPIC_API_KEY), nigdy w aplikacji.
- * Dzienny limit lekcji na urządzenie i na adres IP chroni przed nadużyciami
- * (wymaga powiązania KV o nazwie LIMITS – bez niego limitu nie ma).
+ * Dzienny limit lekcji na urządzenie, na adres IP i łącznie dla całego serwera
+ * chroni przed nadużyciami i nieograniczonym rachunkiem za API.
+ * Wymaga powiązania KV o nazwie LIMITS – bez niego serwer odmawia pracy.
+ * (Wyjątek do testów lokalnych: zmienna ALLOW_NO_LIMITS = "1".)
  */
 import Anthropic from '@anthropic-ai/sdk';
 import { LESSON_SCHEMA, type LessonJson } from './schema';
@@ -19,6 +21,10 @@ export interface Env {
   ALLOWED_ORIGINS?: string;
   /** ile lekcji dziennie może przygotować jedno urządzenie (domyślnie 5) */
   DAILY_LIMIT?: string;
+  /** ile lekcji dziennie łącznie dla wszystkich (górna granica kosztów; domyślnie 300) */
+  GLOBAL_DAILY_LIMIT?: string;
+  /** "1" = pozwól działać bez KV (tylko do testów lokalnych) */
+  ALLOW_NO_LIMITS?: string;
   LIMITS?: KVNamespace;
 }
 
@@ -44,7 +50,7 @@ function json(body: unknown, status: number, headers: Record<string, string>) {
 
 /** Zwiększa licznik dzienny; zwraca false, gdy limit przekroczony. */
 async function underLimit(env: Env, key: string, limit: number): Promise<boolean> {
-  if (!env.LIMITS) return true;
+  if (!env.LIMITS) return env.ALLOW_NO_LIMITS === '1';
   const day = new Date().toISOString().slice(0, 10);
   const k = `${day}:${key}`;
   const n = Number((await env.LIMITS.get(k)) ?? 0);
@@ -65,11 +71,18 @@ export default {
     if (url.pathname === '/' && req.method === 'GET') return json({ ok: true, usluga: 'EduKwadrat – lekcje z AI' }, 200, h);
     if (url.pathname !== '/lekcja' || req.method !== 'POST') return json({ blad: 'Nie ma takiego adresu.' }, 404, h);
     if (h['Access-Control-Allow-Origin'] === 'null') return json({ blad: 'Ta aplikacja nie ma dostępu do serwera.' }, 403, h);
-    if (!env.ANTHROPIC_API_KEY) return json({ blad: 'Serwer nie jest jeszcze skonfigurowany.' }, 503, h);
+    if (!env.ANTHROPIC_API_KEY || (!env.LIMITS && env.ALLOW_NO_LIMITS !== '1')) {
+      return json({ blad: 'Serwer nie jest jeszcze skonfigurowany.' }, 503, h);
+    }
+    if (Number(req.headers.get('Content-Length') ?? 0) > 4096) return json({ blad: 'Zapytanie jest za długie.' }, 413, h);
 
     let body: Record<string, unknown>;
     try {
-      body = (await req.json()) as Record<string, unknown>;
+      const raw = await req.text();
+      if (raw.length > 4096) return json({ blad: 'Zapytanie jest za długie.' }, 413, h);
+      const parsed: unknown = JSON.parse(raw);
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('not an object');
+      body = parsed as Record<string, unknown>;
     } catch {
       return json({ blad: 'Niepoprawne zapytanie.' }, 400, h);
     }
@@ -79,12 +92,15 @@ export default {
     const interests = clean(body.interests, 100) || undefined;
     if (topic.length < 5) return json({ blad: 'Opisz temat lekcji trochę dokładniej.' }, 400, h);
 
-    // limity: na urządzenie i (wyższy) na adres IP
+    // limity: na urządzenie, (wyższy) na adres IP i łączny dla całego serwera
     const limit = Number(env.DAILY_LIMIT ?? 5);
     const device = clean(req.headers.get('X-Device-Id'), 64) || 'brak';
     const ip = req.headers.get('CF-Connecting-IP') ?? 'brak';
     if (!(await underLimit(env, `dev:${device}`, limit)) || !(await underLimit(env, `ip:${ip}`, limit * 6))) {
       return json({ blad: `Na dziś to już wszystkie lekcje na zamówienie (limit: ${limit} dziennie). Wróć jutro albo ćwicz w gotowych działach.` }, 429, h);
+    }
+    if (!(await underLimit(env, 'wszystkie', Number(env.GLOBAL_DAILY_LIMIT ?? 300)))) {
+      return json({ blad: 'Tutor przygotował już dziś bardzo dużo lekcji. Wróć jutro albo ćwicz w gotowych działach.' }, 429, h);
     }
 
     const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });

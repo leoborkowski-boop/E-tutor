@@ -24,4 +24,8 @@ return [
 
     // Ile prób zapisu na godzinę z jednego adresu IP.
     'limit_na_godzine' => 5,
+
+    // Ile e-maili potwierdzających serwer może wysłać łącznie w ciągu godziny
+    // (chroni domenę przed trafieniem na listy spamu, gdyby ktoś zasypywał formularz).
+    'limit_maili_na_godzine' => 50,
 ];
