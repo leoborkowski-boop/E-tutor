@@ -33,7 +33,7 @@ export function Home() {
           <Card className="goal-card">
             <Ring value={todaySec / goalSec} size={72} label={<span>{Math.floor(todaySec / 60)}′</span>} />
             <div>
-              <h3>Cel na dziś</h3>
+              <h2 className="h3">Cel na dziś</h2>
               <p className="muted">
                 {todaySec >= goalSec
                   ? 'Cel osiągnięty. Możesz odpocząć albo ćwiczyć dalej.'
@@ -45,7 +45,7 @@ export function Home() {
         <Card className="goal-card">
           <Ring value={mastered / TOPICS.length} size={72} label={<span>{mastered}/{TOPICS.length}</span>} />
           <div>
-            <h3>Opanowane działy</h3>
+            <h2 className="h3">Opanowane działy</h2>
             <p className="muted">
               <a href={href.progress}>Zobacz szczegóły postępów</a>
             </p>
@@ -59,7 +59,7 @@ export function Home() {
             <Icon name="compass" size={26} />
           </div>
           <div className="callout-body">
-            <h3>Zacznij od krótkiego testu diagnostycznego</h3>
+            <h2 className="h3">Zacznij od krótkiego testu diagnostycznego</h2>
             <p className="muted">18 zadań, około 10 minut. Sprawdzimy, co już umiesz, i ustawimy poziom trudności w każdym dziale.</p>
           </div>
           <Button variant="primary" href={href.diagnostic} icon="play">

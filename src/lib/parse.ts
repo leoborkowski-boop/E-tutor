@@ -20,6 +20,8 @@ export function parseAnswer(input: string): ParsedAnswer | null {
     .replace(/\s+/g, ' ')
     .replace(/\s*\/\s*/g, '/');
   if (!s) return null;
+  // Każda liczba w odpowiedzi ma najwyżej 9 cyfr – większe tracą dokładność w obliczeniach
+  if (/\d{10,}/.test(s)) return null;
 
   let m = s.match(/^(-)?\s?(\d+)$/);
   if (m) {

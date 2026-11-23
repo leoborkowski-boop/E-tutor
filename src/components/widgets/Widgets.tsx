@@ -262,7 +262,7 @@ function Multiply() {
           text={`{${a[0]}/${a[1]}} · {${b[0]}/${b[1]}} = {${a[0] * b[0]}/${a[1] * b[1]}}${prod.isSimplest() ? '' : ` = ${prod.simplify().toMarkup()}`}`}
         />
       </div>
-      <div className="area" style={{ gridTemplateColumns: `repeat(${a[1]}, 1fr)`, gridTemplateRows: `repeat(${b[1]}, 1fr)` }} aria-label="Model prostokątny mnożenia">
+      <div className="area" role="img" style={{ gridTemplateColumns: `repeat(${a[1]}, 1fr)`, gridTemplateRows: `repeat(${b[1]}, 1fr)` }} aria-label="Model prostokątny mnożenia">
         {Array.from({ length: a[1] * b[1] }, (_, i) => {
           const col = i % a[1];
           const row = Math.floor(i / a[1]);
@@ -329,7 +329,7 @@ function Decimal() {
       </div>
       {f.valueOf() <= 1 && (
         <>
-          <div className="hundred" aria-label={`${hundred} ze 100 kratek`}>
+          <div className="hundred" role="img" aria-label={`${hundred} ze 100 kratek`}>
             {Array.from({ length: 100 }, (_, i) => (
               <span key={i} className={i < hundred ? 'on' : ''} />
             ))}

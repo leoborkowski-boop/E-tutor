@@ -55,6 +55,14 @@ npm run android:apk
 
 Wszystkie progi są w `src/state/progress.ts`.
 
+## Jakość: testy i przeglądy
+
+- `npm test` – 58 testów: arytmetyka, odczyt odpowiedzi, wszystkie generatory (300 losowań na dział i poziom), sprawdzanie zadań interaktywnych, walidacja zapisanych danych oraz **testy własności** (fast-check), np. „odejmowanie odwraca dodawanie”, „każdy zapis ułamka jest rozpoznawany”.
+- Przegląd interfejsu wg umiejętności `better-interface` (dostępność WCAG 2.2, układ, tekst, typografia, kolory, ruch) i `mobile-native`; automatyczny audyt axe-core na 10 ekranach w obu motywach: 0 naruszeń.
+- Dane z localStorage i z importowanego pliku są walidowane (`src/state/sanitize.ts`) – uszkodzony plik nie zablokuje aplikacji.
+- Umiejętności agenta (`.agents/`, 88 MB) nie są w repozytorium; przywracanie: `npx skills experimental_install` (z `skills-lock.json`).
+- Wersja do udostępnienia linkiem: `npm run build:artifact` (jeden plik HTML w `dist-artifact/`).
+
 ## Struktura kodu
 
 ```

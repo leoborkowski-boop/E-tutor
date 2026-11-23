@@ -1,4 +1,11 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+
+/** Id widocznej etykiety wiersza ustawień – kontrolki biorą z niej nazwę (WCAG 2.5.3). */
+export const LabelContext = createContext<string | null>(null);
+function useLabelProps(label: string) {
+  const id = useContext(LabelContext);
+  return id ? { 'aria-labelledby': id } : { 'aria-label': label };
+}
 import { speak, speechSupported, stopSpeaking } from '../lib/speech';
 import { useApp } from '../state/AppState';
 import type { Status, TopicStats } from '../state/progress';
@@ -167,8 +174,9 @@ export function Segmented<T extends string | number>({
   onChange: (v: T) => void;
   label: string;
 }) {
+  const labelProps = useLabelProps(label);
   return (
-    <div className="segmented" role="radiogroup" aria-label={label}>
+    <div className="segmented" role="radiogroup" {...labelProps}>
       {options.map((o) => (
         <button
           key={String(o.value)}
@@ -186,8 +194,9 @@ export function Segmented<T extends string | number>({
 }
 
 export function Toggle({ checked, onChange, label }: { checked: boolean; onChange: (v: boolean) => void; label: string }) {
+  const labelProps = useLabelProps(label);
   return (
-    <button type="button" role="switch" aria-checked={checked} aria-label={label} className={`toggle ${checked ? 'is-on' : ''}`} onClick={() => onChange(!checked)}>
+    <button type="button" role="switch" aria-checked={checked} {...labelProps} className={`toggle ${checked ? 'is-on' : ''}`} onClick={() => onChange(!checked)}>
       <span className="toggle-knob" />
     </button>
   );
@@ -210,9 +219,10 @@ export function Slider({
   label: string;
   format?: (v: number) => string;
 }) {
+  const labelProps = useLabelProps(label);
   return (
     <div className="slider">
-      <input type="range" min={min} max={max} step={step} value={value} aria-label={label} onChange={(e) => onChange(Number(e.target.value))} />
+      <input type="range" min={min} max={max} step={step} value={value} {...labelProps} aria-valuetext={format ? format(value) : undefined} onChange={(e) => onChange(Number(e.target.value))} />
       <span className="slider-value">{format ? format(value) : value}</span>
     </div>
   );

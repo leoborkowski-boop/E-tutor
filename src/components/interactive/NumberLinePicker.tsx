@@ -72,6 +72,9 @@ export function NumberLinePicker({
           if (disabled) return;
           if (e.key === 'ArrowRight' || e.key === 'ArrowUp') onChange(Math.min(steps, (value ?? -1) + 1));
           if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') onChange(Math.max(0, (value ?? 1) - 1));
+          if (e.key === 'Home') onChange(0);
+          if (e.key === 'End') onChange(steps);
+          if (e.key.startsWith('Arrow') || e.key === 'Home' || e.key === 'End') e.preventDefault();
         }}
       >
         <rect x={0} y={0} width={W} height={100} fill="transparent" />

@@ -20,7 +20,7 @@ export function Material() {
               <div className="topic-card-head">
                 <span className="topic-num">{t.order}</span>
                 <div>
-                  <h3>{t.title}</h3>
+                  <h2 className="h3">{t.title}</h2>
                   <p className="muted">{t.short}</p>
                 </div>
                 <StatusChip stats={s} />

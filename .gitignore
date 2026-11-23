@@ -6,3 +6,7 @@ dist
 # Zbudowane APK
 *.apk
 dist-artifact
+
+# Umiejętności agenta (88 MB) – przywracane z skills-lock.json: npx skills experimental_install
+.agents/
+.claude/skills/

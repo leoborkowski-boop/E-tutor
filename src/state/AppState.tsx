@@ -3,6 +3,7 @@ import type { TopicId } from '../content/types';
 import { BADGE_BY_ID, newlyEarned, type Badge } from './badges';
 import { EMPTY_PROGRESS, type Attempt, type ExamResult, type Progress, dayKey, topicStats } from './progress';
 import { DEFAULT_SETTINGS, type Settings } from './settings';
+import { sanitizeProgress, sanitizeSettings } from './sanitize';
 import { load, save } from './storage';
 
 type AppState = {
@@ -17,7 +18,8 @@ type AppState = {
   addExam: (r: ExamResult) => void;
   markTheoryRead: (t: TopicId) => void;
   resetProgress: () => void;
-  importProgress: (p: Progress) => void;
+  /** Dane z pliku: walidowane przed użyciem */
+  importProgress: (p: unknown) => void;
   toasts: Badge[];
   dismissToast: (id: string) => void;
 };
@@ -40,8 +42,8 @@ function withReviewStages(before: Progress, after: Progress, now: number): Progr
 }
 
 export function AppStateProvider({ children }: { children: ReactNode }) {
-  const [settings, setSettings] = useState<Settings>(() => ({ ...DEFAULT_SETTINGS, ...load<Partial<Settings>>('settings', {}) }));
-  const [progress, setProgress] = useState<Progress>(() => ({ ...EMPTY_PROGRESS, ...load<Partial<Progress>>('progress', {}) }));
+  const [settings, setSettings] = useState<Settings>(() => sanitizeSettings(load<unknown>('settings', {})));
+  const [progress, setProgress] = useState<Progress>(() => sanitizeProgress(load<unknown>('progress', {})));
   const [toasts, setToasts] = useState<Badge[]>([]);
   const settingsRef = useRef(settings);
   settingsRef.current = settings;
@@ -89,7 +91,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       addExam: (r) => commit((p) => ({ ...p, exams: [...p.exams, r] })),
       markTheoryRead: (t) => commit((p) => (p.theoryRead[t] ? p : { ...p, theoryRead: { ...p.theoryRead, [t]: Date.now() } })),
       resetProgress: () => setProgress(EMPTY_PROGRESS),
-      importProgress: (p) => setProgress({ ...EMPTY_PROGRESS, ...p }),
+      importProgress: (p) => setProgress(sanitizeProgress(p)),
       toasts,
       dismissToast,
     }),

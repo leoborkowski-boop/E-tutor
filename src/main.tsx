@@ -16,6 +16,9 @@ import App from './App';
 import { AppStateProvider } from './state/AppState';
 import './styles.css';
 
+// W wersji udostępnianej linkiem szkielet strony nie ustawia języka
+document.documentElement.lang = 'pl';
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AppStateProvider>

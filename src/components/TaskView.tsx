@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { AnswerSpec, InputTask, Misconception, Task } from '../content/types';
 import { speak } from '../lib/speech';
+import { toSpoken } from '../lib/spoken';
 import { signal } from '../lib/feedback';
 import { checkFractionAnswer, parseAnswer, type CheckResult } from '../lib/parse';
 import { attemptScore } from '../state/progress';
@@ -144,6 +145,7 @@ function StepMode({ task, onDone }: { task: InputTask; onDone: () => void }) {
         </div>
         <AnswerInput value={input} onChange={setInput} onSubmit={finished ? advance : check} spec={step.answer} disabled={finished} />
         {fb && <FeedbackBox fb={fb} />}
+        <LiveRegion message={fb?.message ?? null} />
         {revealedValue && (
           <p className="step-reveal">
             Wynik kroku: <MathText text={revealedValue} />
@@ -152,7 +154,7 @@ function StepMode({ task, onDone }: { task: InputTask; onDone: () => void }) {
         <div className="actions">
           {!finished ? (
             <>
-              <Button variant="primary" icon="check" onClick={check} disabled={!input.trim()}>
+              <Button variant="primary" icon="check" onClick={input.trim() ? check : () => setFb({ kind: 'info', message: 'Najpierw wpisz wynik tego kroku.' })}>
                 Sprawdź krok
               </Button>
               {step.hint && fails === 0 && fb?.kind !== 'wrong' && (
@@ -172,10 +174,28 @@ function StepMode({ task, onDone }: { task: InputTask; onDone: () => void }) {
   );
 }
 
+const FEEDBACK_PREFIX = { correct: '✓', wrong: '✗', info: 'ℹ' } as const;
+
+/** Widoczny komunikat (kolor + symbol, nie sam kolor). Czytnik ekranu dostaje go przez LiveRegion. */
 function FeedbackBox({ fb }: { fb: NonNullable<Feedback> }) {
   return (
-    <div className={`feedback feedback-${fb.kind}`} role="status" aria-live="polite">
+    <div className={`feedback feedback-${fb.kind}`}>
+      <span className="feedback-icon" aria-hidden="true">
+        {FEEDBACK_PREFIX[fb.kind]}
+      </span>
       <MathText text={fb.message} />
+    </div>
+  );
+}
+
+/**
+ * Stały, pusty na starcie region „status” – czytniki ekranu niezawodnie ogłaszają
+ * zmiany tekstu w regionie, który już istniał. Ułamki czytamy po polsku („dwie trzecie”).
+ */
+export function LiveRegion({ message }: { message: string | null }) {
+  return (
+    <div className="sr-only" role="status">
+      {message ? toSpoken(message) : ''}
     </div>
   );
 }
@@ -285,9 +305,23 @@ export function TaskView({ task, onFinished, onNext, nextLabel = 'Dalej' }: { ta
     else registerWrong(verdict.message, verdict.misconception);
   };
 
-  const onCheck = task.format === 'input' ? checkInput : task.format === 'choice' ? checkChoice : checkIA;
+  const runCheck = task.format === 'input' ? checkInput : task.format === 'choice' ? checkChoice : checkIA;
   const canCheck =
     task.format === 'input' ? !!input.trim() : task.format === 'choice' ? selected !== null : isInteractive(task) && !!ia && hasAnswer(task, ia);
+
+  /** Sprawdzanie przy kliknięciu: zamiast wyłączonego przycisku mówimy, czego brakuje. */
+  const onCheck = () => {
+    if (canCheck) return runCheck();
+    const message =
+      task.format === 'input'
+        ? 'Najpierw wpisz odpowiedź w polu powyżej.'
+        : task.format === 'choice'
+          ? 'Najpierw wybierz jedną z odpowiedzi.'
+          : isInteractive(task) && ia
+            ? checkInteractive(task, ia).verdict.message || 'Najpierw dokończ zadanie.'
+            : 'Najpierw dokończ zadanie.';
+    say({ kind: 'info', message });
+  };
 
   const hintsAvailable = settings.hintsMode === 'always' || (settings.hintsMode === 'afterError' && wrongTries > 0);
   const canStepMode = task.format === 'input' && !!task.steps?.length && settings.stepModeAvailable && !done;
@@ -354,6 +388,7 @@ export function TaskView({ task, onFinished, onNext, nextLabel = 'Dalej' }: { ta
       )}
 
       {feedback && <FeedbackBox fb={feedback} />}
+      <LiveRegion message={feedback?.message ?? null} />
 
       {hintsAvailable && !done && hintsShown > 0 && (
         <div className="hints">
@@ -374,7 +409,8 @@ export function TaskView({ task, onFinished, onNext, nextLabel = 'Dalej' }: { ta
               variant="primary"
               icon="check"
               onClick={onCheck}
-              disabled={!canCheck}
+              title={canCheck ? undefined : 'Najpierw podaj odpowiedź'}
+              disabled={!!done}
             >
               Sprawdź
             </Button>

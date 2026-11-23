@@ -8,7 +8,7 @@ const body = src.slice(src.indexOf('<body>') + 6, src.lastIndexOf('</body>'));
 const cleanedHead = head
   .replace(/<meta charset[^>]*>/, '')
   .replace(/<meta name="viewport"[^>]*>/, '')
-  .replace(/<meta name="theme-color"[^>]*>/, '')
+  .replace(/<meta name="theme-color"[^>]*>/g, '')
   .replace(/<title>[^<]*<\/title>/, '')
   .replace(/<link rel="icon" href="[^"]*"\s*\/?>/, '');
 writeFileSync('dist-artifact/e-tutor.html', `<title>E-tutor</title>\n${cleanedHead.trim()}\n${body.trim()}\n`);

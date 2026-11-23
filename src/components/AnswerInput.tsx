@@ -41,6 +41,7 @@ export function AnswerInput({
           inputMode={keypad ? 'none' : 'text'}
           autoComplete="off"
           spellCheck={false}
+          maxLength={24}
           placeholder={spec.placeholder ?? 'np. 3/4'}
           value={value}
           disabled={disabled}

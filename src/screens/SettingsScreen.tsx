@@ -1,18 +1,22 @@
-import { useRef, useState, type ReactNode } from 'react';
-import { Button, Card, Segmented, Slider, Toggle } from '../components/ui';
+import { useId, useRef, useState, type ReactNode } from 'react';
+import { Button, Card, LabelContext, Segmented, Slider, Toggle } from '../components/ui';
 import { speak, speechSupported, useVoices } from '../lib/speech';
 import { useApp } from '../state/AppState';
-import type { Progress } from '../state/progress';
 import { PRESETS } from '../state/settings';
 
 function Row({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
+  const id = useId();
   return (
     <div className="setting-row">
       <div className="setting-text">
-        <span className="setting-title">{title}</span>
+        <span className="setting-title" id={id}>
+          {title}
+        </span>
         {hint && <span className="muted small">{hint}</span>}
       </div>
-      <div className="setting-control">{children}</div>
+      <div className="setting-control">
+        <LabelContext.Provider value={id}>{children}</LabelContext.Provider>
+      </div>
     </div>
   );
 }
@@ -35,10 +39,11 @@ export function SettingsScreen() {
 
   const onImport = async (f: File) => {
     try {
-      const data = JSON.parse(await f.text()) as { progress?: Progress };
-      if (!data.progress || !Array.isArray(data.progress.attempts)) throw new Error();
+      if (f.size > 5_000_000) throw new Error('za duży plik');
+      const data = JSON.parse(await f.text()) as { app?: unknown; progress?: { attempts?: unknown } };
+      if (data?.app !== 'e-tutor' || !data.progress || !Array.isArray(data.progress.attempts)) throw new Error('nieznany format');
       importProgress(data.progress);
-      setMsg('Postępy zostały wczytane.');
+      setMsg(`Wczytano postępy: ${data.progress.attempts.length} zapisanych odpowiedzi.`);
     } catch {
       setMsg('Nie udało się wczytać pliku – sprawdź, czy to plik eksportu z E-tutora.');
     }
@@ -167,7 +172,7 @@ export function SettingsScreen() {
               <Toggle label="Czytanie komunikatów" checked={s.readFeedback} onChange={(v) => set({ readFeedback: v })} />
             </Row>
             <Row title="Głos" hint={voices.length ? undefined : 'Nie znaleziono polskich głosów w systemie – zostanie użyty domyślny.'}>
-              <select className="select" value={s.voiceURI ?? ''} onChange={(e) => set({ voiceURI: e.target.value || null })} aria-label="Wybór głosu">
+              <select className="select" value={s.voiceURI ?? ''} onChange={(e) => set({ voiceURI: e.target.value || null })} aria-label="Głos">
                 <option value="">Domyślny polski</option>
                 {voices.map((v) => (
                   <option key={v.voiceURI} value={v.voiceURI}>

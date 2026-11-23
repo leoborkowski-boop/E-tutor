@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { MathText } from '../MathText';
+import { toSpoken } from '../../lib/spoken';
 
 const PAIR_COLORS = 4;
 
@@ -68,7 +69,13 @@ export function MatchPairs({
             onClick={() => pickLeft(l)}
             disabled={disabled}
             aria-pressed={selLeft === l}
+            aria-label={pairs[l] !== undefined ? `${toSpoken(t)}, para ${l + 1}${locked.includes(l) ? ', poprawna' : ''}` : undefined}
           >
+            {pairs[l] !== undefined && (
+              <span className="pair-badge" aria-hidden="true">
+                {l + 1}
+              </span>
+            )}
             <MathText text={t} />
           </button>
         ))}
@@ -83,7 +90,13 @@ export function MatchPairs({
               className={`match-item ${owner !== undefined ? `is-paired ${colorOf(owner)}` : ''} ${owner !== undefined && locked.includes(owner) ? 'is-locked' : ''} ${selLeft !== null && owner === undefined ? 'is-target' : ''}`}
               onClick={() => pickRight(r)}
               disabled={disabled}
+              aria-label={owner !== undefined ? `${toSpoken(t)}, para ${owner + 1}` : undefined}
             >
+              {owner !== undefined && (
+                <span className="pair-badge" aria-hidden="true">
+                  {owner + 1}
+                </span>
+              )}
               <MathText text={t} />
             </button>
           );

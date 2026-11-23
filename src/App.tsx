@@ -1,15 +1,61 @@
 import { Capacitor, SystemBars, SystemBarsStyle } from '@capacitor/core';
-import { useEffect } from 'react';
+import { Suspense, lazy, useEffect, useRef } from 'react';
 import { Icon } from './components/ui';
 import { href, useRoute, type Route } from './router';
-import { Diagnostic } from './screens/Diagnostic';
-import { Exam } from './screens/Exam';
+import { TOPIC_BY_ID } from './content/topics';
+import type { TopicId } from './content/types';
 import { Home } from './screens/Home';
 import { Material } from './screens/Material';
 import { Practice } from './screens/Practice';
-import { ProgressScreen } from './screens/ProgressScreen';
-import { SettingsScreen } from './screens/SettingsScreen';
 import { Theory } from './screens/Theory';
+
+// Rzadziej używane ekrany ładujemy dopiero przy pierwszym wejściu (mniejszy start aplikacji)
+const Exam = lazy(() => import('./screens/Exam').then((m) => ({ default: m.Exam })));
+const Diagnostic = lazy(() => import('./screens/Diagnostic').then((m) => ({ default: m.Diagnostic })));
+const ProgressScreen = lazy(() => import('./screens/ProgressScreen').then((m) => ({ default: m.ProgressScreen })));
+const SettingsScreen = lazy(() => import('./screens/SettingsScreen').then((m) => ({ default: m.SettingsScreen })));
+
+function screenTitle(route: Route) {
+  switch (route.name) {
+    case 'home':
+      return 'Start';
+    case 'material':
+      return 'Materiał';
+    case 'topic':
+      return TOPIC_BY_ID[route.id as TopicId]?.title ?? 'Teoria';
+    case 'practice':
+      return `Ćwiczenia: ${TOPIC_BY_ID[route.id as TopicId]?.title ?? (route.id === 'powtorka' ? 'powtórka' : 'mieszane')}`;
+    case 'exam':
+      return 'Próbny arkusz';
+    case 'diagnostic':
+      return 'Test diagnostyczny';
+    case 'progress':
+      return 'Postępy';
+    case 'settings':
+      return 'Ustawienia';
+  }
+}
+
+/** Po zmianie ekranu: tytuł karty i fokus na nagłówku (czytnik ekranu ogłasza nowy widok). */
+function useRouteAnnouncement(route: Route) {
+  const first = useRef(true);
+  const key = JSON.stringify(route);
+  useEffect(() => {
+    document.title = `${screenTitle(route)} · E-tutor`;
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    const id = window.setTimeout(() => {
+      const h1 = document.querySelector<HTMLElement>('main h1');
+      if (h1) {
+        h1.tabIndex = -1;
+        h1.focus({ preventScroll: true });
+      }
+    }, 60);
+    return () => window.clearTimeout(id);
+  }, [key]);
+}
 import { useApp } from './state/AppState';
 
 const NAV: { name: Route['name'][]; label: string; icon: string; to: string }[] = [
@@ -56,7 +102,7 @@ function Toasts() {
         <strong>Nowa odznaka: {b.name}</strong>
         <span className="muted small">{b.description}</span>
       </div>
-      <button type="button" className="toast-close" aria-label="Zamknij" onClick={() => dismissToast(b.id)}>
+      <button type="button" className="toast-close" aria-label="Zamknij powiadomienie o odznace" onClick={() => dismissToast(b.id)}>
         <Icon name="x" size={16} />
       </button>
     </div>
@@ -87,8 +133,15 @@ function Screen({ route }: { route: Route }) {
 export default function App() {
   const route = useRoute();
   useAppearance();
+  useRouteAnnouncement(route);
   return (
     <div className="app">
+      <a className="skip-link" href="#main" onClick={(e) => {
+        e.preventDefault();
+        document.getElementById('main')?.focus();
+      }}>
+        Przejdź do treści
+      </a>
       <header className="topbar">
         <a className="brand" href={href.home}>
           <span className="brand-mark">½</span>
@@ -103,8 +156,10 @@ export default function App() {
           ))}
         </nav>
       </header>
-      <main className="main">
-        <Screen route={route} />
+      <main className="main" id="main" tabIndex={-1}>
+        <Suspense fallback={<p className="muted">Ładowanie…</p>}>
+          <Screen route={route} />
+        </Suspense>
       </main>
       <Toasts />
     </div>

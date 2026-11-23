@@ -43,8 +43,13 @@ function Calendar() {
             key={d.key}
             className={`cal-day lvl-${d.future ? 'f' : level(d.sec)} ${d.key === dayKey() ? 'is-today' : ''}`}
             title={`${d.date.toLocaleDateString('pl-PL')}: ${Math.round(d.sec / 60)} min`}
+            role="img"
+            aria-label={d.future ? `${d.date.toLocaleDateString('pl-PL')}: jeszcze przed nami` : `${d.date.toLocaleDateString('pl-PL')}: ${Math.round(d.sec / 60)} min nauki`}
           />
         ))}
+      </div>
+      <div className="calendar-legend" aria-hidden="true">
+        mniej <span className="cal-day lvl-0" /> <span className="cal-day lvl-1" /> <span className="cal-day lvl-2" /> <span className="cal-day lvl-3" /> więcej (pełny kolor = cel dnia)
       </div>
       <p className="muted small">
         Dni z nauką: {learningDays(progress)}. Bez presji – każdy dzień nauki się liczy, przerwy niczego nie zabierają.
@@ -162,6 +167,7 @@ export function ProgressScreen() {
                   <span className="badge-icon" aria-hidden="true">
                     {b.icon}
                   </span>
+                  <span className="badge-state">{got ? 'Zdobyta' : 'Do zdobycia'}</span>
                   <strong>{b.name}</strong>
                   <span className="muted small">{b.description}</span>
                 </div>

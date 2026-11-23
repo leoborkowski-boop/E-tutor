@@ -250,6 +250,7 @@ export function Exam() {
               role="tab"
               aria-selected={i === current}
               className={`exam-pill ${i === current ? 'is-current' : ''} ${isAnswered(it, answers[i]) ? 'is-answered' : ''}`}
+              aria-label={`Zadanie ${i + 1}${isAnswered(it, answers[i]) ? ', odpowiedziano' : ', bez odpowiedzi'}`}
               onClick={() => setCurrent(i)}
             >
               {i + 1}
@@ -260,6 +261,10 @@ export function Exam() {
           <Icon name="clock" size={16} /> {remaining !== null ? fmtTime(Math.max(0, remaining)) : fmtTime(elapsed)}
         </span>
       </div>
+      <p className="exam-legend" aria-hidden="true">
+        <span>• pod numerem – zadanie z odpowiedzią</span>
+        <span>obramowanie – bieżące zadanie</span>
+      </p>
       {remaining !== null && remaining < 300 && remaining > 0 && <p className="muted small center">Zostało mniej niż 5 minut – sprawdź swoje odpowiedzi.</p>}
 
       <Card className="task-card">
