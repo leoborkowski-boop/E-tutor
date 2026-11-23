@@ -32,6 +32,7 @@ W ustawieniach domeny w panelu jest katalog na serwerze, do którego jest przypi
    - `adres_strony` – np. `https://edukwadrat.pl` (bez ukośnika na końcu),
    - `powiadomienia_na` – Twój adres, jeśli chcesz dostawać informację o każdym potwierdzonym zapisie,
    - `haslo_eksportu` – długie, losowe hasło (min. 16 znaków) do pobierania listy.
+   - `smtp_haslo` – hasło do skrzynki z punktu 1, a `smtp_serwer` – adres serwera SMTP z panelu (Usługi WWW → serwer → Konta e-mail → SMTP). Dzięki temu e-maile idą przez Twoją skrzynkę, są podpisane DKIM i rzadziej trafiają do spamu. Puste = wysyłka zwykłą funkcją serwera.
 
    Zapisz kopię wypełnionego pliku jako `wydanie/zapis-ustawienia.php` w repozytorium (folder nie trafia do GitHuba). Wtedy `npm run build:site` będzie ją wkładać do paczki zamiast pustego wzoru.
 

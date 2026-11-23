@@ -9,6 +9,13 @@ return [
     'nadawca' => 'kontakt@twojadomena.pl',
     'nadawca_nazwa' => 'EduKwadrat',
 
+    // Wysyłka przez skrzynkę nadawcy (zalecane – e-maile rzadziej trafiają do spamu).
+    // smtp_haslo: hasło do skrzynki z pola 'nadawca'. Puste = wysyłka funkcją mail() serwera.
+    // smtp_serwer: adres serwera SMTP z panelu home.pl (Usługi WWW → serwer → Konta e-mail → SMTP).
+    'smtp_serwer' => 'serwerXXXXXXX.hosting-home.pl',
+    'smtp_port' => 465,
+    'smtp_haslo' => '',
+
     // Pełny adres strony z https, bez ukośnika na końcu (do linków w e-mailach).
     'adres_strony' => 'https://twojadomena.pl',
 
