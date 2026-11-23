@@ -87,6 +87,7 @@ export function AiLessonsScreen() {
               placeholder="np. Nie rozumiem, jak obliczyć pole trapezu"
               disabled={busy}
             />
+            <span className="muted small">Nie wpisuj imienia, nazwiska ani innych danych osobowych.</span>
             <div className="idea-chips" aria-label="Przykładowe tematy">
               {IDEAS.map((i) => (
                 <button key={i} type="button" className="idea-chip" onClick={() => setTopic(i)} disabled={busy}>
