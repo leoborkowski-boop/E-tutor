@@ -12,7 +12,8 @@
     "typecheck": "tsc -b",
     "android:sync": "vite build && cap sync android",
     "android:apk": "npm run android:sync && cd android && ./gradlew assembleRelease --max-workers=1",
-    "build:artifact": "vite build --mode artifact && node scripts/artifact-page.mjs"
+    "build:artifact": "vite build --mode artifact && node scripts/artifact-page.mjs",
+    "build:site": "bash scripts/zbuduj-strone.sh"
   },
   "dependencies": {
     "@capacitor-community/text-to-speech": "^8.0.2",
