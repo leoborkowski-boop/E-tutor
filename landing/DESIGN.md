@@ -65,7 +65,7 @@ Strona ma jasny i ciemny motyw. Każdy kolor bierz z tokenu, nigdy wpisany na sz
 
 ## Teksty
 
-Piszemy do rodzica, prosto i krótko. Konkretne liczby z aplikacji (18 zadań testu, ostatnie 12 zadań, progi 50% i 85%, powtórki po 2, 4, 7, 14, 30, 60 dniach). Nie obiecujemy rzeczy, których jeszcze nie ma: wszystko, co powstaje, jest w spisie treści oznaczone jako „w przygotowaniu”.
+Piszemy do rodzica, prosto i krótko. Najwyżej jedno przeciwstawienie typu „zamiast X” / „nie X, tylko Y” na całej stronie (teraz: nagłówek porównania z korepetycjami); w innych miejscach piszemy samo twierdzenie. Nagłówki nazywają treść sekcji, a nie są hasłami, które pasowałyby do każdej aplikacji. Teksty sprawdzone wtyczką unslop. Konkretne liczby z aplikacji (18 zadań testu, ostatnie 12 zadań, progi 50% i 85%, powtórki po 2, 4, 7, 14, 30, 60 dniach). Nie obiecujemy rzeczy, których jeszcze nie ma: wszystko, co powstaje, jest w spisie treści oznaczone jako „w przygotowaniu”.
 
 ## Do ustawienia przed startem
 
