@@ -251,6 +251,7 @@ table.compare { width: 100%; min-width: 560px; border-collapse: collapse; font-v
 .check input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--accent); }
 .signup .btn { justify-content: center; width: 100%; }
 .form-msg { font-size: 0.9375rem; min-height: 1.6em; }
+.hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 .form-msg.ok { color: var(--ok); font-weight: 600; }
 .form-msg.err { color: var(--pen); }
 .small { font-size: 0.875rem; color: var(--ink-2); }
@@ -574,9 +575,13 @@ table.compare { width: 100%; min-width: 560px; border-collapse: collapse; font-v
           <input id="consent" name="consent" type="checkbox" required>
           <span>Zgadzam się na otrzymanie od EduKwadrat jednej wiadomości e-mail o starcie pełnej wersji z ofertą zakupu. Zgodę mogę wycofać w każdej chwili. Szczegóły w <a href="polityka-prywatnosci.html">polityce prywatności</a>.</span>
         </label>
+        <div class="hp" aria-hidden="true">
+          <label for="strona">Zostaw to pole puste</label>
+          <input id="strona" name="strona" type="text" tabindex="-1" autocomplete="off">
+        </div>
         <button class="btn btn-primary" type="submit" id="signup-btn">Zapisz mnie</button>
         <p class="form-msg" id="form-msg" role="status" aria-live="polite"></p>
-        <p class="small">Jeden e-mail na start, bez newslettera. Wypisać się można jednym kliknięciem. Formularz jest dla osób pełnoletnich, np. rodziców i opiekunów. Zapisując się, akceptujesz <a href="regulamin.html">regulamin</a>.</p>
+        <p class="small">Najpierw przyjdzie e-mail z linkiem potwierdzającym, potem jeden e-mail na start. Bez newslettera. Wypisać się można jednym kliknięciem. Formularz jest dla osób pełnoletnich, np. rodziców i opiekunów. Zapisując się, akceptujesz <a href="regulamin.html">regulamin</a>.</p>
       </form>
     </div>
   </section>
@@ -633,8 +638,8 @@ table.compare { width: 100%; min-width: 560px; border-collapse: collapse; font-v
 <script>
 (function () {
   // ===== Ustawienia strony (zmień tutaj) =====
-  // Adres, pod który formularz wysyła zapis, np. https://formspree.io/f/xxxxxxx (żądanie POST z JSON).
-  var FORM_ENDPOINT = '';
+  // Skrypt zapisu na serwerze (deploy/zapis.php). Pusty = formularz wyłączony.
+  var FORM_ENDPOINT = 'zapis.php';
   // Termin egzaminu z matematyki wg harmonogramu CKE: 11 maja 2027, 9:00 czasu polskiego.
   var EXAM = new Date('2027-05-11T09:00:00+02:00');
 
@@ -690,11 +695,13 @@ table.compare { width: 100%; min-width: 560px; border-collapse: collapse; font-v
     fetch(FORM_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ email: email, topic: form.topic.value, source: 'landing-przedsprzedaz' })
+      body: JSON.stringify({ email: email, topic: form.topic.value, consent: true, strona: form.strona.value })
     }).then(function (r) {
-      if (!r.ok) throw new Error(r.status);
-      form.reset();
-      say('Zapisane. Gdy ruszy pełna wersja, wyślemy e-mail z linkiem do zakupu za 99 zł.', 'ok');
+      return r.json().catch(function () { return {}; }).then(function (d) {
+        if (!r.ok || !d.ok) { say(d.wiadomosc || 'Nie udało się zapisać. Spróbuj jeszcze raz za kilka minut.', 'err'); return; }
+        form.reset();
+        say(d.wiadomosc, 'ok');
+      });
     }).catch(function () {
       say('Nie udało się zapisać. Sprawdź połączenie z internetem i spróbuj jeszcze raz.', 'err');
     }).then(function () { btn.disabled = false; });

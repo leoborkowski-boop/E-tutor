@@ -70,6 +70,6 @@ Piszemy do rodzica, prosto i krótko. Najwyżej jedno przeciwstawienie typu „z
 ## Do ustawienia przed startem
 
 W `index.html`, w skrypcie na dole strony:
-- `FORM_ENDPOINT`: adres, pod który idą zapisy (np. Formspree). Bez niego formularz pokazuje komunikat, że zapisy jeszcze nie działają.
+- `FORM_ENDPOINT`: skrypt zapisu na serwerze, domyślnie `zapis.php` (z katalogu `deploy/`). Pusty = formularz pokazuje komunikat, że zapisy jeszcze nie działają.
 - `EXAM`: termin egzaminu (odliczanie tygodni).
 - Linki „Wypróbuj ułamki” (klasa `js-app-link`) prowadzą do aplikacji.

@@ -35,5 +35,18 @@ AddType application/manifest+json .webmanifest
   ExpiresByType text/javascript "access plus 1 year"
 </IfModule>
 
+# Zapis na przedsprzedaż: ustawienia i lista adresów niedostępne z przeglądarki
+<Files "zapis-ustawienia.php">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Deny from all
+  </IfModule>
+</Files>
+<IfModule mod_alias.c>
+  RedirectMatch 404 ^/dane(/|$)
+</IfModule>
+
 # Bez listowania zawartości katalogów
 Options -Indexes

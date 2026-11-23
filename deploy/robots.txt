@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+Disallow: /zapis.php
+Disallow: /dane/

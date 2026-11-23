@@ -28,8 +28,14 @@
         <tr>
           <td>Zapis na przedsprzedaż (formularz na stronie)</td>
           <td>adres e-mail; opcjonalnie dział, z którym dziecko ma kłopot</td>
-          <td>wysłanie jednej wiadomości o starcie pełnej wersji z linkiem do zakupu; zgoda (art. 6 ust. 1 lit. a RODO) oraz zgoda na otrzymywanie informacji handlowej drogą elektroniczną</td>
-          <td>do wysłania tej wiadomości, nie dłużej niż do 31 maja 2027 r., albo do wycofania zgody, jeśli nastąpi wcześniej</td>
+          <td>wysłanie e-maila z linkiem potwierdzającym zapis, a po potwierdzeniu jednej wiadomości o starcie pełnej wersji z linkiem do zakupu; zgoda (art. 6 ust. 1 lit. a RODO) oraz zgoda na otrzymywanie informacji handlowej drogą elektroniczną</td>
+          <td>do wysłania tej wiadomości, nie dłużej niż do 31 maja 2027 r., albo do wycofania zgody, jeśli nastąpi wcześniej; adres niepotwierdzony usuwamy automatycznie po 7 dniach</td>
+        </tr>
+        <tr>
+          <td>Potwierdzenie zgody i ochrona formularza</td>
+          <td>data i godzina oraz adres IP zapisu i kliknięcia w link potwierdzający; skrót (hash) adresu IP przy każdej próbie zapisu</td>
+          <td>wykazanie, że zgoda została wyrażona (art. 7 ust. 1 RODO), oraz ograniczenie liczby prób zapisu z jednego adresu, żeby nikt nie zapisywał cudzych adresów masowo; prawnie uzasadniony interes (art. 6 ust. 1 lit. f RODO)</td>
+          <td>dane potwierdzenia: tak długo jak adres e-mail na liście; skrót adresu IP: 1 godzina</td>
         </tr>
         <tr>
           <td>Wizyta na stronie</td>
@@ -67,8 +73,7 @@
   <h2 id="odbiorcy">4. Komu przekazujemy dane</h2>
   <p>Korzystamy z usług firm, które przetwarzają dane w naszym imieniu (podmiotów przetwarzających):</p>
   <ul>
-    <li>dostawca hostingu strony i aplikacji: home.pl S.A. (Polska);</li>
-    <li>dostawca obsługi formularza przedsprzedaży i wysyłki e-maila: <span class="todo">[UZUPEŁNIJ: nazwa i kraj, np. Formspree, Inc., USA]</span>;</li>
+    <li>home.pl S.A. (Polska) – hosting strony i aplikacji, serwer zapisujący adresy z formularza przedsprzedaży i wysyłka e-maili; adresy z formularza są przechowywane tylko na tym serwerze;</li>
     <li>Cloudflare, Inc. (USA) – serwer lekcji na zamówienie;</li>
     <li>Anthropic, PBC (USA) – model AI przygotowujący lekcje na zamówienie.</li>
   </ul>
