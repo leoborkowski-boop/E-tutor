@@ -3,6 +3,7 @@ import { Button, Card, LabelContext, Segmented, Slider, Toggle } from '../compon
 import { speak, speechSupported, useVoices } from '../lib/speech';
 import { useApp } from '../state/AppState';
 import { PRESETS } from '../state/settings';
+import { exportTextFile } from '../lib/exportFile';
 
 function Row({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
   const id = useId();
@@ -28,13 +29,21 @@ export function SettingsScreen() {
   const [msg, setMsg] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const exportProgress = () => {
-    const blob = new Blob([JSON.stringify({ app: 'e-tutor', version: 1, progress, settings: s }, null, 2)], { type: 'application/json' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `e-tutor-postepy-${new Date().toISOString().slice(0, 10)}.json`;
-    a.click();
-    URL.revokeObjectURL(a.href);
+  const [exporting, setExporting] = useState(false);
+  const exportProgress = async () => {
+    setExporting(true);
+    const text = JSON.stringify({ app: 'e-tutor', version: 1, progress, settings: s }, null, 2);
+    const result = await exportTextFile(`e-tutor-postepy-${new Date().toISOString().slice(0, 10)}.json`, text);
+    setExporting(false);
+    setMsg(
+      result === 'saved'
+        ? 'Plik z postępami jest zapisany. Wczytasz go przyciskiem „Wczytaj postępy” na innym urządzeniu.'
+        : result === 'shared'
+          ? 'Plik z postępami jest gotowy – wybierz, gdzie go zapisać (np. Pliki, Dysk Google) albo komu wysłać.'
+          : result === 'declined'
+            ? 'Zapis anulowany. Możesz spróbować ponownie w dowolnej chwili.'
+            : 'Nie udało się zapisać pliku na tym urządzeniu. Spróbuj w innej przeglądarce albo w aplikacji na telefonie.',
+    );
   };
 
   const onImport = async (f: File) => {
@@ -276,7 +285,9 @@ export function SettingsScreen() {
         <h2>Dane</h2>
         <p className="muted small">Postępy są zapisane tylko w tej przeglądarce. Możesz je wyeksportować i wczytać na innym urządzeniu.</p>
         <div className="actions">
-          <Button onClick={exportProgress}>Eksportuj postępy</Button>
+          <Button onClick={() => void exportProgress()} disabled={exporting}>
+            {exporting ? 'Zapisywanie…' : 'Eksportuj postępy'}
+          </Button>
           <Button onClick={() => fileRef.current?.click()}>Wczytaj postępy</Button>
           <input
             ref={fileRef}
@@ -314,7 +325,7 @@ export function SettingsScreen() {
             </>
           )}
         </div>
-        {msg && <p className="feedback feedback-info">{msg}</p>}
+        <div role="status">{msg && <p className="feedback feedback-info">{msg}</p>}</div>
       </Card>
     </div>
   );

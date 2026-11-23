@@ -1451,7 +1451,7 @@ details summary {
 }
 .progress-row {
   display: grid;
-  grid-template-columns: minmax(180px, 1.3fr) minmax(120px, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1.3fr) minmax(120px, 1fr) auto auto;
   grid-template-areas:
     'title bar chip action'
     'title meta meta meta';
@@ -1488,7 +1488,7 @@ details summary {
 }
 @media (max-width: 640px) {
   .progress-row {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
       'title chip'
       'bar bar'
@@ -2480,4 +2480,19 @@ h2.h3 {
 }
 .topic-card {
   min-width: 0;
+}
+
+/* Długie słowa (np. przy 200% tekstu na 320 px) łamią się zamiast wychodzić poza ekran */
+body {
+  overflow-wrap: break-word;
+}
+.progress-title,
+.summary-title,
+.topic-mini-title,
+.rec-title,
+h1,
+h2,
+h3 {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
