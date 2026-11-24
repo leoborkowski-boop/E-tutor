@@ -39,15 +39,15 @@ AddType application/manifest+json .webmanifest
   ExpiresByType text/javascript "access plus 1 year"
 </IfModule>
 
-# Zapis na przedsprzedaż: ustawienia i lista adresów niedostępne z przeglądarki
-<Files "zapis-ustawienia.php">
+# Ustawienia i pliki pomocnicze (hasła do bazy i poczty, wysyłka e-maili) – niedostępne z przeglądarki
+<FilesMatch "^(zapis-ustawienia|konto-ustawienia|poczta)\.php$">
   <IfModule mod_authz_core.c>
     Require all denied
   </IfModule>
   <IfModule !mod_authz_core.c>
     Deny from all
   </IfModule>
-</Files>
+</FilesMatch>
 <IfModule mod_alias.c>
   RedirectMatch 404 ^/dane(/|$)
   # Ukryte pliki (np. .htaccess, .git) – niedostępne

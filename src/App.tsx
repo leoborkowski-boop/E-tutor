@@ -10,6 +10,7 @@ import { Material } from './screens/Material';
 import { Practice } from './screens/Practice';
 import { ProgressScreen } from './screens/ProgressScreen';
 import { SettingsScreen } from './screens/SettingsScreen';
+import { AccountScreen } from './screens/Account';
 import { Theory } from './screens/Theory';
 import { LessonScreen, ZoneScreen, ZonesScreen } from './screens/Lessons';
 import { AiLessonScreen, AiLessonsScreen } from './screens/AiLessons';
@@ -20,7 +21,7 @@ const NAV: { name: Route['name'][]; label: string; icon: string; to: string }[] 
   { name: ['lessons', 'zone', 'lesson', 'ai', 'ailesson', 'material', 'topic', 'practice'], label: 'Lekcje', icon: 'book', to: href.lessons },
   { name: ['exam', 'diagnostic'], label: 'Egzamin', icon: 'exam', to: href.exam },
   { name: ['progress'], label: 'Postępy', icon: 'chart', to: href.progress },
-  { name: ['settings'], label: 'Ustawienia', icon: 'settings', to: href.settings },
+  { name: ['settings', 'account'], label: 'Ustawienia', icon: 'settings', to: href.settings },
 ];
 
 function useAppearance() {
@@ -84,6 +85,8 @@ function Screen({ route }: { route: Route }) {
       return <ProgressScreen />;
     case 'settings':
       return <SettingsScreen />;
+    case 'account':
+      return <AccountScreen />;
     case 'lessons':
       return <ZonesScreen />;
     case 'zone':

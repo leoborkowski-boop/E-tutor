@@ -14,6 +14,11 @@ cp -r dist/. "$OUT/aplikacja/"
 cp deploy/.htaccess deploy/robots.txt deploy/zapis.php "$OUT/"
 # Ustawienia zapisu: nie nadpisuj wypełnionej kopii, jeśli jest w wydanie/zapis-ustawienia.php
 if [ -f wydanie/zapis-ustawienia.php ]; then cp wydanie/zapis-ustawienia.php "$OUT/"; else cp deploy/zapis-ustawienia.php "$OUT/"; fi
+# Konta użytkowników: serwer PHP (api/), wysyłka e-maili i ustawienia bazy danych
+mkdir -p "$OUT/api"
+cp deploy/api/index.php deploy/api/biblioteka.php deploy/api/.htaccess "$OUT/api/"
+cp deploy/poczta.php "$OUT/"
+if [ -f wydanie/konto-ustawienia.php ]; then cp wydanie/konto-ustawienia.php "$OUT/"; else cp deploy/konto-ustawienia.php "$OUT/"; fi
 mkdir -p "$OUT/dane"
 printf 'Require all denied\n<IfModule !mod_authz_core.c>\nDeny from all\n</IfModule>\n' > "$OUT/dane/.htaccess"
 ( cd wydanie && rm -f strona-na-serwer.zip && zip -qr strona-na-serwer.zip strona-na-serwer )

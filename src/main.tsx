@@ -14,6 +14,7 @@ import '@fontsource/opendyslexic/latin-400.css';
 import '@fontsource/opendyslexic/latin-700.css';
 import App from './App';
 import { AppStateProvider } from './state/AppState';
+import { AccountProvider } from './state/AccountState';
 import './styles.css';
 import { initNeural } from './lib/neuralVoice';
 
@@ -22,7 +23,9 @@ void initNeural();
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AppStateProvider>
-      <App />
+      <AccountProvider>
+        <App />
+      </AccountProvider>
     </AppStateProvider>
   </StrictMode>,
 );

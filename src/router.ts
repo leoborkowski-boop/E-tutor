@@ -13,7 +13,8 @@ export type Route =
   | { name: 'zone'; id: string }
   | { name: 'lesson'; id: string }
   | { name: 'ai' }
-  | { name: 'ailesson'; id: string };
+  | { name: 'ailesson'; id: string }
+  | { name: 'account' };
 
 export function parseHash(hash: string): Route {
   const parts = hash.replace(/^#\/?/, '').split('/').filter(Boolean);
@@ -38,6 +39,8 @@ export function parseHash(hash: string): Route {
       return parts[1] ? { name: 'zone', id: parts[1] } : { name: 'lessons' };
     case 'lekcja':
       return parts[1] ? { name: 'lesson', id: decodeURIComponent(parts[1]) } : { name: 'lessons' };
+    case 'konto':
+      return { name: 'account' };
     case 'moje-lekcje':
       return { name: 'ai' };
     case 'moja-lekcja':
@@ -59,6 +62,7 @@ export const href = {
   lessons: '#/lekcje',
   zone: (id: string) => `#/dzial/${id}`,
   lesson: (id: string) => `#/lekcja/${encodeURIComponent(id)}`,
+  account: '#/konto',
   ai: '#/moje-lekcje',
   aiLesson: (id: string) => `#/moja-lekcja/${id}`,
 };

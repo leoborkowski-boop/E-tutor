@@ -5,6 +5,8 @@ import { NEURAL_VOICES, downloadVoice, neuralSupported, removeVoice, useNeuralSt
 import { useApp } from '../state/AppState';
 import type { Progress } from '../state/progress';
 import { PRESETS } from '../state/settings';
+import { useAccount } from '../state/AccountState';
+import { href } from '../router';
 
 function Row({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
   return (
@@ -21,6 +23,7 @@ function Row({ title, hint, children }: { title: string; hint?: string; children
 export function SettingsScreen() {
   const { settings: s, updateSettings: set, resetSettings, progress, resetProgress, importProgress } = useApp();
   const voices = useVoices();
+  const account = useAccount();
   const neural = useNeuralState();
   const [confirmReset, setConfirmReset] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
@@ -52,6 +55,22 @@ export function SettingsScreen() {
         <h1>Ustawienia</h1>
         <p className="lead">Dopasuj tempo, pomoc, głos i wygląd do siebie. Zmiany zapisują się od razu.</p>
       </header>
+
+      {account.available && (
+        <Card>
+          <h2>Konto</h2>
+          <p className="muted small">
+            {account.session
+              ? `Zalogowano jako ${account.session.email}. Postępy synchronizują się z kontem.`
+              : 'Załóż konto, żeby mieć postępy na każdym urządzeniu. Aplikacja działa też bez konta.'}
+          </p>
+          <div className="actions">
+            <Button href={href.account} icon="settings">
+              {account.session ? 'Zarządzaj kontem' : 'Zaloguj się lub załóż konto'}
+            </Button>
+          </div>
+        </Card>
+      )}
 
       <Card>
         <h2>Szybki wybór</h2>

@@ -3,6 +3,7 @@ import type { TopicId } from '../content/types';
 import { BADGE_BY_ID, newlyEarned, type Badge } from './badges';
 import { EMPTY_PROGRESS, type Attempt, type ExamResult, type Progress, dayKey, topicStats } from './progress';
 import { DEFAULT_SETTINGS, type Settings } from './settings';
+import { mergeProgress } from './merge';
 import { load, save } from './storage';
 
 type AppState = {
@@ -19,6 +20,8 @@ type AppState = {
   completeLesson: (id: string, stars: number) => void;
   resetProgress: () => void;
   importProgress: (p: Progress) => void;
+  /** Dołącza postępy z konta na serwerze do lokalnych (nic nie nadpisuje – scala). */
+  applyRemote: (p: Progress) => void;
   toasts: Badge[];
   dismissToast: (id: string) => void;
 };
@@ -96,6 +99,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         }),
       resetProgress: () => setProgress(EMPTY_PROGRESS),
       importProgress: (p) => setProgress({ ...EMPTY_PROGRESS, ...p }),
+      applyRemote: (p) => setProgress((prev) => mergeProgress(prev, p)),
       toasts,
       dismissToast,
     }),
