@@ -29,7 +29,8 @@ npm run android:apk
 
 - W aplikacji lektor korzysta z **natywnego silnika mowy Androida** (`@capacitor-community/text-to-speech`), bo WebView nie obsługuje Web Speech API. Polski głos musi być zainstalowany w telefonie (Ustawienia → Zamiana tekstu na mowę).
 - Wibracje: `@capacitor/haptics`.
-- APK jest podpisany **kluczem testowym** `android/app/etutor-test.keystore` (hasło jawne w `android/app/build.gradle`). Dzięki stałemu kluczowi nowe wersje instalują się jako aktualizacja, bez utraty postępów. Do Google Play trzeba wygenerować prywatny klucz i nie trzymać go w repozytorium.
+- **Podpis APK.** Klucz i hasła NIE są w repozytorium. Gradle czyta je z `android/keystore.properties` (wzór: `android/keystore.properties.example`, plik ignorowany przez git) albo ze zmiennych `EDUKWADRAT_KEYSTORE_FILE`, `EDUKWADRAT_KEYSTORE_PASSWORD`, `EDUKWADRAT_KEY_ALIAS`, `EDUKWADRAT_KEY_PASSWORD`. Bez klucza wersja release przerywa budowanie z czytelnym komunikatem; wersja debug działa bez niego. **Klucz trzymaj w bezpiecznym miejscu (np. menedżer haseł)** – bez niego nie da się wydać aktualizacji, która zainstaluje się na istniejącej aplikacji.
+- Do wersji 0.4.0 APK był podpisywany kluczem testowym zapisanym w repozytorium; ten klucz jest uznany za ujawniony i nie jest już używany (od 0.5.0 nowy klucz).
 - Ikony i ekran startowy: źródła w `assets/`, generowane przez `npx capacitor-assets generate --android`.
 
 ## Co jest w prototypie
@@ -65,6 +66,7 @@ Wszystkie progi są w `src/state/progress.ts`.
 - Przegląd interfejsu wg umiejętności `better-interface` (dostępność WCAG 2.2, układ, tekst, typografia, kolory, ruch) i `mobile-native`; automatyczny audyt axe-core na 10 ekranach w obu motywach: 0 naruszeń.
 - Dane z localStorage i z importowanego pliku są walidowane (`src/state/sanitize.ts`) – uszkodzony plik nie zablokuje aplikacji.
 - Umiejętności agenta (`.agents/`, 88 MB) nie są w repozytorium; przywracanie: `npx skills experimental_install` (z `skills-lock.json`).
+- Przegląd bezpieczeństwa Ghost Security (sekrety: poltergeist, zależności: wraith/osv-scanner, kod: ghost-scan-code) – 0 podatności w zależnościach, brak miejsc wstrzykiwania HTML; naprawione: klucz podpisu w repozytorium, zbyt szeroki zakres FileProvider.
 - Wersja do udostępnienia linkiem: `npm run build:artifact` (jeden plik HTML w `dist-artifact/`).
 
 ## Marka

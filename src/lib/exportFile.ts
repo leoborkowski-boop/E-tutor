@@ -26,7 +26,9 @@ async function claudeDownloads(): Promise<DownloadsApi | null> {
 export async function exportTextFile(filename: string, text: string): Promise<ExportResult> {
   if (Capacitor.isNativePlatform()) {
     try {
-      const { uri } = await Filesystem.writeFile({ path: filename, data: text, directory: Directory.Cache, encoding: Encoding.UTF8 });
+      // Tylko folder cache/exports/ jest udostępniany innym aplikacjom (res/xml/file_paths.xml)
+      const safeName = filename.replace(/[^\w.-]/g, '_');
+      const { uri } = await Filesystem.writeFile({ path: `exports/${safeName}`, data: text, directory: Directory.Cache, encoding: Encoding.UTF8, recursive: true });
       await Share.share({ title: filename, files: [uri], dialogTitle: 'Zapisz lub wyślij plik z postępami' });
       return 'shared';
     } catch (e) {
