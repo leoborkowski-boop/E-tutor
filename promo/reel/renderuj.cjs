@@ -8,7 +8,7 @@ const fs = require('fs');
 const path = require('path');
 
 const FPS = 30, DUR = 25;
-const SCENA = 'file://' + path.join(__dirname, 'scena.html');
+const SCENA = 'file://' + path.join(__dirname, process.env.SCENA || 'scena.html');   // SCENA=scena-rodzice.html
 const LOGO = fs.readFileSync(path.join(__dirname, '../../logo/e2-znak.svg'), 'utf8')
   .replace(/width="\d+" height="\d+"/, 'width="100%" height="100%"')
   .replace('fill="#000"', 'fill="#17223a"');
