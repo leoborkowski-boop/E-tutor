@@ -12,6 +12,8 @@ export const FREE_ZONES = ['ulamki'];
 /** Czy zalogowane konto ma aktywny dostęp do pełnej wersji. */
 export function useFullAccess(): boolean {
   const { session } = useAccount();
+  // wersja podglądowa (VITE_UNLOCK_ALL=1) ma odblokowane wszystkie działy
+  if (import.meta.env.VITE_UNLOCK_ALL === '1') return true;
   return Boolean(session?.access.some((a) => a.do * 1000 > Date.now()));
 }
 
