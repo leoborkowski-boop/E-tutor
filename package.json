@@ -1,9 +1,9 @@
 {
-  "name": "e-tutor",
+  "name": "edukwadrat",
   "private": true,
-  "version": "0.3.1",
+  "version": "0.4.0",
   "type": "module",
-  "description": "E-tutor: nauka matematyki dla klasy 8 – prototyp (ułamki)",
+  "description": "EduKwadrat – Nauka do kwadratu: matematyka dla klasy 8 (prototyp, ułamki)",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

@@ -1,6 +1,7 @@
 import { Capacitor, SystemBars, SystemBarsStyle } from '@capacitor/core';
 import { Suspense, lazy, useEffect, useRef } from 'react';
 import { Icon } from './components/ui';
+import { LogoMark, LogoName } from './brand/Logo';
 import { href, useRoute, type Route } from './router';
 import { TOPIC_BY_ID } from './content/topics';
 import type { TopicId } from './content/types';
@@ -41,7 +42,7 @@ function useRouteAnnouncement(route: Route) {
   const first = useRef(true);
   const key = JSON.stringify(route);
   useEffect(() => {
-    document.title = `${screenTitle(route)} · E-tutor`;
+    document.title = `${screenTitle(route)} · EduKwadrat`;
     if (first.current) {
       first.current = false;
       return;
@@ -144,8 +145,9 @@ export default function App() {
       </a>
       <header className="topbar">
         <a className="brand" href={href.home}>
-          <span className="brand-mark">½</span>
-          <span className="brand-name">E-tutor</span>
+          <LogoMark size={34} />
+          <LogoName height={19} />
+          <span className="sr-only">EduKwadrat – strona główna</span>
         </a>
         <nav className="nav" aria-label="Główna nawigacja">
           {NAV.map((n) => (

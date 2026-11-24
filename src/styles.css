@@ -1,5 +1,5 @@
 /* ==========================================================
-   E-tutor – czysty, spokojny prototyp
+   EduKwadrat – czysty, spokojny prototyp
    ========================================================== */
 
 :root {
@@ -251,16 +251,6 @@ a {
   .brand:hover {
     text-decoration: none;
   }
-}
-.brand-mark {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 9px;
-  background: var(--accent);
-  color: var(--accent-ink);
-  font-size: 1.05rem;
 }
 .nav {
   display: flex;
@@ -2495,4 +2485,40 @@ h2,
 h3 {
   min-width: 0;
   overflow-wrap: anywhere;
+}
+
+/* ==========================================================
+   Marka EduKwadrat: czarny znak na jasnym tle, negatyw (białe koło) na ciemnym
+   ========================================================== */
+:root {
+  --logo-bg: #000000;
+  --logo-fg: #ffffff;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --logo-bg: #ffffff;
+    --logo-fg: #000000;
+  }
+}
+:root[data-theme='dark'] {
+  --logo-bg: #ffffff;
+  --logo-fg: #000000;
+}
+.logo-mark-bg {
+  fill: var(--logo-bg);
+}
+.logo-mark-fg {
+  fill: var(--logo-fg);
+}
+.brand {
+  gap: 0.6rem;
+}
+.brand .logo-name {
+  color: var(--text);
+}
+@media (max-width: 380px) {
+  .brand .logo-name {
+    height: 16px;
+    width: auto;
+  }
 }

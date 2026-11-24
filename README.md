@@ -1,4 +1,8 @@
-# E-tutor – matematyka dla klasy 8 (prototyp)
+# EduKwadrat – Nauka do kwadratu
+
+![EduKwadrat](assets/brand/edukwadrat-logo.svg)
+
+Matematyka dla klasy 8 (prototyp)
 
 Prototyp aplikacji do samodzielnej nauki matematyki. Pierwszy moduł: **ułamki** (powtórka przed egzaminem ósmoklasisty). Interfejs po polsku.
 
@@ -62,6 +66,20 @@ Wszystkie progi są w `src/state/progress.ts`.
 - Dane z localStorage i z importowanego pliku są walidowane (`src/state/sanitize.ts`) – uszkodzony plik nie zablokuje aplikacji.
 - Umiejętności agenta (`.agents/`, 88 MB) nie są w repozytorium; przywracanie: `npx skills experimental_install` (z `skills-lock.json`).
 - Wersja do udostępnienia linkiem: `npm run build:artifact` (jeden plik HTML w `dist-artifact/`).
+
+## Marka
+
+Pliki w `assets/brand/` (wektorowe, litery zamienione na kontury – nie wymagają czcionek):
+
+| Plik | Użycie |
+| --- | --- |
+| `edukwadrat-znak.svg` | znak „e²” na jasnym tle (favicon, pasek aplikacji) |
+| `edukwadrat-znak-negatyw.svg` | znak na ciemnym tle (tryb ciemny) |
+| `edukwadrat-logo.svg` | pełne logo z hasłem „Nauka do kwadratu” |
+| `edukwadrat-logo-negatyw.svg` | pełne logo w negatywie |
+| `wzor-od-klienta.jpg` | wzór, na podstawie którego odtworzono logo |
+
+Czcionka: Inter („e” i „2” – ExtraBold 800, nazwa – Black 900, hasło – SemiBold 600). W aplikacji znak jest w `src/brand/` i w trybie ciemnym automatycznie zmienia się w negatyw. Ikona Androida i ekran startowy są generowane z tych plików (`assets/icon-*.png`, `assets/splash*.png`).
 
 ## Struktura kodu
 

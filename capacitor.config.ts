@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'pl.etutor.matematyka',
-  appName: 'E-tutor',
+  appName: 'EduKwadrat',
   webDir: 'dist',
   android: {
     // kolor tła WebView przed załadowaniem strony (jak tło aplikacji)

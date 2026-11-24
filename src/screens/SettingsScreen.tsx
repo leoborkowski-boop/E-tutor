@@ -32,8 +32,8 @@ export function SettingsScreen() {
   const [exporting, setExporting] = useState(false);
   const exportProgress = async () => {
     setExporting(true);
-    const text = JSON.stringify({ app: 'e-tutor', version: 1, progress, settings: s }, null, 2);
-    const result = await exportTextFile(`e-tutor-postepy-${new Date().toISOString().slice(0, 10)}.json`, text);
+    const text = JSON.stringify({ app: 'edukwadrat', version: 1, progress, settings: s }, null, 2);
+    const result = await exportTextFile(`edukwadrat-postepy-${new Date().toISOString().slice(0, 10)}.json`, text);
     setExporting(false);
     setMsg(
       result === 'saved'
@@ -50,11 +50,12 @@ export function SettingsScreen() {
     try {
       if (f.size > 5_000_000) throw new Error('za duży plik');
       const data = JSON.parse(await f.text()) as { app?: unknown; progress?: { attempts?: unknown } };
-      if (data?.app !== 'e-tutor' || !data.progress || !Array.isArray(data.progress.attempts)) throw new Error('nieznany format');
+      // 'e-tutor' – pliki z wersji sprzed zmiany nazwy
+      if ((data?.app !== 'edukwadrat' && data?.app !== 'e-tutor') || !data.progress || !Array.isArray(data.progress.attempts)) throw new Error('nieznany format');
       importProgress(data.progress);
       setMsg(`Wczytano postępy: ${data.progress.attempts.length} zapisanych odpowiedzi.`);
     } catch {
-      setMsg('Nie udało się wczytać pliku – sprawdź, czy to plik eksportu z E-tutora.');
+      setMsg('Nie udało się wczytać pliku – sprawdź, czy to plik eksportu z EduKwadratu.');
     }
   };
 

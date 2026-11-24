@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">E-tutor</string>
-    <string name="title_activity_main">E-tutor</string>
+    <string name="app_name">EduKwadrat</string>
+    <string name="title_activity_main">EduKwadrat</string>
     <string name="package_name">pl.etutor.matematyka</string>
     <string name="custom_url_scheme">pl.etutor.matematyka</string>
 </resources>
