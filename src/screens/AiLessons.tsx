@@ -6,6 +6,7 @@ import { href, navigate } from '../router';
 import { useApp } from '../state/AppState';
 import { LessonRunner, Stars } from './Lessons';
 import { starsFor } from '../content/curriculum/model';
+import { FREE_ZONES, useFullAccess } from '../state/access';
 
 const IDEAS = [
   'Nie rozumiem, jak obliczyć, o ile procent cena wzrosła',
@@ -17,6 +18,9 @@ const IDEAS = [
 
 export function AiLessonsScreen() {
   const { progress } = useApp();
+  const full = useFullAccess();
+  // bez pełnej wersji lekcje na zamówienie tylko z darmowych działów
+  const zones = full ? ZONES : ZONES.filter((z) => FREE_ZONES.includes(z.id));
   const [lessons, setLessons] = useState<AiLesson[]>(() => loadAiLessons());
   const [topic, setTopic] = useState('');
   const [level, setLevel] = useState<AiLevel>('sredni');
@@ -37,7 +41,7 @@ export function AiLessonsScreen() {
     setBusy(true);
     abort.current = new AbortController();
     try {
-      const l = await requestLesson({ topic: topic.trim().slice(0, 300), level, zone: zone || undefined, interests: interests.trim().slice(0, 100) || undefined }, abort.current.signal);
+      const l = await requestLesson({ topic: topic.trim().slice(0, 300), level, zone: (full ? zone : zones[0]?.title) || undefined, interests: interests.trim().slice(0, 100) || undefined }, abort.current.signal);
       const list = [l, ...lessons];
       setLessons(list);
       saveAiLessons(list);
@@ -113,8 +117,8 @@ export function AiLessonsScreen() {
             <div className="field">
               <label htmlFor="ai-zone">Dział (nieobowiązkowe)</label>
               <select id="ai-zone" value={zone} onChange={(e) => setZone(e.target.value)} disabled={busy}>
-                <option value="">Dowolny</option>
-                {ZONES.map((z) => (
+                {full && <option value="">Dowolny</option>}
+                {zones.map((z) => (
                   <option key={z.id} value={z.title}>
                     {z.title}
                   </option>
