@@ -26,7 +26,7 @@ export function Stars({ n, of = 3, size = 16 }: { n: number; of?: number; size?:
   );
 }
 
-function zoneDone(zoneId: string, done: Record<string, { stars: number }>) {
+export function zoneDone(zoneId: string, done: Record<string, { stars: number }>) {
   const list = LESSONS_BY_ZONE[zoneId] ?? [];
   const finished = list.filter((l) => (done[l.id]?.stars ?? 0) > 0).length;
   const stars = list.reduce((s, l) => s + (done[l.id]?.stars ?? 0), 0);

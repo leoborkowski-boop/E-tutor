@@ -4,6 +4,8 @@ import { href } from '../router';
 import { useApp } from '../state/AppState';
 import { dayKey, topicStats } from '../state/progress';
 import { recommendations } from '../state/recommend';
+import { ALL_LESSONS, ZONES, firstOpenLesson } from '../content/curriculum';
+import { zoneDone } from './Lessons';
 
 function greeting() {
   const h = new Date().getHours();
@@ -19,7 +21,8 @@ export function Home() {
   const todaySec = progress.studySeconds[dayKey()] ?? 0;
   const goalSec = settings.dailyGoalMinutes * 60;
   const stats = TOPICS.map((t) => topicStats(progress, t.id));
-  const mastered = stats.filter((s) => s.status === 'mastered').length;
+  const done = progress.lessons ?? {};
+  const lessonsDone = ALL_LESSONS.filter((l) => (done[l.id]?.stars ?? 0) > 0).length;
 
   return (
     <div className="page">
@@ -43,9 +46,12 @@ export function Home() {
           </Card>
         )}
         <Card className="goal-card">
-          <Ring value={mastered / TOPICS.length} size={72} label={<span>{mastered}/{TOPICS.length}</span>} />
+          <Ring value={lessonsDone / ALL_LESSONS.length} size={72} label={<span>{lessonsDone}</span>} />
           <div>
-            <h3>Opanowane działy</h3>
+            <h3>Ukończone lekcje</h3>
+            <p className="muted">
+              {lessonsDone} z {ALL_LESSONS.length} we wszystkich działach
+            </p>
             <p className="muted">
               <a href={href.progress}>Zobacz szczegóły postępów</a>
             </p>
@@ -53,13 +59,49 @@ export function Home() {
         </Card>
       </div>
 
+      <section>
+        <h2>Wszystkie działy egzaminu</h2>
+        <div className="zone-grid">
+          {ZONES.map((z) => {
+            const d = zoneDone(z.id, done);
+            const next = firstOpenLesson(z.id, done);
+            return (
+              <Card key={z.id} className="zone-card">
+                <a className="zone-card-link" href={href.zone(z.id)}>
+                  <span className="zone-mark" aria-hidden="true">
+                    {z.mark}
+                  </span>
+                  <span className="zone-card-text">
+                    <strong>{z.title}</strong>
+                    <span className="muted small">{z.short}</span>
+                  </span>
+                </a>
+                <div className="zone-progress">
+                  <div className="zone-track" aria-hidden="true">
+                    <div className="zone-fill" style={{ width: `${(d.finished / d.total) * 100}%` }} />
+                  </div>
+                  <span className="muted small">
+                    {d.finished} / {d.total} lekcji
+                  </span>
+                </div>
+                {next && (
+                  <Button className="zone-next" variant={d.finished ? 'primary' : 'secondary'} href={href.lesson(next.id)} icon="play">
+                    {d.finished ? 'Dalej' : 'Zacznij'}
+                  </Button>
+                )}
+              </Card>
+            );
+          })}
+        </div>
+      </section>
+
       {!progress.diagnosticDone && (
         <Card className="callout">
           <div className="callout-icon">
             <Icon name="compass" size={26} />
           </div>
           <div className="callout-body">
-            <h3>Zacznij od krótkiego testu diagnostycznego</h3>
+            <h3>Ułamki: zacznij od krótkiego testu</h3>
             <p className="muted">18 zadań, około 10 minut. Sprawdzimy, co już umiesz, i ustawimy poziom trudności w każdym dziale.</p>
           </div>
           <Button variant="primary" href={href.diagnostic} icon="play">
@@ -69,7 +111,7 @@ export function Home() {
       )}
 
       <section>
-        <h2>Co dalej?</h2>
+        <h2>Co dalej w ułamkach?</h2>
         <div className="rec-list">
           {recs.map((r) => (
             <Card key={r.topic.id} className="rec">
@@ -117,7 +159,7 @@ export function Home() {
       </section>
 
       <section>
-        <h2>Twoje działy</h2>
+        <h2>Ułamki: tematy z teorią i modelami</h2>
         <Card className="topic-mini-list">
           {TOPICS.map((t, i) => (
             <a key={t.id} className="topic-mini" href={href.topic(t.id)}>
