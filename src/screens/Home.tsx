@@ -6,6 +6,7 @@ import { dayKey, topicStats } from '../state/progress';
 import { recommendations } from '../state/recommend';
 import { ALL_LESSONS, ZONES, firstOpenLesson } from '../content/curriculum';
 import { zoneDone } from './Lessons';
+import { useFullAccess, zoneLocked } from '../state/access';
 
 function greeting() {
   const h = new Date().getHours();
@@ -22,6 +23,7 @@ export function Home() {
   const goalSec = settings.dailyGoalMinutes * 60;
   const stats = TOPICS.map((t) => topicStats(progress, t.id));
   const done = progress.lessons ?? {};
+  const full = useFullAccess();
   const lessonsDone = ALL_LESSONS.filter((l) => (done[l.id]?.stars ?? 0) > 0).length;
 
   return (
@@ -46,11 +48,11 @@ export function Home() {
           </Card>
         )}
         <Card className="goal-card">
-          <Ring value={lessonsDone / ALL_LESSONS.length} size={72} label={<span>{lessonsDone}</span>} />
+          <Ring value={lessonsDone / (full ? ALL_LESSONS.length : ALL_LESSONS.filter((l) => l.zoneId === 'ulamki').length)} size={72} label={<span>{lessonsDone}</span>} />
           <div>
             <h3>Ukończone lekcje</h3>
             <p className="muted">
-              {lessonsDone} z {ALL_LESSONS.length} we wszystkich działach
+              {lessonsDone} z {full ? ALL_LESSONS.length : ALL_LESSONS.filter((l) => l.zoneId === 'ulamki').length} {full ? 'we wszystkich działach' : 'w darmowym dziale ułamków'}
             </p>
             <p className="muted">
               <a href={href.progress}>Zobacz szczegóły postępów</a>
@@ -65,8 +67,9 @@ export function Home() {
           {ZONES.map((z) => {
             const d = zoneDone(z.id, done);
             const next = firstOpenLesson(z.id, done);
+            const locked = zoneLocked(z.id, full);
             return (
-              <Card key={z.id} className="zone-card">
+              <Card key={z.id} className={`zone-card ${locked ? 'is-locked' : ''}`}>
                 <a className="zone-card-link" href={href.zone(z.id)}>
                   <span className="zone-mark" aria-hidden="true">
                     {z.mark}
@@ -84,10 +87,14 @@ export function Home() {
                     {d.finished} / {d.total} lekcji
                   </span>
                 </div>
-                {next && (
-                  <Button className="zone-next" variant={d.finished ? 'primary' : 'secondary'} href={href.lesson(next.id)} icon="play">
-                    {d.finished ? 'Dalej' : 'Zacznij'}
-                  </Button>
+                {locked ? (
+                  <span className="zone-lock">Pełna wersja</span>
+                ) : (
+                  next && (
+                    <Button className="zone-next" variant={d.finished ? 'primary' : 'secondary'} href={href.lesson(next.id)} icon="play">
+                      {d.finished ? 'Dalej' : 'Zacznij'}
+                    </Button>
+                  )
                 )}
               </Card>
             );

@@ -11,6 +11,7 @@ import { useApp, useStudyTimer } from '../state/AppState';
 import { Block, blockSpeech } from './Theory';
 import { neuralSupported, useNeuralState } from '../lib/neuralVoice';
 import { FractionVisual } from '../components/FractionVisual';
+import { Paywall, useFullAccess, zoneLocked } from '../state/access';
 
 /* ---------------- Gwiazdki ---------------- */
 
@@ -38,6 +39,7 @@ export function zoneDone(zoneId: string, done: Record<string, { stars: number }>
 export function ZonesScreen() {
   const { progress, settings } = useApp();
   const neural = useNeuralState();
+  const full = useFullAccess();
   const done = progress.lessons ?? {};
   const voiceMissing = neuralSupported && settings.voiceEnabled && settings.voiceEngine === 'neural' && !neural.ready.includes(settings.neuralVoice);
   return (
@@ -74,8 +76,9 @@ export function ZonesScreen() {
         {ZONES.map((z) => {
           const d = zoneDone(z.id, done);
           const next = firstOpenLesson(z.id, done);
+          const locked = zoneLocked(z.id, full);
           return (
-            <Card key={z.id} className="zone-card">
+            <Card key={z.id} className={`zone-card ${locked ? 'is-locked' : ''}`}>
               <a className="zone-card-link" href={href.zone(z.id)}>
                 <span className="zone-mark" aria-hidden="true">
                   {z.mark}
@@ -93,10 +96,14 @@ export function ZonesScreen() {
                   {d.finished} / {d.total} lekcji
                 </span>
               </div>
-              {next && (
-                <Button href={href.lesson(next.id)} variant={d.finished ? 'primary' : 'secondary'} icon="play" className="zone-next">
-                  {d.finished ? 'Kontynuuj' : 'Zacznij'}: lekcja {next.n}
-                </Button>
+              {locked ? (
+                <span className="zone-lock">Pełna wersja</span>
+              ) : (
+                next && (
+                  <Button href={href.lesson(next.id)} variant={d.finished ? 'primary' : 'secondary'} icon="play" className="zone-next">
+                    {d.finished ? 'Kontynuuj' : 'Zacznij'}: lekcja {next.n}
+                  </Button>
+                )
               )}
             </Card>
           );
@@ -110,8 +117,10 @@ export function ZonesScreen() {
 
 export function ZoneScreen({ id }: { id: string }) {
   const { progress } = useApp();
+  const full = useFullAccess();
   const zone = ZONE_BY_ID[id];
   if (!zone) return <p>Nie znaleziono działu.</p>;
+  if (zoneLocked(zone.id, full)) return <Paywall title={zone.title} />;
   const done = progress.lessons ?? {};
   const d = zoneDone(zone.id, done);
   const next = firstOpenLesson(zone.id, done);
@@ -357,7 +366,9 @@ export function LessonScreen({ id }: { id: string }) {
   const [round, setRound] = useState(0);
   const example = useMemo(() => (lesson?.kind === 'poznaj' ? SKILL_BY_ID[lesson.skillId].gen(1, defaultRng) : undefined), [id, round]);
   const [stars, setStars] = useState(0);
+  const full = useFullAccess();
   if (!lesson) return <p>Nie znaleziono lekcji.</p>;
+  if (zoneLocked(lesson.zoneId, full)) return <Paywall title={ZONE_BY_ID[lesson.zoneId].title} />;
   const zone = ZONE_BY_ID[lesson.zoneId];
   const skill = SKILL_BY_ID[lesson.skillId];
   const kind = LESSON_KINDS.find((k) => k.kind === lesson.kind)!;
