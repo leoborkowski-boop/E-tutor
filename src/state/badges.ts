@@ -5,7 +5,7 @@ export type Badge = { id: string; icon: string; name: string; description: strin
 
 export const BADGES: Badge[] = [
   { id: 'first-step', icon: '🌱', name: 'Pierwszy krok', description: 'Rozwiąż pierwsze zadanie.' },
-  { id: 'diagnostic', icon: '🧭', name: 'Znam swój start', description: 'Ukończ test diagnostyczny.' },
+  { id: 'diagnostic', icon: '🧭', name: 'Znam swój start', description: 'Ukończ test sprawdzający.' },
   { id: 'theory-3', icon: '📖', name: 'Czytelnik', description: 'Przeczytaj teorię z trzech działów.' },
   { id: 'goal', icon: '🎯', name: 'Cel dnia', description: 'Osiągnij dzienny cel nauki.' },
   { id: 'days-5', icon: '📅', name: 'Systematyczność', description: 'Ucz się w 5 różnych dniach (nie muszą być pod rząd).' },

@@ -104,7 +104,7 @@ export function toChoice(task: Task, rng: Rng): Task | null {
   };
 }
 
-/** Test diagnostyczny: po 2 zadania z każdego działu (poziom 1 i 2). */
+/** Test sprawdzający: po 2 zadania z każdego działu (poziom 1 i 2). */
 export function buildDiagnostic(rng: Rng): Task[] {
   return ALL_TOPICS.flatMap((t) => [generateTask(t, 1, rng), generateTask(t, 2, rng)]);
 }

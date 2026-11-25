@@ -73,7 +73,7 @@ Ekran „Moja lekcja” (Lekcje → Moja lekcja). Uczeń wpisuje temat, wybiera 
 | **Laboratoria w teorii** | 7 interaktywnych modeli z przyciskami +/−: budowanie ułamka (pasek + oś + odczyt), ułamki równe, wyłączanie całości, porównywanie, dodawanie na pasku, mnożenie na modelu prostokątnym, rozwinięcie dziesiętne (z siatką 10×10). |
 | **Klawiatura ułamków** | Ekranowa klawiatura z „/”, spacją (liczby mieszane), przecinkiem i minusem – automatycznie na telefonach. Delikatne wibracje po odpowiedzi. |
 | **Pomoc** | Kolejne podpowiedzi, tryb **krok po kroku**, pełne rozwiązanie, komunikaty dla typowych błędów (np. dodanie mianowników). |
-| **Test diagnostyczny** | 18 zadań (po 2 z działu) – ustawia startowy poziom w każdym dziale. |
+| **Test sprawdzający** | 18 zadań (po 2 z działu) – ustawia startowy poziom w każdym dziale. |
 | **Próbny arkusz** | 10 zadań zamkniętych + 2 prawda/fałsz + 3 otwarte, limit czasu, punktacja, raport z działami do powtórki i przeglądem rozwiązań. |
 | **Postępy** | Opanowanie 0–100% w każdym dziale (🔴 do powtórki < 50%, 🟡 w trakcie, 🟢 opanowane ≥ 85%), powtórki w odstępach, najczęstsze błędy, kalendarz nauki, historia arkuszy. |
 | **Motywacja** | Dzienny cel (minuty), kalendarz bez „tracenia serii”, odznaki. Każdy element można wyłączyć. |

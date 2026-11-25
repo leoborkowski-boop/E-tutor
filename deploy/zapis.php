@@ -2,7 +2,7 @@
 /**
  * EduKwadrat – zapis na przedsprzedaż (PHP 7.4+, bez bazy danych).
  *
- *   POST zapis.php                  zapis: {email, topic, consent, strona(pułapka)} → JSON
+ *   POST zapis.php                  zapis: {email, consent, strona(pułapka)} → JSON
  *   GET  zapis.php?potwierdz=TOKEN  strona z przyciskiem „Potwierdzam” (link z e-maila)
  *   GET  zapis.php?wypisz=TOKEN     strona z przyciskiem „Wypisz mnie”
  *   POST zapis.php?potwierdz|wypisz wykonanie (token w polu formularza)
@@ -23,7 +23,6 @@ $cfg = require __DIR__ . '/zapis-ustawienia.php';
 $DIR = __DIR__ . '/dane';
 $PLIK = $DIR . '/zapisy.php';
 $LIMITY = $DIR . '/limity.php';
-const TEMATY = ['', 'Ułamki', 'Procenty', 'Równania i wyrażenia', 'Geometria', 'Zadania tekstowe', 'Wszystko po trochu'];
 const OCZEKUJE_DNI = 7;
 const STRAZNIK = "<?php exit; ?>\n";
 
@@ -225,7 +224,7 @@ if (isset($_GET['potwierdz'])) {
                 $zapisy[$email]['status'] = 'potwierdzony';
                 $zapisy[$email]['potwierdzenie_ts'] = $z['potwierdzenie_ts'] ?? time();
                 $zapisy[$email]['potwierdzenie_ip'] = $z['potwierdzenie_ip'] ?? $ip;
-                return ['email' => (string) $email, 'nowy' => $nowy, 'temat' => $z['temat']];
+                return ['email' => (string) $email, 'nowy' => $nowy];
             }
         }
         return null;
@@ -234,7 +233,7 @@ if (isset($_GET['potwierdz'])) {
         strona_odp('Link wygasł', 'Ten link jest nieaktualny. Zapisz się ponownie na stronie – wyślemy nowy link.', $cfg, 404);
     }
     if ($wynik['nowy'] && $cfg['powiadomienia_na']) {
-        wyslij((string) $cfg['powiadomienia_na'], 'Nowy zapis na przedsprzedaż', "Adres: {$wynik['email']}\nTemat: " . ($wynik['temat'] ?: '–') . "\nData: " . date('Y-m-d H:i'), $cfg);
+        wyslij((string) $cfg['powiadomienia_na'], 'Nowy zapis na przedsprzedaż', "Adres: {$wynik['email']}\nData: " . date('Y-m-d H:i'), $cfg);
     }
     strona_odp('Zapis potwierdzony', 'Dziękujemy. Gdy ruszy pełna wersja EduKwadrat, wyślemy jeden e-mail z linkiem do zakupu w cenie 99 zł.', $cfg);
 }
@@ -290,12 +289,12 @@ if (isset($_GET['eksport'])) {
     header('Content-Disposition: attachment; filename="edukwadrat-zapisy-' . date('Y-m-d') . '.csv"');
     $out = fopen('php://output', 'w');
     fwrite($out, "\xEF\xBB\xBF"); // BOM – polskie znaki w Excelu
-    fputcsv($out, ['email', 'temat', 'zapis', 'potwierdzenie', 'ip_potwierdzenia', 'link_wypisania'], ';');
+    fputcsv($out, ['email', 'zapis', 'potwierdzenie', 'ip_potwierdzenia', 'link_wypisania'], ';');
     foreach ($zapisy as $email => $z) {
         if ($z['status'] !== 'potwierdzony') {
             continue;
         }
-        fputcsv($out, array_map('csv_bezp', [(string) $email, $z['temat'], date('Y-m-d H:i', $z['zapis_ts']), date('Y-m-d H:i', $z['potwierdzenie_ts']), $z['potwierdzenie_ip'], link_do($cfg, 'wypisz', $z['token'])]), ';');
+        fputcsv($out, array_map('csv_bezp', [(string) $email, date('Y-m-d H:i', $z['zapis_ts']), date('Y-m-d H:i', $z['potwierdzenie_ts']), $z['potwierdzenie_ip'], link_do($cfg, 'wypisz', $z['token'])]), ';');
     }
     exit;
 }
@@ -312,7 +311,6 @@ if (!is_array($wejscie)) {
     $wejscie = $_POST;
 }
 $email = strtolower(trim((string) ($wejscie['email'] ?? '')));
-$temat = (string) ($wejscie['topic'] ?? '');
 $zgoda = !empty($wejscie['consent']);
 $pulapka = trim((string) ($wejscie['strona'] ?? ''));
 
@@ -327,9 +325,6 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 254) {
 if (!$zgoda) {
     json_odp(400, ['ok' => false, 'wiadomosc' => 'Zaznacz zgodę, żebyśmy mogli wysłać Ci e-mail na start.']);
 }
-if (!in_array($temat, TEMATY, true)) {
-    $temat = '';
-}
 
 // Limit prób z jednego adresu IP
 if (!w_limicie($LIMITY, 'zapis:' . $ip, (int) $cfg['limit_na_godzine'], 3600)) {
@@ -337,7 +332,7 @@ if (!w_limicie($LIMITY, 'zapis:' . $ip, (int) $cfg['limit_na_godzine'], 3600)) {
 }
 
 // Zapis albo ponowne wysłanie linku (bez zdradzania, czy adres już jest na liście)
-$doWyslania = zmien_plik($PLIK, function (array &$zapisy) use ($email, $temat, $ip, $cfg) {
+$doWyslania = zmien_plik($PLIK, function (array &$zapisy) use ($email, $ip, $cfg) {
     sprzataj($zapisy, $cfg);
     if (isset($zapisy[$email]) && $zapisy[$email]['status'] === 'potwierdzony') {
         return null;
@@ -345,7 +340,6 @@ $doWyslania = zmien_plik($PLIK, function (array &$zapisy) use ($email, $temat, $
     $token = $zapisy[$email]['token'] ?? bin2hex(random_bytes(16));
     $zapisy[$email] = [
         'status' => 'oczekuje',
-        'temat' => $temat,
         'token' => $token,
         'zapis_ts' => $zapisy[$email]['zapis_ts'] ?? time(),
         'zapis_ip' => $ip,

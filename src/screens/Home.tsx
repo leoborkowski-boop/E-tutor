@@ -61,6 +61,21 @@ export function Home() {
         </Card>
       </div>
 
+      {!progress.diagnosticDone && (
+        <Card className="callout">
+          <div className="callout-icon">
+            <Icon name="compass" size={26} />
+          </div>
+          <div className="callout-body">
+            <h3>Zacznij od krótkiego testu sprawdzającego</h3>
+            <p className="muted">18 zadań z ułamków, około 10 minut. Sprawdzimy, co już umiesz, i ustawimy poziom trudności w każdym temacie.</p>
+          </div>
+          <Button variant="primary" href={href.diagnostic} icon="play">
+            Rozpocznij test
+          </Button>
+        </Card>
+      )}
+
       <section>
         <h2>Wszystkie działy egzaminu</h2>
         <div className="zone-grid">
@@ -101,21 +116,6 @@ export function Home() {
           })}
         </div>
       </section>
-
-      {!progress.diagnosticDone && (
-        <Card className="callout">
-          <div className="callout-icon">
-            <Icon name="compass" size={26} />
-          </div>
-          <div className="callout-body">
-            <h3>Ułamki: zacznij od krótkiego testu</h3>
-            <p className="muted">18 zadań, około 10 minut. Sprawdzimy, co już umiesz, i ustawimy poziom trudności w każdym dziale.</p>
-          </div>
-          <Button variant="primary" href={href.diagnostic} icon="play">
-            Rozpocznij test
-          </Button>
-        </Card>
-      )}
 
       <section>
         <h2>Co dalej w ułamkach?</h2>

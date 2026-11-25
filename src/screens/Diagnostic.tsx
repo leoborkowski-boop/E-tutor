@@ -81,7 +81,7 @@ export function Diagnostic() {
     return (
       <div className="page">
         <header className="page-head">
-          <h1>Test diagnostyczny</h1>
+          <h1>Test sprawdzający</h1>
           <p className="lead">Sprawdźmy, od czego zacząć.</p>
         </header>
         <Card>
@@ -143,7 +143,7 @@ export function Diagnostic() {
     <div className="page practice">
       <div className="practice-head">
         <div className="practice-title">
-          <h1>Test diagnostyczny</h1>
+          <h1>Test sprawdzający</h1>
         </div>
         <div className="session-progress">
           <div className="session-track">

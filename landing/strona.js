@@ -57,7 +57,7 @@
     fetch(FORM_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ email: email, topic: form.topic.value, consent: true, strona: form.strona.value })
+      body: JSON.stringify({ email: email, consent: true, strona: form.strona.value })
     }).then(function (r) {
       return r.json().catch(function () { return {}; }).then(function (d) {
         if (!r.ok || !d.ok) { say(d.wiadomosc || 'Nie udało się zapisać. Spróbuj jeszcze raz za kilka minut.', 'err'); return; }
